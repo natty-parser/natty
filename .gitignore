@@ -1,13 +1,15 @@
 .classpath
 .settings
 .project
+.gradle
 workspace.xml
 bin
 target
+build/
 src/main/java/org/natty/generated/*
 src/main/java/*.tokens
-src/main/antlr3/org/natty/generated/DebugDateParser.g
-src/main/antlr3/org/natty/generated/DebugDateWalker.g
+src/main/antlr/org/natty/generated/DebugDateParser.g
+src/main/antlr/org/natty/generated/DebugDateWalker.g
 
 # IntelliJ Idea
 *.iml
