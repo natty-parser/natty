@@ -1,0 +1,68 @@
+input|expected_ast
+april fool's day|APRIL_FOOLS_DAY
+april fools day|APRIL_FOOLS_DAY
+april fool day|APRIL_FOOLS_DAY
+black friday|BLACK_FRIDAY
+black fri|BLACK_FRIDAY
+black fri.|BLACK_FRIDAY
+christmas|CHRISTMAS
+christmas day|CHRISTMAS
+christmas eve|CHRISTMAS_EVE
+christmas eve.|CHRISTMAS_EVE
+christmas evening|CHRISTMAS_EVE
+columbus day|COLUMBUS_DAY
+earth day|EARTH_DAY
+easter|EASTER
+easter day|EASTER
+easter sunday|EASTER
+father's day|FATHERS_DAY
+fathers day|FATHERS_DAY
+flag day|FLAG_DAY
+good friday|GOOD_FRIDAY
+good fri|GOOD_FRIDAY
+good fri.|GOOD_FRIDAY
+groundhog day|GROUNDHOG_DAY
+groundhogs day|GROUNDHOG_DAY
+groundhog's day|GROUNDHOG_DAY
+halloween|HALLOWEEN
+haloween|HALLOWEEN
+halloween day|HALLOWEEN
+independence day|INDEPENDENCE_DAY
+kwanzaa|KWANZAA
+kwanza|KWANZAA
+kwanzaa day|KWANZAA
+labor day|LABOR_DAY
+martin luther king day|MLK_DAY
+martin luther king jr.'s day|MLK_DAY
+martin luther king jr. day|MLK_DAY
+martin luther king jr day|MLK_DAY
+mlk day|MLK_DAY
+memorial day|MEMORIAL_DAY
+memorial day|MEMORIAL_DAY
+mothers day|MOTHERS_DAY
+mother's day|MOTHERS_DAY
+new year's day|NEW_YEARS_DAY
+new years day|NEW_YEARS_DAY
+new years|NEW_YEARS_DAY
+new year's eve|NEW_YEARS_EVE
+new years eve|NEW_YEARS_EVE
+new years eve.|NEW_YEARS_EVE
+patriot day|PATRIOT_DAY
+president's day|PRESIDENTS_DAY
+presidents day|PRESIDENTS_DAY
+president day|PRESIDENTS_DAY
+st. patricks day|ST_PATRICKS_DAY
+st patrick's day|ST_PATRICKS_DAY
+saint patrick's day|ST_PATRICKS_DAY
+saint paddy's day|ST_PATRICKS_DAY
+saint paddys day|ST_PATRICKS_DAY
+tax day|TAX_DAY
+thanksgiving|THANKSGIVING
+thanksgiving day|THANKSGIVING
+election day|ELECTION_DAY
+valentine's day|VALENTINES_DAY
+valentines day|VALENTINES_DAY
+valentine day|VALENTINES_DAY
+veterans day|VETERANS_DAY
+veteran's day|VETERANS_DAY
+veteran day|VETERANS_DAY

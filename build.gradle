@@ -1,0 +1,87 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'antlr'
+
+    alias(libs.plugins.nebula.release)
+    alias(libs.plugins.lombok)
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+dependencies {
+    api(
+            libs.antlr.runtime,
+            libs.ical4j,
+            libs.slf4j.api
+    )
+
+    antlr libs.antlr
+
+    testImplementation(
+            //  libs.slf4j.log4j12, // required for Level
+            libs.junit,
+            libs.junit.jupiter.api,
+            libs.junit.jupiter.params,
+            libs.antlr.gunit,
+            libs.assertj.core
+    )
+    testRuntimeOnly(
+            // libs.slf4j.simple,
+            libs.log4j2,
+            libs.junit.jupiter.engine,
+            libs.junit.vintage.engine,
+            libs.junit.platform.engine,
+            //libs.logback.classic
+    )
+
+
+}
+
+description = 'Natty Date Parser'
+
+generateGrammarSource {
+
+    arguments += ["-visitor",
+                  "-listener",
+                  "-long-messages",
+                  "-lib", "src/main/antlr/org/natty/generated/imports"
+    ]
+    outputDirectory = file("${project.buildDir}/generated-src/antlr/")
+    source "src/main/antlr"
+    include "org/natty/generated/DateLexer.g"
+    include "org/natty/generated/DateParser.g"
+
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.compileJava {
+    dependsOn tasks.generateGrammarSource
+}
