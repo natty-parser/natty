@@ -69,33 +69,33 @@ The issues are grouped into rough categories to make it possible to prioritise t
 | [#50](https://github.com/joestelmach/natty/issues/50)   | Parsing error                                                                                                               |
 
 ## Format issues
-| ID                                                      | Title                                                                          |
-|---------------------------------------------------------|--------------------------------------------------------------------------------|
-| [#271](https://github.com/joestelmach/natty/issues/271) | 9999-12-31 fails to parse                                                      |
-| [#265](https://github.com/joestelmach/natty/issues/265) | Date parsed wrongly                                                            |
-| [#260](https://github.com/joestelmach/natty/issues/260) | 04Oct17-31Oct17                                                                |
-| [#257](https://github.com/joestelmach/natty/issues/257) | 02sep85                                                                        |
-| [#254](https://github.com/joestelmach/natty/issues/254) | Problem parsing Oct-07-2018 10:00                                              |
-| [#242](https://github.com/joestelmach/natty/issues/242) | Can't parse ddMMyyyy formate                                                   |
-| [#241](https://github.com/joestelmach/natty/issues/241) | Question/Issue, dates with no delimiters like 5Jan2018 are parsed in-correctly |
-| [#240](https://github.com/joestelmach/natty/issues/240) | Unable to parse "End of the Week"                                              |
-| [#237](https://github.com/joestelmach/natty/issues/237) | Wrong parsing in case of %                                                                                                  |
-| [#229](https://github.com/joestelmach/natty/issues/229) | Not able to parse boundary references                                                                                       |
-| [#228](https://github.com/joestelmach/natty/issues/228) | Not able to parse 4MAR17                                                                                                    |
-| [#215](https://github.com/joestelmach/natty/issues/215) | The first of the month                                                                                                      |
-| [#214](https://github.com/joestelmach/natty/issues/214) | Unable to detect date in news article                                                                                       |
-| [#212](https://github.com/joestelmach/natty/issues/212) | Can't detect year when spelled out                                                                                          |
-| [#208](https://github.com/joestelmach/natty/issues/208) | Placing the year after time causes parsing to change the year                                                               |
-| [#204](https://github.com/joestelmach/natty/issues/204) | Natty is unable to parse this date                                                                                          |
-| [#179](https://github.com/joestelmach/natty/issues/179) | Only date is not being parsed                                                                                               |
-| [#167](https://github.com/joestelmach/natty/issues/167) | "2016.06.13 18:42:04" is parsed as "Fri Mar 25 20:16:06 UTC 2016"                                                           |
-| [#160](https://github.com/joestelmach/natty/issues/160) | @ between date and time                                                                                                     |
-| [#158](https://github.com/joestelmach/natty/issues/158) | can't parse simple Datetype                                                                                                 |
-| [#151](https://github.com/joestelmach/natty/issues/151) | no viable alternative at input '<EOF>'                                                                                      |
-| [#144](https://github.com/joestelmach/natty/issues/144) | 15/12/2004 is not parsed correctly.                                                                                         |
-| [#118](https://github.com/joestelmach/natty/issues/118) | 29.01.57 is parsed incorrectly                                                                                              |
-| [#104](https://github.com/joestelmach/natty/issues/104) | date parsing                                                                                                                |
-| [#75](https://github.com/joestelmach/natty/issues/75)   | 20121028_161105.jpg                                                                                                         |
+| ID                                                         | Title                                                                          |
+|------------------------------------------------------------|--------------------------------------------------------------------------------|
+| [~~#27~~](https://github.com/joestelmach/natty/issues/271) | 9999-12-31 fails to parse                                                      |
+| [#265](https://github.com/joestelmach/natty/issues/265)    | Date parsed wrongly                                                            |
+| [#260](https://github.com/joestelmach/natty/issues/260)    | 04Oct17-31Oct17                                                                |
+| [#257](https://github.com/joestelmach/natty/issues/257)    | 02sep85                                                                        |
+| [#254](https://github.com/joestelmach/natty/issues/254)    | Problem parsing Oct-07-2018 10:00                                              |
+| [#242](https://github.com/joestelmach/natty/issues/242)    | Can't parse ddMMyyyy formate                                                   |
+| [#241](https://github.com/joestelmach/natty/issues/241)    | Question/Issue, dates with no delimiters like 5Jan2018 are parsed in-correctly |
+| [#240](https://github.com/joestelmach/natty/issues/240)    | Unable to parse "End of the Week"                                              |
+| [#237](https://github.com/joestelmach/natty/issues/237)    | Wrong parsing in case of %                                                                                                  |
+| [#229](https://github.com/joestelmach/natty/issues/229)    | Not able to parse boundary references                                                                                       |
+| [#228](https://github.com/joestelmach/natty/issues/228)    | Not able to parse 4MAR17                                                                                                    |
+| [#215](https://github.com/joestelmach/natty/issues/215)    | The first of the month                                                                                                      |
+| [#214](https://github.com/joestelmach/natty/issues/214)    | Unable to detect date in news article                                                                                       |
+| [#212](https://github.com/joestelmach/natty/issues/212)    | Can't detect year when spelled out                                                                                          |
+| [#208](https://github.com/joestelmach/natty/issues/208)    | Placing the year after time causes parsing to change the year                                                               |
+| [#204](https://github.com/joestelmach/natty/issues/204)    | Natty is unable to parse this date                                                                                          |
+| [#179](https://github.com/joestelmach/natty/issues/179)    | Only date is not being parsed                                                                                               |
+| [#167](https://github.com/joestelmach/natty/issues/167)    | "2016.06.13 18:42:04" is parsed as "Fri Mar 25 20:16:06 UTC 2016"                                                           |
+| [#160](https://github.com/joestelmach/natty/issues/160)    | @ between date and time                                                                                                     |
+| [#158](https://github.com/joestelmach/natty/issues/158)    | can't parse simple Datetype                                                                                                 |
+| [#151](https://github.com/joestelmach/natty/issues/151)    | no viable alternative at input '<EOF>'                                                                                      |
+| [#144](https://github.com/joestelmach/natty/issues/144)    | 15/12/2004 is not parsed correctly.                                                                                         |
+| [#118](https://github.com/joestelmach/natty/issues/118)    | 29.01.57 is parsed incorrectly                                                                                              |
+| [#104](https://github.com/joestelmach/natty/issues/104)    | date parsing                                                                                                                |
+| [#75](https://github.com/joestelmach/natty/issues/75)      | 20121028_161105.jpg                                                                                                         |
 
 ## Feature requests
 
