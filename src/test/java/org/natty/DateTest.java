@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.TimeZone;
-import org.apache.log4j.Level;
+import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import junit.framework.Assert;
 
 /**
@@ -379,8 +381,7 @@ public class DateTest extends AbstractTest {
 
     String value="easter '06";
 
-    org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
-
+    ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.natty").setLevel(Level.INFO);
     Parser parser = new Parser();
     List<DateGroup> groups = parser.parse(value);
     for(DateGroup group:groups) {

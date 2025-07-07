@@ -2,6 +2,7 @@ package org.natty;
 
 import org.junit.Test;
 
+import java.util.List;
 import java.util.TimeZone;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -43,5 +44,12 @@ public class ParserTest {
     // see http://stackoverflow.com/a/27609 for more.
     assertEquals(parser, deserialized);
     assertEquals(parser.hashCode(), deserialized.hashCode());
+  }
+
+  @Test
+  public void issue135() {
+    Parser parser1 = new Parser();
+    List<DateGroup> groups1 = parser1.parse("Diagnosis 1: AMS");
+
   }
 }
