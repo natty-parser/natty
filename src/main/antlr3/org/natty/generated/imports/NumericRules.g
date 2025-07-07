@@ -10,6 +10,22 @@ tokens {
 
 // ********** numeric rules **********
 
+
+@parser::members {
+  private static org.slf4j.Logger _logger =
+    org.slf4j.LoggerFactory.getLogger( org.natty.generated.DateParser_NumericRules.class);
+
+  @Override
+  public void displayRecognitionError(String[] tokenNames, RecognitionException re) {
+  if (_logger.isDebugEnabled()) {
+    String message = getErrorHeader(re);
+    try { message += getErrorMessage(re, tokenNames); } catch(Exception e) {}
+    _logger.debug(message);
+  }
+  }
+}
+
+
 // a number between 00 and 59 inclusive, with a mandatory 0 prefix before numbers 0-9
 int_00_to_59_mandatory_prefix
   : (INT_00
