@@ -175,22 +175,22 @@ The issues are grouped into rough categories to make it possible to prioritise t
 
 ## Misc
 
-| ID                                                      | Title                                                                                                                       |
-|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| [#281](https://github.com/joestelmach/natty/issues/281) | Documentation - 500 internal server error - http://natty.joestelmach.com/                                                   |
-| [#274](https://github.com/joestelmach/natty/issues/274) | abandonware and forks diverge wildly                                                                                        |
-| [#253](https://github.com/joestelmach/natty/issues/253) | Runtime VerifyError: Verifier rejected class  with Android <= 21                                                            |
-| [#251](https://github.com/joestelmach/natty/issues/251) | Strange Memory Issue (leak)                                                                                                 |
-| [#230](https://github.com/joestelmach/natty/issues/230) | Can't import project into android studio                                                                                    |
-| [#219](https://github.com/joestelmach/natty/issues/219) | How can I add a needed format?                                                                                              |
-| [#218](https://github.com/joestelmach/natty/issues/218) | Inferences could be more specific                                                                                           |
-| [#217](https://github.com/joestelmach/natty/issues/217) | Upgrade to ical4j 2.0                                                                                                       |
-| [#199](https://github.com/joestelmach/natty/issues/199) | how to get rid of: [main] INFO com.joestelmach.natty.Parser - STREAM                                                        |
-| [#195](https://github.com/joestelmach/natty/issues/195) | Getting date format from parser                                                                                             |
-| [#165](https://github.com/joestelmach/natty/issues/165) | Parser logs are too verbose at INFO                                                                                         |
-| [#156](https://github.com/joestelmach/natty/issues/156) | How do I mute console output?                                                                                               |
-| [#149](https://github.com/joestelmach/natty/issues/149) | Daylight savings logic?                                                                                                     |
-| [#135](https://github.com/joestelmach/natty/issues/135) | SLF4J for class DateParser_NumericRules                                                                                     |
-| [#95](https://github.com/joestelmach/natty/issues/95)   | Usage questions related to multiple groups/dates returned by parser                                                         |
-| [#84](https://github.com/joestelmach/natty/issues/84)   | Javascript version?                                                                                                         |
-| [#52](https://github.com/joestelmach/natty/issues/52)   | Can i change in the java source code and  create it's new jar without using maven and if no how can i do that using maven ? |
+| ID                                                          | Title                                                                                                                       |
+|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| [#281](https://github.com/joestelmach/natty/issues/281)     | Documentation - 500 internal server error - http://natty.joestelmach.com/                                                   |
+| [#274](https://github.com/joestelmach/natty/issues/274)     | abandonware and forks diverge wildly                                                                                        |
+| [#253](https://github.com/joestelmach/natty/issues/253)     | Runtime VerifyError: Verifier rejected class  with Android <= 21                                                            |
+| [#251](https://github.com/joestelmach/natty/issues/251)     | Strange Memory Issue (leak)                                                                                                 |
+| [#230](https://github.com/joestelmach/natty/issues/230)     | Can't import project into android studio                                                                                    |
+| [#219](https://github.com/joestelmach/natty/issues/219)     | How can I add a needed format?                                                                                              |
+| [#218](https://github.com/joestelmach/natty/issues/218)     | Inferences could be more specific                                                                                           |
+| [~~#217~~](https://github.com/joestelmach/natty/issues/217) | Upgrade to ical4j 2.0                                                                                                       |
+| [~~#199~~](https://github.com/joestelmach/natty/issues/199) | how to get rid of: [main] INFO com.joestelmach.natty.Parser - STREAM                                                        |
+| [#195](https://github.com/joestelmach/natty/issues/195)     | Getting date format from parser                                                                                             |
+| [~~#165~~](https://github.com/joestelmach/natty/issues/165) | Parser logs are too verbose at INFO                                                                                         |
+| [~~#156~~](https://github.com/joestelmach/natty/issues/156) | How do I mute console output?                                                                                               |
+| [#149](https://github.com/joestelmach/natty/issues/149)     | Daylight savings logic?                                                                                                     |
+| [#135](https://github.com/joestelmach/natty/issues/135)     | SLF4J for class DateParser_NumericRules                                                                                     |
+| [#95](https://github.com/joestelmach/natty/issues/95)       | Usage questions related to multiple groups/dates returned by parser                                                         |
+| [#84](https://github.com/joestelmach/natty/issues/84)       | Javascript version?                                                                                                         |
+| [~~#52~~](https://github.com/joestelmach/natty/issues/52)   | Can i change in the java source code and  create it's new jar without using maven and if no how can i do that using maven ? |
