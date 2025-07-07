@@ -8,8 +8,8 @@ public enum Season {
   SPRING("Vernal Equinox"),
   SUMMER("Summer Solstice"),
   FALL("Autumnal Equinox");
-  
-  private String summary;
+
+  private final String summary;
   private static final Map<String, Season> lookup;
   static {
     lookup = new HashMap<String, Season>();
@@ -27,7 +27,9 @@ public enum Season {
   }
 
   public static Season fromSummary(String summary) {
-    if(summary == null) return null;
+    if (summary == null || summary.trim().isEmpty()) {
+      return null;
+    }
     return lookup.get(summary);
   }
 }
