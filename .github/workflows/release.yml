@@ -19,7 +19,7 @@ jobs:
           server-password: CENTRAL_PASSWORD
           gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
           cache: maven
-      - uses: oleksiyrudenko/gha-git-credentials@v2
+      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
         with:
           global: true
           name: 'github'
