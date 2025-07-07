@@ -5,19 +5,19 @@ The issues are grouped into rough categories to make it possible to prioritise t
 
 ## Crashes
 
-| ID                                                      | Title                                                                                                       |
-|---------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| [#278](https://github.com/joestelmach/natty/issues/278) | 'last easter' gives NPE since 2021                                                                          |
-| [#277](https://github.com/joestelmach/natty/issues/277) | Cant parse this oddly specific string.                                                                      |
-| [#263](https://github.com/joestelmach/natty/issues/263) | "Christma-eve" before 2000 throws NPE                                                                       |
-| [#246](https://github.com/joestelmach/natty/issues/246) | Could not parse input org.antlr.runtime.EarlyExitException: null                                            |
-| [#238](https://github.com/joestelmach/natty/issues/238) | natty line 1:23 no viable alternative at input '4' - Just override the emitErrorMessage method @joestelmach |
-| [#236](https://github.com/joestelmach/natty/issues/236) | java.lang.NullPointerException                                                                                              |
-| [#234](https://github.com/joestelmach/natty/issues/234) | NullPointerException                                                                                                        |
-| [#193](https://github.com/joestelmach/natty/issues/193) | NumberFormatException                                                                                                       |
-| [#190](https://github.com/joestelmach/natty/issues/190) | NullPointerExceptions                                                                                                       |
-| [#162](https://github.com/joestelmach/natty/issues/162) | NPE / NumberFormatExceptions in WalkerState on Seasons and year seaks with miscalculated target year                        |
-| [#147](https://github.com/joestelmach/natty/issues/147) | NumberFormatException for "match-up on Saturday, February 22, 64-44, against Lynwood"                                       |
+| ID                                                          | Title                                                                                                       |
+|-------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| [#278](https://github.com/joestelmach/natty/issues/278)     | 'last easter' gives NPE since 2021                                                                          |
+| [#277](https://github.com/joestelmach/natty/issues/277)     | Cant parse this oddly specific string.                                                                      |
+| [#263](https://github.com/joestelmach/natty/issues/263)     | "Christma-eve" before 2000 throws NPE                                                                       |
+| [#246](https://github.com/joestelmach/natty/issues/246)     | Could not parse input org.antlr.runtime.EarlyExitException: null                                            |
+| [~~#238~~](https://github.com/joestelmach/natty/issues/238) | natty line 1:23 no viable alternative at input '4' - Just override the emitErrorMessage method @joestelmach |
+| [#236](https://github.com/joestelmach/natty/issues/236)     | java.lang.NullPointerException                                                                                              |
+| [#234](https://github.com/joestelmach/natty/issues/234)     | NullPointerException                                                                                                        |
+| [#193](https://github.com/joestelmach/natty/issues/193)     | NumberFormatException                                                                                                       |
+| [#190](https://github.com/joestelmach/natty/issues/190)     | NullPointerExceptions                                                                                                       |
+| [#162](https://github.com/joestelmach/natty/issues/162)     | NPE / NumberFormatExceptions in WalkerState on Seasons and year seaks with miscalculated target year                        |
+| [#147](https://github.com/joestelmach/natty/issues/147)     | NumberFormatException for "match-up on Saturday, February 22, 64-44, against Lynwood"                                       |
 
 ## Errors + Incorrect Parsing
 
