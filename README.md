@@ -1,3 +1,7 @@
+# natty-parser
+[![maven central](https://img.shields.io/maven-central/v/io.github.natty-parser/natty.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.natty-parser/natty)
+[![javadoc](https://javadoc.io/badge2/io.github.natty-parser/natty/javadoc.svg)](https://javadoc.io/doc/io.github.natty-parser/natty)
+
 ## What
 
 Natty is a natural language date parser written in Java.  Given a date
@@ -7,11 +11,11 @@ syntax information.
 
 ## History
 
-Originally written by Joel Stelmach at https://github.com/joestelmach/natty and developed between 2010 and 2017. Abandoned since then.
+Originally written by Joel Stelmach at https://github.com/joestelmach/natty and developed between 2010 and 2017. Abandoned since then. We keep it alive as fork here since 2022.
 
 ## Usage
 Maven:
-```
+```xml
 <dependency>
   <groupId>io.github.natty-parser</groupId>
   <artifactId>natty</artifactId>
@@ -22,23 +26,23 @@ Maven:
 or [consult maven.org](https://search.maven.org/artifact/io.github.natty-parser/natty) for other build systems.
 
 for snapshot dependencies, add maven-snapshots repository to your `pom.xml`:
-```
+```xml
 <repositories>
   <repository>
-	<name>Central Portal Snapshots</name>
-	<id>central-portal-snapshots</id>
-	<url>https://central.sonatype.com/repository/maven-snapshots/</url>
-	<releases>
-	  <enabled>false</enabled>
-	</releases>
-	<snapshots>
-	  <enabled>true</enabled>
-	</snapshots>
+  <name>Central Portal Snapshots</name>
+  <id>central-portal-snapshots</id>
+  <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+  <releases>
+    <enabled>false</enabled>
+  </releases>
+  <snapshots>
+    <enabled>true</enabled>
+  </snapshots>
   </repository>
 </repositories>
 ```
 and
-```
+```xml
 <dependency>
   <groupId>io.github.natty-parser</groupId>
   <artifactId>natty</artifactId>
@@ -69,9 +73,9 @@ See [issues](issues.md)
 
 I hope for open collaboration and contributions from others. To me it's totally a side-project, not the core activity. Yet, I can commit to being (fairly) responsive and inclusive.
 
-## Contibutions
+## Contributions
 
-Are more then welcome. Feel free to reach out (e.g. by creating an issue in this repo) to offer your support and ideas. I am happy to include more
-maintainers. Tag @mccartney if no response for 2-3 days (I might have missed that).
+Are more than welcome. Feel free to reach out (e.g. by creating an issue in this repo) to offer your support and ideas. I am happy to include more
+maintainers. Tag @mccartney or @mihxil if no response for 2-3 days (I might have missed that).
 
 I see this project potentially being welcoming to many, incl. quite junior and inexperienced developers, who would like to learn and contribute.
