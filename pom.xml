@@ -46,6 +46,7 @@
   </properties>
   
   <build>
+    <defaultGoal>install</defaultGoal>
     <plugins>
       <plugin>
         <groupId>org.sonatype.central</groupId>
@@ -152,7 +153,7 @@
             </goals> 
           </execution> 
         </executions> 
-      </plugin> 
+      </plugin>
     </plugins>
   </build>
   

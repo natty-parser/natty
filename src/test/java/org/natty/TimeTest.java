@@ -5,14 +5,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * Runs the parser through the various time formats 
- * 
+ * Runs the parser through the various time formats
+ *
  * @author Joe Stelmach
  */
 public class TimeTest extends AbstractTest {
@@ -22,9 +23,9 @@ public class TimeTest extends AbstractTest {
     TimeZone.setDefault(TimeZone.getTimeZone("US/Eastern"));
     initCalendarAndParser();
   }
-  
+
   /**
-   * Runs the parser through the various time formats 
+   * Runs the parser through the various time formats
    * @throws Exception
    */
   @Test
@@ -52,7 +53,7 @@ public class TimeTest extends AbstractTest {
     validateTime(reference, "8 pm", 20, 0, 0);
     validateTime(reference, "8 p_m", 20, 0, 0);
   }
-  
+
   @Test
   public void testRelaxed() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("1/02/2011");
@@ -71,10 +72,10 @@ public class TimeTest extends AbstractTest {
     validateTime(reference, "5 hours after midnight", 5, 0, 0);
     validateTime(reference, "tonight", 20, 0, 0);
   }
-  
+
   @Test
   public void testRelative() throws Exception {
-    Date reference = DateFormat.getTimeInstance(DateFormat.SHORT).parse("12:00 pm");
+    Date reference = Date.from(LocalDate.EPOCH.atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
     validateTime(reference, "in 5 seconds", 12, 0, 5);
     validateTime(reference, "in 5 minutes", 12, 5, 0);
@@ -92,7 +93,7 @@ public class TimeTest extends AbstractTest {
 
   @Test
   public void testAlternatives() throws Exception {
-    Date reference = DateFormat.getTimeInstance(DateFormat.SHORT).parse("12:00 pm");
+    Date reference = Date.from(LocalDate.EPOCH.atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "12 or 12:30");
@@ -118,19 +119,19 @@ public class TimeTest extends AbstractTest {
 
   @Test
   public void testRange() throws Exception {
-    Date reference = DateFormat.getTimeInstance(DateFormat.SHORT).parse("12:00 pm");
+    Date reference = Date.from(LocalDate.EPOCH.atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "for six hours");
     Assert.assertEquals(2, dates.size());
     validateTime(dates.get(0), 12, 0, 0);
     validateTime(dates.get(1), 18, 0, 0);
-    
+
     dates = parseCollection(reference, "for 12 minutes");
     Assert.assertEquals(2, dates.size());
     validateTime(dates.get(0), 12, 0, 0);
     validateTime(dates.get(1), 12, 12, 0);
-    
+
     dates = parseCollection(reference, "for 10 seconds");
     Assert.assertEquals(2, dates.size());
     validateTime(dates.get(0), 12, 0, 0);
@@ -139,7 +140,7 @@ public class TimeTest extends AbstractTest {
 
   @Test
   public void testText() throws Exception {
-    Date reference = DateFormat.getTimeInstance(DateFormat.SHORT).parse("12:00 pm");
+    Date reference = Date.from(LocalDate.EPOCH.atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
 
     List<DateGroup> groups = _parser.parse("5.30pm", reference);
     Assert.assertEquals(1, groups.size());
