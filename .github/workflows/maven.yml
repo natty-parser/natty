@@ -12,8 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
+      matrix: 
         java_version: ['11', '17', '21']
+ 
+    env:
+      MAVEN_ARGS: '--no-transfer-progress'
+ 
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK ${{ matrix.java_version }}
@@ -22,5 +26,17 @@ jobs:
           java-version: ${{ matrix.java_version }}
           distribution: 'temurin'
           cache: maven
+          server-id: central
+          server-username: CENTRAL_USERNAME
+          server-password: CENTRAL_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
+      - name: Deploy with Maven
+        run: mvn -B -Prelease deploy
+        if: matrix.java_version == '8'
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B package
+        if: matrix.java_version != '8'

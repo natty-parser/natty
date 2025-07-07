@@ -3,7 +3,9 @@
   <groupId>io.github.natty-parser</groupId>
   <artifactId>natty</artifactId>
   <packaging>jar</packaging>
-  <version>2.0.0-SNAPSHOT</version>
+ 
+  <version>1.1.0-SNAPSHOT</version>
+ 
   <name>Natty Date Parser</name>
   <description>natural language date parser</description>
   <url>https://github.com/natty-parser/natty</url>
@@ -14,13 +16,14 @@
       <url>https://opensource.org/licenses/MIT</url>
     </license>
   </licenses>
-  
+
   <scm>
-    <connection>scm:git:git@github.com:natty-parser/natty.git</connection>
-    <url>scm:git:git@github.com:natty-parser/natty.git</url>
-    <developerConnection>scm:git:git@github.com:natty-parser/natty.git</developerConnection>
+    <connection>scm:git:${project.scm.url}.git</connection>
+    <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
+    <url>https://github.com/natty-parser/natty</url>
+    <tag>HEAD</tag>
   </scm>
-  
+
   <developers>
     <developer>
       <id>mccartney</id>
@@ -44,8 +47,6 @@
   
   <build>
     <plugins>
-
-      <!-- automatically release to maven central without manual Sonatype promotion -->
       <plugin>
         <groupId>org.sonatype.central</groupId>
         <artifactId>central-publishing-maven-plugin</artifactId>
