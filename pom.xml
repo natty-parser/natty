@@ -3,13 +3,13 @@
   <groupId>io.github.natty-parser</groupId>
   <artifactId>natty</artifactId>
   <packaging>jar</packaging>
- 
+
   <version>1.1.0-SNAPSHOT</version>
- 
+
   <name>Natty Date Parser</name>
   <description>natural language date parser</description>
   <url>https://github.com/natty-parser/natty</url>
-  
+
   <licenses>
     <license>
       <name>MIT License</name>
@@ -35,7 +35,7 @@
       <timezone>1</timezone>
     </developer>
   </developers>
-  
+
   <properties>
     <grammar.dir>${basedir}/src/main/antlr3/org/natty/generated</grammar.dir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,7 +44,7 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
-  
+
   <build>
     <defaultGoal>install</defaultGoal>
     <plugins>
@@ -59,7 +59,7 @@
           <waitUntil>published</waitUntil>
         </configuration>
       </plugin>
-      
+
       <!-- need to force a new version of the release plugin for git support-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -69,13 +69,13 @@
           <mavenExecutorId>forked-path</mavenExecutorId>
         </configuration>
       </plugin>
-    
+
       <!-- compiler plugin -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.14.0</version>
       </plugin>
-      
+
       <!-- clean plugin -->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
@@ -98,7 +98,7 @@
         <groupId>org.antlr</groupId>
         <artifactId>antlr3-maven-plugin</artifactId>
         <version>3.5.3</version>
-        
+
         <executions>
           <execution>
             <id>debug</id>
@@ -135,28 +135,28 @@
               </excludes>
             </configuration>
           </execution>
-          
+
         </executions>
       </plugin>
-      
-      <!-- gUnit plugin --> 
-      <plugin> 
-        <groupId>org.antlr</groupId> 
-        <artifactId>maven-gunit-plugin</artifactId> 
+
+      <!-- gUnit plugin -->
+      <plugin>
+        <groupId>org.antlr</groupId>
+        <artifactId>maven-gunit-plugin</artifactId>
         <version>3.5.3</version>
-        <executions> 
-          <execution> 
-            <id>maven-gunit-plugin</id> 
-            <phase>test</phase> 
-            <goals> 
-              <goal>gunit</goal> 
-            </goals> 
-          </execution> 
-        </executions> 
+        <executions>
+          <execution>
+            <id>maven-gunit-plugin</id>
+            <phase>test</phase>
+            <goals>
+              <goal>gunit</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
-  
+
   <!-- release profile -->
   <profiles>
     <profile>
@@ -169,7 +169,7 @@
       </activation>
       <build>
         <plugins>
-        
+
           <!-- sign artifacts -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -185,7 +185,7 @@
               </execution>
             </executions>
           </plugin>
-          
+
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
@@ -219,15 +219,15 @@
       </build>
     </profile>
   </profiles>
-  
+
   <!-- dependencies -->
   <dependencies>
-    <dependency> 
+    <dependency>
       <groupId>org.antlr</groupId>
       <artifactId>antlr-runtime</artifactId>
       <version>3.5.3</version>
-    </dependency> 
-    
+    </dependency>
+
     <dependency>
       <groupId>org.mnode.ical4j</groupId>
       <artifactId>ical4j</artifactId>
@@ -253,19 +253,25 @@
       <version>1.5.18</version>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
-    
-    <dependency> 
+
+    <dependency>
       <groupId>org.antlr</groupId>
       <artifactId>gunit</artifactId>
       <version>3.5.3</version>
       <scope>test</scope>
-    </dependency> 
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.17.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

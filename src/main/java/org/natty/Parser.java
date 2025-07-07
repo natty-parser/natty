@@ -1,28 +1,45 @@
 package org.natty;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenStream;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.runtime.tree.Tree;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.natty.generated.DateLexer;
 import org.natty.generated.DateParser;
 import org.natty.generated.DateWalker;
 import org.natty.generated.TreeRewrite;
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.CommonTreeNodeStream;
-import org.antlr.runtime.tree.Tree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.*;
-
 /**
- * 
+ *
  * @author Joe Stelmach
  */
-public class Parser {
-  private TimeZone _defaultTimeZone;
-  
+public class Parser implements Serializable {
+
+  private static final long serialVersionUID = 233282586086252203L;
   private static final Logger _logger = LoggerFactory.getLogger(Parser.class);
+
+  private final TimeZone _defaultTimeZone;
+
+
 
   /**
    * Tokens that should be removed from the end any list of tokens before parsing. These are
@@ -48,17 +65,17 @@ public class Parser {
   public Parser(TimeZone defaultTimeZone) {
     _defaultTimeZone = defaultTimeZone;
   }
-  
+
   /**
    * Creates a new parser with no explicit default time zone (default will be US/Eastern)
    */
   public Parser() {
     _defaultTimeZone = TimeZone.getDefault();
   }
-  
+
   /**
    * Parses the given input value for one or more groups of date alternatives
-   * 
+   *
    * @param value the date to parse
    * @return list of date alternatives
    */
@@ -81,15 +98,15 @@ public class Parser {
     ANTLRInputStream input = null;
     try {
       input = new ANTLRNoCaseInputStream(new ByteArrayInputStream(value.getBytes()));
-      
+
     } catch (IOException e) {
       _logger.error("could not lex input", e);
     }
     DateLexer lexer = new DateLexer(input);
-    
+
     // collect all sub-token streams that may include date information
     List<TokenStream> streams = collectTokenStreams(new CommonTokenStream(lexer));
-    
+
     // and parse each of them
     List<DateGroup> groups = new ArrayList<DateGroup>();
     TokenStream lastStream = null;
@@ -99,7 +116,7 @@ public class Parser {
       DateGroup group = singleParse(stream, value, referenceDate);
       while((group == null || group.getDates().size() == 0) && tokens.size() > 0) {
         if(group == null || group.getDates().size() == 0) {
-          
+
           // we have two options:
           // 1. Continuously remove tokens from the end of the stream and re-parse.  This will
           //    recover from the case of an extraneous token at the end of the token stream.
@@ -173,12 +190,12 @@ public class Parser {
     }
     return true;
   }
-  
+
   /**
    * Parses the token stream for a SINGLE date time alternative.  This
    * method assumes that the entire token stream represents date and or
    * time information (no extraneous tokens)
-   * 
+   *
    * @param stream
    * @return
    */
@@ -186,7 +203,7 @@ public class Parser {
 	DateGroup group = null;
 	List<Token> tokens = ((NattyTokenSource) stream.getTokenSource()).getTokens();
 	if(tokens.isEmpty()) return group;
-		
+
     StringBuilder tokenString = new StringBuilder();
     for(Token token:tokens) {
       tokenString.append(DateParser.tokenNames[token.getType()]);
@@ -194,11 +211,11 @@ public class Parser {
     }
 
     try {
-      // parse 
+      // parse
       ParseListener listener = new ParseListener();
       DateParser parser = new DateParser(stream, listener);
       DateParser.parse_return parseReturn = parser.parse();
-      
+
       Tree tree = (Tree) parseReturn.getTree();
 
       // we only continue if a meaningful syntax tree has been built
@@ -247,18 +264,18 @@ public class Parser {
 
     return group;
   }
-  
+
   /**
-   * Scans the given token global token stream for a list of sub-token 
-   * streams representing those portions of the global stream that 
+   * Scans the given token global token stream for a list of sub-token
+   * streams representing those portions of the global stream that
    * may contain date time information
-   * 
+   *
    * @param stream
    * @return
    */
   private List<TokenStream> collectTokenStreams(TokenStream stream) {
-    
-    // walk through the token stream and build a collection 
+
+    // walk through the token stream and build a collection
     // of sub token streams that represent possible date locations
     List<Token> currentGroup = null;
     List<List<Token>> groups = new ArrayList<List<Token>>();
@@ -305,7 +322,7 @@ public class Parser {
     if(currentGroup != null) {
       addGroup(currentGroup, groups);
     }
-    
+
     _logger.debug("STREAM: {}", tokenString);
     List<TokenStream> streams = new ArrayList<TokenStream>();
     for(List<Token> group:groups) {
@@ -343,5 +360,28 @@ public class Parser {
     if(!group.isEmpty()) {
       groups.add(group);
     }
+  }
+
+  @Override
+  public int hashCode() {
+    // use two randomly chosen prime numbers
+    return new HashCodeBuilder(17, 31).
+      append(_defaultTimeZone).
+      toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    boolean isEqual = false;
+
+    if (obj instanceof Parser) {
+      Parser other = (Parser) obj;
+
+      isEqual = new EqualsBuilder().
+        append(_defaultTimeZone, other._defaultTimeZone).
+        isEquals();
+    }
+
+    return isEqual;
   }
 }
