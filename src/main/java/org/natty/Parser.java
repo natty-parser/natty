@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 import org.antlr.runtime.ANTLRInputStream;
@@ -19,8 +20,6 @@ import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.antlr.runtime.tree.Tree;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.natty.generated.DateLexer;
 import org.natty.generated.DateParser;
 import org.natty.generated.DateWalker;
@@ -363,25 +362,15 @@ public class Parser implements Serializable {
   }
 
   @Override
-  public int hashCode() {
-    // use two randomly chosen prime numbers
-    return new HashCodeBuilder(17, 31).
-      append(_defaultTimeZone).
-      toHashCode();
+  public final boolean equals(Object o) {
+    if (!(o instanceof Parser)) return false;
+
+    Parser parser = (Parser) o;
+    return Objects.equals(_defaultTimeZone, parser._defaultTimeZone);
   }
 
   @Override
-  public boolean equals(Object obj) {
-    boolean isEqual = false;
-
-    if (obj instanceof Parser) {
-      Parser other = (Parser) obj;
-
-      isEqual = new EqualsBuilder().
-        append(_defaultTimeZone, other._defaultTimeZone).
-        isEquals();
-    }
-
-    return isEqual;
+  public int hashCode() {
+    return Objects.hashCode(_defaultTimeZone);
   }
 }
