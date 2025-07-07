@@ -8,6 +8,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       MAVEN_ARGS: '--no-transfer-progress'
     steps:
@@ -25,7 +27,7 @@ jobs:
         with:
           global: true
           name: 'github'
-          token: '${{ secrets.GITHUB_TOKEN  }}'
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Release
         run: mvn -Prelease --batch-mode  -Darguments=-DskipTests  release:prepare release:perform
         env:
