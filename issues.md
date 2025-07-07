@@ -190,7 +190,7 @@ The issues are grouped into rough categories to make it possible to prioritise t
 | [~~#165~~](https://github.com/joestelmach/natty/issues/165) | Parser logs are too verbose at INFO                                                                                         |
 | [~~#156~~](https://github.com/joestelmach/natty/issues/156) | How do I mute console output?                                                                                               |
 | [#149](https://github.com/joestelmach/natty/issues/149)     | Daylight savings logic?                                                                                                     |
-| [#135](https://github.com/joestelmach/natty/issues/135)     | SLF4J for class DateParser_NumericRules                                                                                     |
+| [~~#135~~](https://github.com/joestelmach/natty/issues/135) | SLF4J for class DateParser_NumericRules                                                                                     |
 | [#95](https://github.com/joestelmach/natty/issues/95)       | Usage questions related to multiple groups/dates returned by parser                                                         |
 | [#84](https://github.com/joestelmach/natty/issues/84)       | Javascript version?                                                                                                         |
 | [~~#52~~](https://github.com/joestelmach/natty/issues/52)   | Can i change in the java source code and  create it's new jar without using maven and if no how can i do that using maven ? |
