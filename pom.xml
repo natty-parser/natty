@@ -14,13 +14,13 @@
       <url>https://opensource.org/licenses/MIT</url>
     </license>
   </licenses>
-  
+
   <scm>
-    <connection>scm:git:git@github.com:natty-parser/natty.git</connection>
-    <url>scm:git:git@github.com:natty-parser/natty.git</url>
-    <developerConnection>scm:git:git@github.com:natty-parser/natty.git</developerConnection>
+    <connection>scm:git:${project.scm.url}.git</connection>
+    <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
+    <url>https://github.com/natty-parser/natty</url>
   </scm>
-  
+
   <developers>
     <developer>
       <id>mccartney</id>
