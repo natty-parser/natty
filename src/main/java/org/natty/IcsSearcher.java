@@ -1,18 +1,20 @@
 package org.natty;
 
-import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.data.ParserException;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Period;
-import net.fortuna.ical4j.model.PeriodList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
+import java.time.*;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.Temporal;
 import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+import net.fortuna.ical4j.data.CalendarBuilder;
+import net.fortuna.ical4j.data.ParserException;
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.Period;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IcsSearcher {
   private static final String GMT = "GMT";
@@ -20,9 +22,9 @@ public class IcsSearcher {
   private static final String SUMMARY = "SUMMARY";
   private static final Logger _logger = LoggerFactory.getLogger(IcsSearcher.class);
   private net.fortuna.ical4j.model.Calendar _holidayCalendar;
-  private String _calendarFileName;
-  private TimeZone _timeZone;
-  private CalendarSource calendarSource;
+  private final String _calendarFileName;
+  private final TimeZone _timeZone;
+  private final CalendarSource calendarSource;
 
   public IcsSearcher(String calendarFileName, TimeZone timeZone, Date referenceDate) {
     calendarSource = new CalendarSource(referenceDate);
@@ -52,29 +54,36 @@ public class IcsSearcher {
       }
     }
     
-    Period period = null;
+    final Period<LocalDateTime> period;
     try {
-      DateTime from = new DateTime(startYear + "0101T000000Z");
-      DateTime to = new DateTime(endYear + "1231T000000Z");;
-      period = new Period(from, to);
+
+      LocalDateTime from = LocalDate.of(startYear, 1, 1).atStartOfDay();
+      LocalDateTime to =  LocalDate.of(endYear, 12, 31).atStartOfDay();
+      period = new Period<>(from, to);
       
-    } catch (ParseException e) {
+    } catch (DateTimeParseException e) {
       _logger.error("Invalid start or end year: " + startYear + ", " + endYear, e);
       return holidays;
     }
     
-    for (Object  component : _holidayCalendar.getComponents(VEVENT)) {
-      Component vevent = (Component) component;
-      String summary = vevent.getProperty(SUMMARY).getValue();
+    for (Component  vevent : _holidayCalendar.getComponents(VEVENT)) {
+      String summary = vevent.getProperty(SUMMARY).map(Content::getValue).orElse(null);
       if(summary.equals(eventSummary)) {
-        PeriodList list = vevent.calculateRecurrenceSet(period);
-        for(Object p : list) {
-          DateTime date = ((Period) p).getStart();
+        Set<Period<Temporal>> list = vevent.calculateRecurrenceSet(period);
+        for(Period<Temporal> p : list) {
+          Temporal date = p.getStart();
           
           // this date is at the date of the holiday at 12 AM UTC
           Calendar utcCal = calendarSource.getCurrentCalendar();
           utcCal.setTimeZone(TimeZone.getTimeZone(GMT));
-          utcCal.setTime(date);
+          if (date instanceof LocalDate) {
+            utcCal.setTime(Date.from(((LocalDate) date).atStartOfDay(ZoneOffset.UTC).toInstant()));
+          } else if (date instanceof OffsetDateTime) {
+            utcCal.setTime(Date.from(((OffsetDateTime) date).toInstant()));
+          } else {
+            _logger.warn("Unsupported date type: " + date.getClass().getName());
+            continue;
+          }
           
           // use the year, month and day components of our UTC date to form a new local date
           Calendar localCal = calendarSource.getCurrentCalendar();
