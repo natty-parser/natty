@@ -8,13 +8,16 @@ lexer grammar DateLexer;
 
   @Override
   public void displayRecognitionError(String[] tokenNames, RecognitionException re) {
-    String message = getErrorHeader(re);
-    try { message += getErrorMessage(re, tokenNames); } catch(Exception e) {}
-    _logger.debug(message);
+    if (_logger.isDebugEnabled()) {
+
+       String message = getErrorHeader(re);
+       try { message += getErrorMessage(re, tokenNames); } catch(Exception e) {}
+       _logger.debug(message);
+    }
   }
 }
 
-// ********** date rules ********** 
+// ********** date rules **********
 
 JANUARY   : 'january'   's'?  | 'jan' DOT?;
 FEBRUARY  : 'february'  's'?  | 'feb' DOT?;
@@ -28,7 +31,7 @@ SEPTEMBER : 'september' 's'?  | 'sep' DOT? | 'sept' DOT?;
 OCTOBER   : 'october'   's'?  | 'oct' DOT?;
 NOVEMBER  : 'november'  's'?  | 'nov' DOT?;
 DECEMBER  : 'december'  's'?  | 'dec' DOT?;
-  
+
 SUNDAY    : 'sunday'    's'?  | 'sun' DOT?  | 'suns' DOT?;
 MONDAY    : 'monday'    's'?  | 'mon' DOT?  | 'mons' DOT?;
 TUESDAY   : 'tuesday'   's'?  | 'tues' DOT? | 'tue' DOT?;
@@ -46,7 +49,7 @@ YEAR   : 'year'   | 'year' SINGLE_QUOTE? 's' | 'yrs' DOT?;
 
 TODAY     : 'today';
 TOMORROW  : 'tomorow' | 'tomorrow' | 'tommorow' | 'tommorrow' | 'tmr';
-TONIGHT   : 'tonight'; 
+TONIGHT   : 'tonight';
 YESTERDAY : 'yesterday';
 
 // ********** recurrence rules **********
@@ -54,7 +57,7 @@ YESTERDAY : 'yesterday';
 EVERY : 'every';
 UNTIL : 'until';
 
-// ********** time rules ********** 
+// ********** time rules **********
 
 AT        : 'at' | '@';
 AFTER     : 'after';
@@ -69,7 +72,7 @@ MIDNIGHT  : 'midnight' | 'mid-night';
 NOON      : 'noon'     | 'afternoon' | 'after-noon';
 MORNING   : 'morning';
 EVENING   : 'evening' | 'eve';
-NIGHT     : 'night'; 
+NIGHT     : 'night';
 
 UTC  : 'utc'  | 'gmt'  | 'z';
 EST  : 'est'  | 'edt'  | 'et'  | 'eastern';
@@ -241,7 +244,7 @@ ST : 'st';
 ND : 'nd';
 RD : 'rd';
 TH : 'th';
-   
+
 // ********** common rules **********
 
 COLON : ':';
@@ -280,7 +283,7 @@ END       : 'end';
 WHITE_SPACE
   : (DOT | SPACE)+
   ;
-  
+
 // ********** holiday specific **********
 
 FOOL         : 'fool' | 'fools' | 'fool' SINGLE_QUOTE 's';
@@ -322,15 +325,15 @@ FALL   : 'fall'   's'?;
 AUTUMN : 'autumn' 's'?;
 SPRING : 'spring' 's'?;
 SUMMER : 'summer' 's'?;
-  
+
 UNKNOWN
   : UNKNOWN_CHAR
   ;
-  
+
 fragment UNKNOWN_CHAR
   : ~(SPACE | DOT)
   ;
-  
+
 fragment DIGIT : '0'..'9';
-  
+
 fragment SPACE : ' ' | '\t' | '\n' | '\r' | '\u00A0';
