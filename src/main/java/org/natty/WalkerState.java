@@ -683,14 +683,13 @@ public class WalkerState {
 
   private Map<Integer, Date> getDatesFromIcs(Map<Range<Year>, String> icsFileNames,
       String eventSummary, int startYear, int endYear) {
-    Year start = Year.of(startYear);
-    Year end = Year.of(endYear);
-    Map<Integer, Date> dates = new HashMap<>();
 
+    Range<Year> range = new Range<>(Year.of(startYear), Year.of(endYear));
+
+    Map<Integer, Date> dates = new HashMap<>();
     icsFileNames.entrySet().stream()
         .filter(
-          entry -> entry.getKey().contains(start) ||
-            entry.getKey().contains(end))
+          entry ->  entry.getKey().overlap(range))
       .map(Map.Entry::getValue)
       .forEach(icsFileName -> {
         IcsSearcher searcher = new IcsSearcher(icsFileName, _defaultTimeZone);

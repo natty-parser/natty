@@ -1,47 +1,63 @@
 package org.natty;
 
+import java.util.function.Predicate;
+
 /**
  * Simple range implementation for Comparable types.
  * author Michiel Meeuwissen
  * @param <C>
  */
-class Range<C extends Comparable<C>> {
+class Range<C extends Comparable<C>> implements Predicate<C> {
 
-    private final C start;
-    private final C end;
+  private final C start;
+  private final C end;
 
-    public Range(C start, C end) {
-        if (start == null || end == null) {
-            throw new IllegalArgumentException("Start and end cannot be null");
-        }
-        if (start.compareTo(end) > 0) {
-            throw new IllegalArgumentException("Start cannot be greater than end");
-        }
-        this.start = start;
-        this.end = end;
+  public Range(C start, C end) {
+    if (start == null || end == null) {
+      throw new IllegalArgumentException("Start and end cannot be null");
     }
-
-    public C getStart() {
-        return start;
+    if (start.compareTo(end) > 0) {
+      throw new IllegalArgumentException("Start cannot be greater than end");
     }
+    this.start = start;
+    this.end = end;
+  }
 
-    public C getEnd() {
-        return end;
+  public C getStart() {
+    return start;
+  }
+
+  public C getEnd() {
+    return end;
+  }
+
+  @Override
+  public boolean test(C value) {
+    if (value == null) {
+      return false;
     }
-
-    public boolean contains(C value) {
-        if (value == null) {
-            return false;
-        }
-        return (start.compareTo(value) <= 0 && end.compareTo(value) >= 0);
+    return (start.compareTo(value) <= 0 && end.compareTo(value) >= 0);
+  }
+  public boolean contains(Range<C> value) {
+    if (value == null) {
+      return false;
     }
+    return test(value.getStart()) && test(value.getEnd());
+  }
 
-    @Override
-    public String toString() {
-        return "Range{" +
-                "start=" + start +
-                ", end=" + end +
-                '}';
+  public boolean overlap(Range<C> value) {
+    if (value == null) {
+      return false;
+    }
+    return test(value.getStart()) || test(value.getEnd());
+  }
+
+  @Override
+  public String toString() {
+    return "Range{" +
+      "start=" + start +
+      ", end=" + end +
+      '}';
     }
 
   @Override
