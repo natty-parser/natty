@@ -55,9 +55,18 @@ public class ParserTest {
   }
 
   @Test
-
   public void issue278() {
     final List<DateGroup> groups = new Parser().parse("last easter", new Date(121, 1, 1));
+
+
+  }
+  @Test
+  public void lastEaster() {
+    final List<DateGroup> groups = new Parser().parse("last easter", new Date(119, 1, 1));
+    assertEquals(1, groups.size());
+    Date easter = groups.get(0).getDates().get(0);
+    assertEquals("Sun Apr 01 00:00:00 CEST 2018", easter.toString());
+
 
 
   }

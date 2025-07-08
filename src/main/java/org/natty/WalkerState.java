@@ -1,6 +1,15 @@
 package org.natty;
 
-import java.util.*;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * @author Joe Stelmach
@@ -25,10 +34,21 @@ public class WalkerState {
   private static final String PLUS = "+";
   private static final String MINUS = "-";
   private static final String GMT = "GMT";
-  private static final String HOLIDAY_ICS_FILE = "/holidays.ics";
-  private static final String SEASON_ICS_FILE = "/seasons.ics";
+  private static final Map<Range<Year>, String> HOLIDAY_ICS_FILES;
+  static {
+    Map<Range<Year>, String> icsFileNames = new HashMap<>();
+    icsFileNames.put(new Range<>(Year.of(2000), Year.of(2020)), "/us/2000-2020/holidays.ics");
+    HOLIDAY_ICS_FILES = Collections.unmodifiableMap(icsFileNames);
+  }
+  private static final Map<Range<Year>, String> SEASON_ICS_FILE;
+  static {
+    Map<Range<Year>, String> icsFileNames = new HashMap<>();
+    icsFileNames.put(new Range<>(Year.of(2000), Year.of(2020)), "/seaons.ics");
+    SEASON_ICS_FILE = Collections.unmodifiableMap(icsFileNames);
+  }
 
-  private CalendarSource calendarSource;
+
+  private final CalendarSource calendarSource;
   private GregorianCalendar _calendar;
   private TimeZone _defaultTimeZone;
   private int _currentYear;
@@ -37,8 +57,8 @@ public class WalkerState {
   private boolean _dateGivenInGroup = false;
   private boolean _updatePreviousDates = false;
   private DateGroup _dateGroup;
-  private List<String> _amPmGivenPerCapture = new ArrayList<String>();
-  private List<Boolean> _timeGivenPerCapture = new ArrayList<Boolean>();
+  private final List<String> _amPmGivenPerCapture = new ArrayList<String>();
+  private final List<Boolean> _timeGivenPerCapture = new ArrayList<Boolean>();
 
   /**
    * Creates a new WalkerState representing the start of
@@ -385,7 +405,7 @@ public class WalkerState {
     Holiday holiday = Holiday.valueOf(holidayString);
     assert(holiday != null);
 
-    seekToIcsEvent(HOLIDAY_ICS_FILE, holiday.getSummary(), direction, seekAmount);
+    seekToIcsEvent(HOLIDAY_ICS_FILES, holiday.getSummary(), direction, seekAmount);
   }
 
   /**
@@ -398,7 +418,7 @@ public class WalkerState {
     Holiday holiday = Holiday.valueOf(holidayString);
     assert(holiday != null);
 
-    seekToIcsEventYear(HOLIDAY_ICS_FILE, yearString, holiday.getSummary());
+    seekToIcsEventYear(HOLIDAY_ICS_FILES, yearString, holiday.getSummary());
   }
 
   /**
@@ -543,7 +563,7 @@ public class WalkerState {
     _currentYear = _calendar.get(Calendar.YEAR);
   }
 
-  private void seekToIcsEvent(String icsFileName, String eventSummary, String direction, String seekAmount) {
+  private void seekToIcsEvent(Map<Range<Year>, String> icsFileNames, String eventSummary, String direction, String seekAmount) {
     int seekAmountInt = Integer.parseInt(seekAmount);
     assert(direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT));
     assert(seekAmountInt >= 0);
@@ -559,11 +579,17 @@ public class WalkerState {
     boolean forwards = direction.equals(DIR_RIGHT);
     int startYear = forwards ? currentYear : currentYear - seekAmountInt - 1;
     int endYear = forwards ? currentYear + seekAmountInt + 1 : currentYear;
-    Map<Integer, Date> dates = getDatesFromIcs(icsFileName, eventSummary,
+    Map<Integer, Date> dates = getDatesFromIcs(icsFileNames, eventSummary,
         startYear, endYear);
 
+    Date date = dates.get(currentYear);
+    if (date == null) {
+      throw new IllegalArgumentException(
+          "No date found for event '" + eventSummary + "' in the range " +
+          startYear + " - " + endYear);
+    }
     // grab the right one
-    boolean hasPassed = cal.getTime().after(dates.get(currentYear));
+    boolean hasPassed = cal.getTime().after(date);
     int targetYear = currentYear +
         (forwards ? seekAmountInt + (hasPassed ? 0 : -1) :
           (seekAmountInt - (hasPassed ? 1 : 0)) * -1);
@@ -575,7 +601,7 @@ public class WalkerState {
     _calendar.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
   }
 
-  private void seekToIcsEventYear(String icsFileName, String yearString, String eventSummary) {
+  private void seekToIcsEventYear(Map<Range<Year>, String> icsFileNames, String yearString, String eventSummary) {
     int yearInt = Integer.parseInt(yearString);
     assert(yearInt >= 0);
 
@@ -586,9 +612,9 @@ public class WalkerState {
     // This is likely to represent the correct start date of the given season, but is not
     // guaranteed as these dates do shift over time
     int year = getFullYear(yearInt);
-    Date date = seasonalDateFromIcs(icsFileName, eventSummary, year);
+    Date date = seasonalDateFromIcs(icsFileNames, eventSummary, year);
     if(date == null) {
-      date = seasonalDateFromIcs(icsFileName, eventSummary, getCalendar().get(Calendar.YEAR));
+      date = seasonalDateFromIcs(icsFileNames, eventSummary, getCalendar().get(Calendar.YEAR));
       if(date != null) {
         Calendar cal = getCalendar();
         cal.setTime(date);
@@ -611,8 +637,8 @@ public class WalkerState {
    * Finds and returns the date for the given event summary and year within the given ics file,
    * or null if not present.
    */
-  private Date seasonalDateFromIcs(String icsFileName, String eventSummary, int year) {
-    Map<Integer, Date> dates = getDatesFromIcs(icsFileName, eventSummary, year, year);
+  private Date seasonalDateFromIcs(Map<Range<Year>, String> icsFileNames, String eventSummary, int year) {
+    Map<Integer, Date> dates = getDatesFromIcs(icsFileNames, eventSummary, year, year);
     return dates.get(year - (eventSummary.equals(Holiday.NEW_YEARS_EVE.getSummary()) ? 1 : 0));
   }
 
@@ -655,10 +681,22 @@ public class WalkerState {
     _timeGivenPerCapture.add(true);
   }
 
-  private Map<Integer, Date> getDatesFromIcs(String icsFileName,
+  private Map<Integer, Date> getDatesFromIcs(Map<Range<Year>, String> icsFileNames,
       String eventSummary, int startYear, int endYear) {
-    IcsSearcher searcher = new IcsSearcher(icsFileName, _defaultTimeZone);
-    return searcher.findDates(startYear, endYear, eventSummary);
+    Year start = Year.of(startYear);
+    Year end = Year.of(endYear);
+    Map<Integer, Date> dates = new HashMap<>();
+
+    icsFileNames.entrySet().stream()
+        .filter(
+          entry -> entry.getKey().contains(start) ||
+            entry.getKey().contains(end))
+      .map(Map.Entry::getValue)
+      .forEach(icsFileName -> {
+        IcsSearcher searcher = new IcsSearcher(icsFileName, _defaultTimeZone);
+        dates.putAll(searcher.findDates(startYear, endYear, eventSummary));
+      });
+    return dates;
   }
 
   private int getFullYear(Integer year) {
