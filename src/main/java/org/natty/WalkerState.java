@@ -689,7 +689,7 @@ public class WalkerState {
     Map<Integer, Date> dates = new HashMap<>();
     icsFileNames.entrySet().stream()
         .filter(
-          entry ->  entry.getKey().overlap(range))
+          entry ->  entry.getKey().isConnected(range))
       .map(Map.Entry::getValue)
       .forEach(icsFileName -> {
         IcsSearcher searcher = new IcsSearcher(icsFileName, _defaultTimeZone);

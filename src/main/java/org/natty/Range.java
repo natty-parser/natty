@@ -38,18 +38,18 @@ class Range<C extends Comparable<C>> implements Predicate<C> {
     }
     return (start.compareTo(value) <= 0 && end.compareTo(value) >= 0);
   }
-  public boolean contains(Range<C> value) {
+  public boolean encloses(Range<C> value) {
     if (value == null) {
       return false;
     }
-    return test(value.getStart()) && test(value.getEnd());
+    return test(value.start) && test(value.end);
   }
 
-  public boolean overlap(Range<C> value) {
+  public boolean isConnected(Range<C> value) {
     if (value == null) {
       return false;
     }
-    return test(value.getStart()) || test(value.getEnd());
+    return test(value.start) || test(value.end);
   }
 
   @Override
