@@ -2,6 +2,7 @@ package org.natty;
 
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import org.apache.commons.lang3.SerializationUtils;
@@ -50,6 +51,14 @@ public class ParserTest {
   public void issue135() {
     Parser parser1 = new Parser();
     List<DateGroup> groups1 = parser1.parse("Diagnosis 1: AMS");
+
+  }
+
+  @Test
+
+  public void issue278() {
+    final List<DateGroup> groups = new Parser().parse("last easter", new Date(121, 1, 1));
+
 
   }
 }
