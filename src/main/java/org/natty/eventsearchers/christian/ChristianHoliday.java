@@ -11,9 +11,9 @@ import org.natty.YearlyHoliday;
   * @author Michiel Meeuwissen
  */
 public enum ChristianHoliday implements YearlyHoliday {
-  CHRISTMAS("Christmas", (year) -> LocalDate.of(year.getValue(), 12, 25)),
+  CHRISTMAS("Christmas Day", (year) -> LocalDate.of(year.getValue(), 12, 25)),
   CHRISTMAS_EVE("Christmas Eve", (year) -> LocalDate.of(year.getValue(), 12, 24)),
-  EASTER("Easter", ChristianHolidaySearcher::easter),
+  EASTER("Easter Sunday", ChristianHolidaySearcher::easter),
   EPIPHANY("Epiphany", (year) ->  LocalDate.of(year.getValue(), 1, 6)),
   ALL_SAINTS("All Saints' Day", (year) -> LocalDate.of(year.getValue(), 11, 1)),
   PALM_SUNDAY("Palm Sunday", (year) -> EASTER.dateFunction.apply(year).minusDays(7)),
