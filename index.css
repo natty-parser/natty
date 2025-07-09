@@ -1,0 +1,216 @@
+html {
+  padding:0;
+  margin:0;
+}
+
+body {
+  font-family:Helvetica;
+  padding:0;
+  margin:0;
+  color:#444;
+}
+
+h1,
+h2 {
+  font-size:28px;
+  font-weight:normal;
+  color:#888;
+}
+
+h2 {
+  font-size:20px;
+}
+
+a {
+  color:#ba5707;
+  text-decoration:none;
+}
+
+code.block {
+  display:block;
+  margin:10px 0 0 0;
+  padding:10px;
+  border:1px solid #aaa;
+}
+
+#version {
+  position:fixed;
+  top:200px;
+  left:0;
+  width:160px;
+  padding-right:20px;
+  text-align:right;
+  color:#ccc;
+}
+
+#nav {
+  float:left;
+  width:180px;
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  border-right:1px solid #888;
+  background-color:#f4f9fd;
+}
+
+#nav ul {
+  list-style-type:none;
+  padding:0;
+  margin:34px 0 0 0;
+}
+
+#nav ul li {
+  border-bottom:1px solid #ccc;
+  text-align:right;
+}
+
+#nav ul li.first {
+  border-top:1px solid #ccc;
+}
+
+#nav ul li.current a {
+  background-color:#fff;
+  color:#000;
+}
+
+#nav ul li a {
+  display:block;
+  padding: 10px 20px 10px 10px;
+  text-decoration : none;
+  color:#888;
+  background-color:#fff;
+}
+
+#content {
+	position:absolute;
+  width : 620px;
+  padding:20px 40px 40px 40px;
+  margin:0 0 0 180px;
+  top:0;
+}
+
+#text_input {
+  width:620px;
+  font-size:18px;
+  margin-bottom:20px;
+}
+
+#error,
+#empty {
+  color:#888;
+  font-size:18px;
+  margin:0 0 0 80px;
+  line-height:30px;
+}
+
+#error .description {
+  font-size:16px;
+  margin-top:10px;
+}
+
+#submit_row {
+  line-height:32px;
+}
+
+#submit_row * {
+  float:left;
+  margin-right:20px;
+  font-size:18px;
+}
+
+#submit {
+  background:url(/web/20210309115333im_/http://natty.joestelmach.com/images/button.png) transparent 0 0 no-repeat;
+  height:30px;
+  width:64px;
+  outline:none;
+}
+
+#submit:hover {
+  background-position:0 -34px;
+}
+
+#submit:active {
+  background-position:0 -68px;
+}
+
+#date_wrapper {
+  clear:both;
+  padding-top:20px;
+}
+
+#date {
+  background-color:#FFFFCC;
+}
+
+#summary {
+  clear:both;
+  padding-top:20px;
+}
+
+#structure .index {
+  border:1px solid #aaa;
+  padding:5px 5px 0 5px;
+  margin-right:5px;
+  font-size:20px;
+  float:left;
+  font-weight:bold;
+}
+
+#structure .index.imaginary {
+  border:none;
+}
+
+#structure .index .name {
+  padding:5px 0;
+  font-size:12px;
+  font-weight:normal;
+  clear:both;
+}
+
+#ast {
+  clear:both;
+  padding-top:20px;
+  color :#222;
+}
+
+#ast #ast_details .token {
+  margin-top:5px;
+}
+
+#ast #ast_details .spacing {
+  color :#aaa;
+  font-weight:normal;
+}
+
+#ast #ast_details .root {
+  font-weight:bold;
+}
+
+/**** searcher ****/
+
+textarea#search_input {
+  width:660px;
+  height:160px;
+  margin-bottom:20px;
+}
+
+#results {
+  clear:both;
+  padding-top:20px;
+}
+
+.highlight {
+  background-color:#FFFFCC;
+  font-weight:bold;
+}
+
+#result_list {
+  list-style-type:none;
+  margin:0 0 40px 0;
+  padding:0;
+}
+
+#result_list li {
+  margin-bottom:10px;
+}
