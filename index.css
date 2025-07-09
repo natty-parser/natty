@@ -120,7 +120,7 @@ code.block {
 }
 
 #submit {
-  background:url(/web/20210309115333im_/http://natty.joestelmach.com/images/button.png) transparent 0 0 no-repeat;
+  background:url(images/button.png) transparent 0 0 no-repeat;
   height:30px;
   width:64px;
   outline:none;
