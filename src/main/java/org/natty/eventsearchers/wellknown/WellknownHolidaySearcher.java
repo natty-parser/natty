@@ -1,6 +1,6 @@
 package org.natty.eventsearchers.wellknown;
 
-import org.natty.YearlyHoliday;
+import java.util.Optional;
 import org.natty.eventsearchers.AbstractYearlyHolidayEventSearcher;
 
 /**
@@ -10,14 +10,13 @@ import org.natty.eventsearchers.AbstractYearlyHolidayEventSearcher;
  */
 public class WellknownHolidaySearcher extends AbstractYearlyHolidayEventSearcher {
 
-  public static final WellknownHolidaySearcher INSTANCE = new WellknownHolidaySearcher();
 
-  private WellknownHolidaySearcher() {
-    // Private constructor to enforce singleton pattern
+  public WellknownHolidaySearcher() {
+
   }
 
   @Override
-  public YearlyHoliday fromSummary(String eventSummary) {
+  public Optional<WellknownHoliday> fromSummary(String eventSummary) {
     return WellknownHoliday.fromSummary(eventSummary);
   }
 

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.Year;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -42,11 +42,11 @@ public enum Season implements Function<Year, Optional<Instant>>{
     return summary;
   }
 
-  public static Season fromSummary(String summary) {
+  public static Optional<Season> fromSummary(String summary) {
     if (summary == null || summary.trim().isEmpty()) {
-      return null;
+      return Optional.empty();
     }
-    return lookup.get(summary.toLowerCase());
+    return Optional.ofNullable(lookup.get(summary.toLowerCase()));
   }
 
   @Override
@@ -75,8 +75,7 @@ public enum Season implements Function<Year, Optional<Instant>>{
             LocalTime time = LocalTime.parse(parts[column * 3 + 3]);
             dates.put(
               Year.of(y),
-              LocalDate.of(y, month, day).atTime(time).toInstant(
-                ZoneOffset.UTC));
+              LocalDate.of(y, month, day).atTime(time).atZone(ZoneId.of("GMT")).toInstant());
           }
         }
       } catch (Exception e) {

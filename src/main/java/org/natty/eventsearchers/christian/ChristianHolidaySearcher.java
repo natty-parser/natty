@@ -2,7 +2,7 @@ package org.natty.eventsearchers.christian;
 
 import java.time.LocalDate;
 import java.time.Year;
-import org.natty.YearlyHoliday;
+import java.util.Optional;
 import org.natty.eventsearchers.AbstractYearlyHolidayEventSearcher;
 
 /**
@@ -12,10 +12,9 @@ import org.natty.eventsearchers.AbstractYearlyHolidayEventSearcher;
  */
 public class ChristianHolidaySearcher extends AbstractYearlyHolidayEventSearcher {
 
-  public static final ChristianHolidaySearcher INSTANCE = new ChristianHolidaySearcher();
 
-  private ChristianHolidaySearcher() {
-    // Private constructor to enforce singleton pattern
+  public ChristianHolidaySearcher() {
+
   }
 
 
@@ -25,7 +24,7 @@ public class ChristianHolidaySearcher extends AbstractYearlyHolidayEventSearcher
   }
 
   @Override
-  public YearlyHoliday fromSummary(String eventSummary) {
+  public Optional<ChristianHoliday> fromSummary(String eventSummary) {
     return ChristianHoliday.fromSummary(eventSummary);
   }
 

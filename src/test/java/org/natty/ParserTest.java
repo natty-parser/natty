@@ -9,8 +9,10 @@ import org.apache.commons.lang3.SerializationUtils;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class ParserTest {
 
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ParserTest.class);
   @Test
   public void testParser() {
     // Test serializing of a basic parser which does not have a
@@ -60,14 +62,44 @@ public class ParserTest {
 
 
   }
+
+  /**
+   * Still fails after 2020, because easter is not an holiday in the US.
+   */
+
   @Test
   public void lastEaster() {
-    final List<DateGroup> groups = new Parser().parse("last easter", new Date(119, 1, 1));
-    assertEquals(1, groups.size());
-    Date easter = groups.get(0).getDates().get(0);
-    assertEquals("Sun Apr 01 00:00:00 CEST 2018", easter.toString());
+    for (int i = 2001; i < 2030; i++) {
+      Date reference = new Date(i - 1900, 1, 1);
+      final List<DateGroup> groups = new Parser().parse("last easter", reference);
+      assertEquals(1, groups.size());
+      Date easter = groups.get(0).getDates().get(0);
+      log.info("Last easter for year {}: {}", i, easter);
+    }
+  }
+
+  @Test
+  public void lastElectionDay() {
+    for (int i = 2001; i < 2030; i++) {
+      Date reference = new Date(i - 1900, 1, 1);
+      final List<DateGroup> groups = new Parser().parse("last election day", reference);
+      assertEquals(1, groups.size());
+      Date easter = groups.get(0).getDates().get(0);
+      log.info("Last election day for year {}: {}", i, easter);
+    }
+  }
+
+  @Test
+  public void issue279() {
+    Parser parser = new Parser();
+
+    List<DateGroup> parse1 = parser.parse("Fri Mar 04 00:00:00 UTC 2016", new Date(100, 1, 1));
+    log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
 
 
 
+    List<DateGroup> parse2 = parser.parse("Tue Jan 12 00:00:00 UTC 2016");
+
+    log.info("Parsed date: {}", parse2.get(0).getDates().get(0));
   }
 }

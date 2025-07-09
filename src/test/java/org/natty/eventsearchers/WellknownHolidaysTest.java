@@ -14,6 +14,10 @@ public class WellknownHolidaysTest {
     Stream.of(WellknownHoliday.values()).forEach(holiday -> {
       System.out.println(holiday.getSummary() + " on " + holiday.apply(Year.of(2025)));
     });
+
+    Stream.of(WellknownHoliday.values()).forEach(holiday -> {
+      System.out.println(holiday.getSummary() + " on " + holiday.apply(Year.of(2012)));
+    });
   }
 
 }

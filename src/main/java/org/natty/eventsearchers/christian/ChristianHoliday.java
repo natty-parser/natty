@@ -46,11 +46,11 @@ public enum ChristianHoliday implements YearlyHoliday {
     return summary;
   }
 
-  public static ChristianHoliday fromSummary(String summary) {
+  public static Optional<ChristianHoliday> fromSummary(String summary) {
     if (summary == null || summary.trim().isEmpty()) {
-      return null;
+      return Optional.empty();
     }
-    return lookup.get(summary.toLowerCase());
+    return Optional.ofNullable(lookup.get(summary.toLowerCase()));
   }
 
   @Override
