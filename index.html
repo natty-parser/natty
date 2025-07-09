@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head><script src="//archive.org/includes/athena.js" type="text/javascript"></script>
+<script type="text/javascript">window.addEventListener('DOMContentLoaded',function(){var v=archive_analytics.values;v.service='wb';v.server_name='wwwb-app212.us.archive.org';v.server_ms=1278;archive_analytics.send_pageview({});});</script>
+<script type="text/javascript" src="https://web-static.archive.org/_static/js/bundle-playback.js?v=1B2M2Y8A" charset="utf-8"></script>
+<script type="text/javascript" src="https://web-static.archive.org/_static/js/wombat.js?v=1B2M2Y8A" charset="utf-8"></script>
+<script>window.RufflePlayer=window.RufflePlayer||{};window.RufflePlayer.config={"autoplay":"on","unmuteOverlay":"hidden","showSwfDownload":true};</script>
+<script type="text/javascript" src="https://web-static.archive.org/_static/js/ruffle/ruffle.js"></script>
+<script type="text/javascript">
+    __wm.init("http://web.archive.org/web");
+  __wm.wombat("http://natty.joestelmach.com/","20210309115324","http://web.archive.org/","web","https://web-static.archive.org/_static/",
+	      "1615290804");
+</script>
+<link rel="stylesheet" type="text/css" href="https://web-static.archive.org/_static/css/banner-styles.css?v=1B2M2Y8A" />
+<link rel="stylesheet" type="text/css" href="https://web-static.archive.org/_static/css/iconochive.css?v=1B2M2Y8A" />
+<!-- End Wayback Rewrite JS Include -->
+
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <title>Natty Date Parser</title>
+    <link rel="stylesheet" type="text/css" href="/web/20210309115324cs_/http://natty.joestelmach.com/stylesheets/index.css"/>
+    <script src="/web/20210309115324js_/http://natty.joestelmach.com/javascripts/prototype.js" type="text/javascript"></script>
+  </head>
+
+  <body>
+
+
+
+<div id="nav">
+  <ul>
+    <li class="first current">
+      <a href="/web/20210309115324/http://natty.joestelmach.com/">about</a>
+    </li>
+
+    <li class="">
+      <a href="/web/20210309115324/http://natty.joestelmach.com/try.jsp">try it out</a>
+    </li>
+
+    <li class="">
+      <a href="/web/20210309115324/http://natty.joestelmach.com/doc.jsp">documentation</a>
+    </li>
+
+    <li class="">
+      <a href="/web/20210309115324/http://natty.joestelmach.com/supporters.jsp">support us</a>
+    </li>
+  </ul>
+</div>
+
+<div id="version">
+  v.0.12
+</div>
+
+
+
+    <div id="content">
+      <h1>natty</h1>
+      <p>
+        Natty is a natural language date parser written in Java.  Given a date
+        expression, natty will apply standard language recognition and translation
+        techniques to produce a list of corresponding dates with optional parse
+        and syntax information.  <a href="/web/20210309115324/http://natty.joestelmach.com/try.jsp">Give it a try</a>.
+      </p>
+      <p>
+        Natty recognizes dates described in many ways, including formal dates
+        (02/28/1979), relaxed dates (oct 1st), relative dates (the day before
+        next thursday), and even date alternatives (next wed or thurs).
+      </p>
+      <p>
+        Natty is also able to search for date components within a larger block
+        of text, detect their structure, and report line and column information.
+      </p>
+      </p>
+        Take a look at the <a href="/web/20210309115324/http://natty.joestelmach.com/doc.jsp">documentation</a> for a complete
+        description, and <a href="http://web.archive.org/web/20210309115324/http://github.com/joestelmach/natty/issues">let
+        us know</a> if natty doesn't recognize something it should.
+      </p>
+
+      <p>
+        Getting started with natty is easy:
+      </p>
+
+      <ol>
+        <li>
+        Include the following dependency in your pom.xml file:
+<pre><code class="block">&lt;dependency&gt;
+  &lt;groupId&gt;com.joestelmach&lt;/groupId&gt;
+  &lt;artifactId&gt;natty&lt;/artifactId&gt;
+  &lt;version&gt;0.11&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+        <p>
+          If you're not using Maven, you can download the latest jar file from
+          <a href="http://web.archive.org/web/20210309115324/https://github.com/joestelmach/natty">github</a>.
+        </p>
+
+        <li>
+          <p>
+            Use the <code>Parser</code> class to parse your input string into
+            a list of <code>DateGroup</code>'s.  Each <code>DateGroup</code>
+            contains a list of <code>Date</code>'s, the original value and
+            location of the matching text, granular parse and abstract syntax
+            tree information, and simple recurrence information.
+          </p>
+<pre><code class="block">import com.joestelmach.natty.*;
+
+Parser parser = new Parser();
+List<dategroup> groups = parser.parse("the day before next thursday");
+for(DateGroup group:groups) {
+  List<date> dates = group.getDates();
+  int line = group.getLine();
+  int column = group.getPosition();
+  String matchingValue = group.getText();
+  String syntaxTree = group.getSyntaxTree().toStringTree();
+  Map<string, list<parselocation>&gt; parseMap = group.getParseLocations();
+  boolean isRecurreing = group.isRecurring();
+  Date recursUntil = group.getRecursUntil();
+}
+</code></pre>
+        </li>
+      </ol>
+      <p>
+        Keep in mind that natty is still quite young, and its API may change as
+        it reaches maturity.  If you'd like to leave some feedback, you can
+        submit an issue on <a href="http://web.archive.org/web/20210309115324/http://github.com/joestelmach/natty/issues">
+        github</a>, or contact me directly at <a href="http://web.archive.org/web/20210309115324/mailto:joestelmach@gmail.com">
+        joestelmach@gmail.com</a>.
+      </p>
+    </div>
+  </body>
+</html>
+<!--
+     FILE ARCHIVED ON 11:53:24 Mar 09, 2021 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 19:39:50 Jul 09, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  captures_list: 0.559
+  exclusion.robots: 0.026
+  exclusion.robots.policy: 0.015
+  esindex: 0.01
+  cdx.remote: 64.345
+  LoadShardBlock: 383.73 (3)
+  PetaboxLoader3.datanode: 678.637 (5)
+  PetaboxLoader3.resolve: 416.764 (3)
+  load_resource: 793.133 (2)
+-->
