@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <title>Natty Date Parser</title>
+    <script src="prototype.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="index.css"/>
+    <style type="text/css">
+      #syntax_list dt {
+        margin:20px 0 10px 20px;
+        color:#aaa;
+      }
+
+      #syntax_list dd {
+        margin-left:20px;
+      }
+
+      #syntax_list dd ul {
+        border:1px solid #aaa;
+        padding:10px;
+        list-style-type:none;
+      }
+
+      img#ast_diagram {
+        margin:40px 0 20px 40px;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+
+<div id="nav">
+  <ul>
+    <li class="first">
+      <a href=".">about</a>
+    </li>
+
+    <li class="">
+      <a href="try.html">try it out</a>
+    </li>
+
+    <li class="current">
+      <a href="doc.html">documentation</a>
+    </li>
+
+    <li class="">
+      <a href="supporters.html">support us</a>
+    </li>
+  </ul>
+</div>
+
+<div id="version">
+  v.0.12
+</div>
+
+
+
+    <div id="content">
+      <h1>some words of wisdom</h1>
+
+      <h2>how it works</h2>
+      <p>Natty makes heavy use of <a href="https://antlr.org/">ANTLR</a> to tokenize and parse its input into a generic abstract syntax tree, and then walk that tree to determine the date(s) represented.  Natty attempts to recognize a wide range of date formats, but since there is an inherent ambuigity in the grammar describing these formats, some decisions need to be made arbitrarily.  For example, given the string: '10/10 500', we could interpret this as "october 10th at 5 o'clock" or as "october 10th in the year 500".  Given this choice, natty will choose the former with the reasoning that people don't typically reference dates that are centuries away from the present.
+      </p>
+      <p>
+        The abstract syntax tree (AST) approach allows us to minimize the actual code we need to write (as opposed to the code generated for us by ANTLR,) to just a few date manipulation methods (see <a href="https://github.com/natty-parser/natty/blob/main/src/main/java/org/natty/WalkerState.java">WalkerState.java</a>). Another advantage to this approach is the theoretical ease at which natty could be ported to another target language.  For the more curious, here's a rough sketch of the AST structure used:
+      </p>
+      <img id="ast_diagram" alt="ast diagram" src="images/ast.png"/>
+      <h2>supported formats</h2>
+      Following is an attempt at cataloging the date formats that natty recognizes.  For the formal grammar definition, see <a href="https://github.com/natty-parser/natty/blob/main/src/main/antlr3/org/natty/generated/DateParser.g">DateParser.g</a>.
+
+      <dl id="syntax_list">
+        <dt>formal dates</dt>
+        <dd>
+          Formal dates are those in which the month, day, and year are represented as integers separated by a common separator character.  The year is optional and may preceed the month or succeed the day of month.  If a two-digit year is given, it must succeed the day of month.
+          <ul>
+            <li>1978-01-28</li>
+            <li>1984/04/02</li>
+            <li>1/02/1980</li>
+            <li>2/28/79</li>
+          </ul>
+        </dd>
+
+        <dt>relaxed dates</dt>
+        <dd>
+          Relaxed dates are those in which the month, day of week, day of month, and year may be given in a loose, non-standard manner, with most parts being optional.
+          <ul>
+            <li>The 31st of April in the year 2008</li>
+            <li>Fri, 21 Nov 1997</li>
+            <li>Jan 21, '97</li>
+            <li>Sun, Nov 21</li>
+            <li>jan 1st</li>
+            <li>february twenty-eighth</li>
+          </ul>
+        </dd>
+
+        <dt>relative dates</dt>
+        <dd>
+          Relative dates are those that are relative to the current date.
+          <ul>
+            <li>next thursday</li>
+            <li>last wednesday</li>
+            <li>today</li>
+            <li>tomorrow</li>
+            <li>yesterday</li>
+            <li>next week</li>
+            <li>next month</li>
+            <li>next year</li>
+            <li>3 days from now</li>
+            <li>three weeks ago</li>
+          </ul>
+        </dd>
+
+        <dt>date alternatives</dt>
+        <dd>
+          Natty is able to reconize a list of date alternatives.  This is the reason why the <code>ParseResult</code> always contains a <code>List</code> of <code>Date</code> objects.
+          <ul>
+            <li>next wed or thurs</li>
+            <li>oct 3rd or 4th</li>
+          </ul>
+        </dd>
+
+        <dt>prefixes</dt>
+        <dd>
+          Most of the above date formats may be prefixed with a modifier.
+          <ul>
+            <li>day after</li>
+            <li>the day before</li>
+            <li>the monday after</li>
+            <li>the monday before</li>
+            <li>2 fridays before</li>
+            <li>4 tuesdays after</li>
+          </ul>
+        </dd>
+
+        <dt>time</dt>
+        <dd>
+          The above date formats may be prefixed or suffixed with time information.
+          <ul>
+            <li>0600h</li>
+            <li>06:00 hours</li>
+            <li>6pm</li>
+            <li>5:30 a.m.</li>
+            <li>5</li>
+            <li>12:59</li>
+            <li>23:59</li>
+            <li>8p</li>
+            <li>noon</li>
+            <li>afternoon</li>
+            <li>midnight</li>
+          </ul>
+        </dd>
+
+        <dt>relative times</dt>
+        <dd>
+          <ul>
+            <li>10 seconds ago</li>
+            <li>in 5 minutes</li>
+            <li>4 minutes from now</li>
+          </ul>
+        </dd>
+
+        <dt>time zones</dt>
+        <dd>
+          Any time may be suffixed with time zone information.  Any arbitrary GMT
+          offset may be given in the form +00:500, -0600, etc.  Common American
+          and Pacific time zone abbreviations may also be used.  If you'd like
+          to help add common abbreviations for your locale, feel free to contact
+          us (via github)
+          <ul>
+            <li>+0500</li>
+            <li>-08:00</li>
+            <li>UTC</li>
+            <li>EST</li>
+            <li>EDT</li>
+            <li>ET</li>
+            <li>CST</li>
+            <li>PST</li>
+            <li>PDT</li>
+            <li>PT</li>
+            <li>MST</li>
+            <li>AKST</li>
+            <li>HAST</li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
+
+    <div id="margin"></div>
+  </body>
+</html>
