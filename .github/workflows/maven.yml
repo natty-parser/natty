@@ -16,7 +16,9 @@ jobs:
         os: [ ubuntu-latest ]
         include:
           - java_version: '11'
-            os: [windows-latest, macos-latest]
+            os: windows-latest
+          - java_version: '11'
+            os: macos-latest
     runs-on: ${{ matrix.os }}
     env:
       MAVEN_ARGS: '--no-transfer-progress'
