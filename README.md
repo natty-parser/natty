@@ -9,6 +9,10 @@ expression, natty will apply standard language recognition and translation
 techniques to produce a list of corresponding dates with optional parse and
 syntax information.
 
+## Documentation
+
+Used to live at http://natty.joestelmach.com/, we'll try to get something up at https://natty-parser.github.io/natty/
+
 ## History
 
 Originally written by Joel Stelmach at https://github.com/joestelmach/natty and developed between 2010 and 2017. Abandoned since then. We keep it alive as fork here since 2022.
