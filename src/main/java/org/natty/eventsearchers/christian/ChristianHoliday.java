@@ -13,7 +13,7 @@ import org.natty.YearlyHoliday;
 public enum ChristianHoliday implements YearlyHoliday {
   CHRISTMAS("Christmas", (year) -> LocalDate.of(year.getValue(), 12, 25)),
   CHRISTMAS_EVE("Christmas Eve", (year) -> LocalDate.of(year.getValue(), 12, 24)),
-  EASTER("Easter", (year) -> ChristianHolidaySearcher.easter(year.getValue())),
+  EASTER("Easter", ChristianHolidaySearcher::easter),
   EPIPHANY("Epiphany", (year) ->  LocalDate.of(year.getValue(), 1, 6)),
   ALL_SAINTS("All Saints' Day", (year) -> LocalDate.of(year.getValue(), 11, 1)),
   PALM_SUNDAY("Palm Sunday", (year) -> EASTER.dateFunction.apply(year).minusDays(7)),
@@ -21,7 +21,7 @@ public enum ChristianHoliday implements YearlyHoliday {
   GOOD_FRIDAY("Good Friday", (year) -> EASTER.dateFunction.apply(year).minusDays(2)),
   ASCENSION("Ascension Day", (year) -> EASTER.dateFunction.apply(year).plusDays(39)),
   PENTECOST("Pentecost", (year) -> EASTER.dateFunction.apply(year).plusDays(49)),
-  TRINITY_SUNDAY("Trinity Sunday", year -> EASTER.dateFunction.apply(year).plusDays(56)),
+  TRINITY_SUNDAY("Trinity Sunday", year -> EASTER.dateFunction.apply(year).plusDays(56))
   ;
 
   private final String summary;

@@ -1,6 +1,7 @@
 package org.natty.eventsearchers.christian;
 
 import java.time.LocalDate;
+import java.time.Year;
 import org.natty.YearlyHoliday;
 import org.natty.eventsearchers.AbstractYearlyHolidayEventSearcher;
 
@@ -19,8 +20,8 @@ public class ChristianHolidaySearcher extends AbstractYearlyHolidayEventSearcher
 
 
 
-  public static LocalDate easter(int year) {
-    return computeEasterDateWithButcherMeeusAlgorithm(year);
+  public static LocalDate easter(Year year) {
+    return computeEasterDateWithButcherMeeusAlgorithm(year.getValue());
   }
 
   @Override
