@@ -1,15 +1,14 @@
 package org.natty;
 
-import java.time.Year;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 /**
  * @author Joe Stelmach
@@ -34,19 +33,6 @@ public class WalkerState {
   private static final String PLUS = "+";
   private static final String MINUS = "-";
   private static final String GMT = "GMT";
-  private static final Map<Range<Year>, String> HOLIDAY_ICS_FILES;
-  static {
-    Map<Range<Year>, String> icsFileNames = new HashMap<>();
-    icsFileNames.put(new Range<>(Year.of(2000), Year.of(2020)), "/us/2000-2020/holidays.ics");
-    HOLIDAY_ICS_FILES = Collections.unmodifiableMap(icsFileNames);
-  }
-  private static final Map<Range<Year>, String> SEASON_ICS_FILE;
-  static {
-    Map<Range<Year>, String> icsFileNames = new HashMap<>();
-    icsFileNames.put(new Range<>(Year.of(2000), Year.of(2020)), "/seaons.ics");
-    SEASON_ICS_FILE = Collections.unmodifiableMap(icsFileNames);
-  }
-
 
   private final CalendarSource calendarSource;
   private GregorianCalendar _calendar;
@@ -100,8 +86,8 @@ public class WalkerState {
   public void seekToDayOfWeek(String direction, String seekType, String seekAmount, String dayOfWeek) {
     int dayOfWeekInt = Integer.parseInt(dayOfWeek);
     int seekAmountInt = Integer.parseInt(seekAmount);
-    assert(direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT));
-    assert(seekType.equals(SEEK_BY_DAY) || seekType.equals(SEEK_BY_WEEK));
+    assert direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT);
+    assert seekType.equals(SEEK_BY_DAY) || seekType.equals(SEEK_BY_WEEK);
     assert(dayOfWeekInt >= 1 && dayOfWeekInt <= 7);
 
     markDateInvocation();
@@ -112,9 +98,7 @@ public class WalkerState {
       // then add or subtract the week(s)
       _calendar.set(Calendar.DAY_OF_WEEK, dayOfWeekInt);
       _calendar.add(Calendar.DAY_OF_YEAR, seekAmountInt * 7 * sign);
-    }
-
-    else if(seekType.equals(SEEK_BY_DAY)) {
+    } else if(seekType.equals(SEEK_BY_DAY)) {
       // find the closest day
       do {
         _calendar.add(Calendar.DAY_OF_YEAR, sign);
@@ -403,9 +387,9 @@ public class WalkerState {
    */
   public void seekToHoliday(String holidayString, String direction, String seekAmount) {
     Holiday holiday = Holiday.valueOf(holidayString);
-    assert(holiday != null);
+    assert holiday != null;
 
-    seekToIcsEvent(HOLIDAY_ICS_FILES, holiday.getSummary(), direction, seekAmount);
+    seekToEvent(holiday.getSummary(), direction, seekAmount);
   }
 
   /**
@@ -418,7 +402,7 @@ public class WalkerState {
     Holiday holiday = Holiday.valueOf(holidayString);
     assert(holiday != null);
 
-    seekToIcsEventYear(HOLIDAY_ICS_FILES, yearString, holiday.getSummary());
+    seekToEventYear(yearString, holiday.getSummary());
   }
 
   /**
@@ -430,9 +414,9 @@ public class WalkerState {
    */
   public void seekToSeason(String seasonString, String direction, String seekAmount) {
     Season season = Season.valueOf(seasonString);
-    assert(season!= null);
+    assert season!= null;
 
-    seekToIcsEvent(SEASON_ICS_FILE, season.getSummary(), direction, seekAmount);
+    seekToEvent(season.getSummary(), direction, seekAmount);
   }
 
   /**
@@ -443,9 +427,9 @@ public class WalkerState {
    */
   public void seekToSeasonYear(String seasonString, String yearString) {
     Season season = Season.valueOf(seasonString);
-    assert(season != null);
+    assert season != null;
 
-    seekToIcsEventYear(SEASON_ICS_FILE, yearString, season.getSummary());
+    seekToEventYear(yearString, season.getSummary());
   }
 
   /**
@@ -563,10 +547,10 @@ public class WalkerState {
     _currentYear = _calendar.get(Calendar.YEAR);
   }
 
-  private void seekToIcsEvent(Map<Range<Year>, String> icsFileNames, String eventSummary, String direction, String seekAmount) {
+  private void seekToEvent(String eventSummary, String direction, String seekAmount) {
     int seekAmountInt = Integer.parseInt(seekAmount);
-    assert(direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT));
-    assert(seekAmountInt >= 0);
+    assert direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT);
+    assert seekAmountInt >= 0;
 
     markDateInvocation();
 
@@ -579,31 +563,39 @@ public class WalkerState {
     boolean forwards = direction.equals(DIR_RIGHT);
     int startYear = forwards ? currentYear : currentYear - seekAmountInt - 1;
     int endYear = forwards ? currentYear + seekAmountInt + 1 : currentYear;
-    Map<Integer, Date> dates = getDatesFromIcs(icsFileNames, eventSummary,
-        startYear, endYear);
+    Map<Integer, Date> dates = EventSearcherService.INSTANCE
+      .findEvents(Range.ofYears(startYear, endYear), _defaultTimeZone, eventSummary)
+      .collect(Collectors.toMap((d) -> {
+        return d.atZone(_defaultTimeZone.toZoneId()).getYear();
+      }, Date::from));
 
-    Date date = dates.get(currentYear);
-    if (date == null) {
+
+    Date currentYearDate = dates.get(currentYear);
+    if (currentYearDate == null) {
       throw new IllegalArgumentException(
-          "No date found for event '" + eventSummary + "' in the range " +
-          startYear + " - " + endYear);
+          "No date found for event '" + eventSummary + "' for year " + currentYear);
     }
     // grab the right one
-    boolean hasPassed = cal.getTime().after(date);
+    boolean hasPassed = cal.getTime().after(currentYearDate);
     int targetYear = currentYear +
         (forwards ? seekAmountInt + (hasPassed ? 0 : -1) :
           (seekAmountInt - (hasPassed ? 1 : 0)) * -1);
 
     cal.setTimeZone(_calendar.getTimeZone());
+    Date targetYearDate = dates.get(targetYear);
+    if (targetYearDate == null) {
+      throw new IllegalArgumentException(
+        "No date found for event '" + eventSummary + "' for year " + targetYear);
+    }
     cal.setTime(dates.get(targetYear));
     _calendar.set(Calendar.YEAR, cal.get(Calendar.YEAR));
     _calendar.set(Calendar.MONTH, cal.get(Calendar.MONTH));
     _calendar.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
   }
 
-  private void seekToIcsEventYear(Map<Range<Year>, String> icsFileNames, String yearString, String eventSummary) {
+  private void seekToEventYear(String yearString, String eventSummary) {
     int yearInt = Integer.parseInt(yearString);
-    assert(yearInt >= 0);
+    assert yearInt >= 0;
 
     markDateInvocation();
 
@@ -612,9 +604,9 @@ public class WalkerState {
     // This is likely to represent the correct start date of the given season, but is not
     // guaranteed as these dates do shift over time
     int year = getFullYear(yearInt);
-    Date date = seasonalDateFromIcs(icsFileNames, eventSummary, year);
+    Date date = seasonalDate(eventSummary, year);
     if(date == null) {
-      date = seasonalDateFromIcs(icsFileNames, eventSummary, getCalendar().get(Calendar.YEAR));
+      date = seasonalDate(eventSummary, getCalendar().get(Calendar.YEAR));
       if(date != null) {
         Calendar cal = getCalendar();
         cal.setTime(date);
@@ -637,9 +629,9 @@ public class WalkerState {
    * Finds and returns the date for the given event summary and year within the given ics file,
    * or null if not present.
    */
-  private Date seasonalDateFromIcs(Map<Range<Year>, String> icsFileNames, String eventSummary, int year) {
-    Map<Integer, Date> dates = getDatesFromIcs(icsFileNames, eventSummary, year, year);
-    return dates.get(year - (eventSummary.equals(Holiday.NEW_YEARS_EVE.getSummary()) ? 1 : 0));
+  private Date seasonalDate(String eventSummary, int year) {
+    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year), _defaultTimeZone, eventSummary).findFirst().orElse(null);
+    return instant == null ? null : Date.from(instant);
   }
 
   /**
@@ -681,22 +673,6 @@ public class WalkerState {
     _timeGivenPerCapture.add(true);
   }
 
-  private Map<Integer, Date> getDatesFromIcs(Map<Range<Year>, String> icsFileNames,
-      String eventSummary, int startYear, int endYear) {
-
-    Range<Year> range = new Range<>(Year.of(startYear), Year.of(endYear));
-
-    Map<Integer, Date> dates = new HashMap<>();
-    icsFileNames.entrySet().stream()
-        .filter(
-          entry ->  entry.getKey().isConnected(range))
-      .map(Map.Entry::getValue)
-      .forEach(icsFileName -> {
-        IcsSearcher searcher = new IcsSearcher(icsFileName, _defaultTimeZone);
-        dates.putAll(searcher.findDates(startYear, endYear, eventSummary));
-      });
-    return dates;
-  }
 
   private int getFullYear(Integer year) {
     int result = year;

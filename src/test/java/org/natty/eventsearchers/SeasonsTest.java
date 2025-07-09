@@ -3,11 +3,11 @@ package org.natty.eventsearchers;
 import org.junit.Test;
 
 import java.time.Year;
-import java.util.ServiceLoader;
 import java.util.stream.Stream;
-import org.apache.commons.lang3.Range;
-import org.natty.EventSearcher;
+import org.natty.EventSearcherService;
+import org.natty.Range;
 import org.natty.Season;
+import org.natty.eventsearchers.seasons.SeasonsEventSearcher;
 
 public class SeasonsTest {
 
@@ -21,11 +21,10 @@ public class SeasonsTest {
 
   @Test
   public void service() {
-    ServiceLoader<EventSearcher> loader = ServiceLoader.load(EventSearcher.class);
-    loader.forEach(eventSearcher -> {
-      System.out.println("Found event searcher: " + eventSearcher.getClass().getName());
-      eventSearcher.findEvents(new Range<>(Year.of(2020), Year.of(2025)), null, "Spring")
-          .forEach(event -> System.out.println("Event found: " + event));
-    });
+    SeasonsEventSearcher seasonsEventSearcher = EventSearcherService.INSTANCE.getEventSearcher(SeasonsEventSearcher.class);
+
+    seasonsEventSearcher.findEvents(Range.ofYears(1900, 2100), Season.SPRING.getSummary())
+      .forEach(event -> System.out.println(Season.SPRING + ": " +event));
+
   }
 }
