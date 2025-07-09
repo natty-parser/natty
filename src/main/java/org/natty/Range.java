@@ -36,7 +36,7 @@ class Range<C extends Comparable<C>> implements Predicate<C> {
     if (value == null) {
       return false;
     }
-    return (start.compareTo(value) <= 0 && end.compareTo(value) >= 0);
+    return start.compareTo(value) <= 0 && end.compareTo(value) >= 0;
   }
   public boolean encloses(Range<C> value) {
     if (value == null) {
