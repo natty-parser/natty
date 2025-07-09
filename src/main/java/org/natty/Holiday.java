@@ -3,6 +3,15 @@ package org.natty;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The recognized holidays.
+ * TODO: This is quite US-centric, but it is also tightly coupled to the recognized tokens in DateParser.
+ * <p>
+ * May be we can change the parser that it will recognize any summary when using quotes or so.
+ * <p>
+ * Like: "King's day" 2025
+ */
+
 public enum Holiday {
   APRIL_FOOLS_DAY("April Fool's Day"),
   BLACK_FRIDAY("Black Friday"),
@@ -33,7 +42,7 @@ public enum Holiday {
   VALENTINES_DAY("Valentine's Day"),
   VETERANS_DAY("Veteran's Day");
 
-  private String summary;
+  private final String summary;
   private static final Map<String, Holiday> lookup;
   static {
     lookup = new HashMap<String, Holiday>();
@@ -51,7 +60,9 @@ public enum Holiday {
   }
 
   public static Holiday fromSummary(String summary) {
-    if(summary == null) return null;
+    if(summary == null)  {
+      return null;
+    }
     return lookup.get(summary);
   }
 }
