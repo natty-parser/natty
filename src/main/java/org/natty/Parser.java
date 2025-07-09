@@ -4,9 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -45,17 +43,16 @@ public class Parser implements Serializable {
    * valid tokens, but could never add any meaningful parsing information when located at the
    * end of a token stream.
    */
-  private static final Set<Integer> IGNORED_TRAILING_TOKENS =
-      new HashSet<Integer>(Arrays.asList(new Integer[] {
-          DateLexer.DOT,
-          DateLexer.COLON,
-          DateLexer.COMMA,
-          DateLexer.DASH,
-          DateLexer.SLASH,
-          DateLexer.DOT,
-          DateLexer.PLUS,
-          DateLexer.SINGLE_QUOTE
-      }));
+  private static final Set<Integer> IGNORED_TRAILING_TOKENS = Set.of(
+    DateLexer.DOT,
+    DateLexer.COLON,
+    DateLexer.COMMA,
+    DateLexer.DASH,
+    DateLexer.SLASH,
+    DateLexer.PLUS,
+    DateLexer.SINGLE_QUOTE
+  );
+
 
   /**
    * Creates a new parser using the given time zone as the default
