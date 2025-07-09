@@ -1,10 +1,12 @@
 package org.natty.eventsearchers.wellknown;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import org.natty.YearlyHoliday;
 
@@ -18,14 +20,14 @@ public enum WellknownHoliday implements YearlyHoliday {
   THANKSGIVING("Thanksgiving Day", (year) -> {
     // Thanksgiving is the fourth Thursday in November
     LocalDate firstDayOfNovember = LocalDate.of(year.getValue(), 11, 1);
-    int daysToAdd = (11 - firstDayOfNovember.getDayOfWeek().getValue() + 4) % 7 + 21; // 21 days to get to the fourth Thursday
+    int daysToAdd = (DayOfWeek.THURSDAY.getValue()  - firstDayOfNovember.getDayOfWeek().getValue() + 7) % 7 + 21; // three week after first
     return firstDayOfNovember.plusDays(daysToAdd);
   }),
   BLACK_FRIDAY("Black Friday", (year) -> THANKSGIVING.dateFunction.apply(year).plusDays(1)),
   COLUMBUS_DAY("Columbus Day (US-OPM)", (year) -> {
     // Columbus Day is the second Monday in October
     LocalDate firstDayOfOctober = LocalDate.of(year.getValue(), 10, 1);
-    int daysToAdd = (8 - firstDayOfOctober.getDayOfWeek().getValue() + 1) % 7 + 7; // 7 days to get to the second Monday
+    int daysToAdd = (DayOfWeek.MONDAY.getValue() - firstDayOfOctober.getDayOfWeek().getValue() + 7) % 7 + 7; // 7 days to get to the second Monday
     return firstDayOfOctober.plusDays(daysToAdd);
   }),
   GROUNDHOG_DAY("Groundhog's Day", (year) -> LocalDate.of(year.getValue(), 2, 2)),
@@ -35,15 +37,27 @@ public enum WellknownHoliday implements YearlyHoliday {
   FATHERS_DAY("Father's Day", (year) -> {
     // Father's Day is the third Sunday in June
     LocalDate firstDayOfJune = LocalDate.of(year.getValue(), 6, 1);
-    int daysToAdd = (7 - firstDayOfJune.getDayOfWeek().getValue() + 7) % 7 + 14; // 14 days to get to the third Sunday
+    int daysToAdd = (DayOfWeek.SUNDAY.getValue() - firstDayOfJune.getDayOfWeek().getValue() + 7) % 7 + 14; // 14 days to get to the third Sunday
     return firstDayOfJune.plusDays(daysToAdd);
   }),
   MOTHERS_DAY("Mother's Day",  (year) -> {
     // Mother's Day is the second Sunday in May
     LocalDate firstDayOfMay = LocalDate.of(year.getValue(), 5, 1);
-    int daysToAdd = (7 - firstDayOfMay.getDayOfWeek().getValue() + 7) % 7 + 7; // 7 days to get to the second Sunday
+    int daysToAdd = (DayOfWeek.SUNDAY.getValue() - firstDayOfMay.getDayOfWeek().getValue() + 7) % 7 + 7; // 7 days to get to the second Sunday
     return firstDayOfMay.plusDays(daysToAdd);
   }),
+
+  VETERANS_DAY("Veteran's Day", (year) -> {
+    // Veteran's Day is November 11th
+    return LocalDate.of(year.getValue(), 11, 11);
+  }),
+  MEMORIAL_DAY("Memorial Day", (year) -> {
+    // Memorial Day is the last Monday in May
+    LocalDate lastDayOfMay = LocalDate.of(year.getValue(), 5, 31);
+    int daysToSubtract = (lastDayOfMay.getDayOfWeek().getValue() - DayOfWeek.MONDAY.getValue() + 7) % 7; // days to subtract to get to the last Monday
+    return lastDayOfMay.minusDays(daysToSubtract);
+  }),
+
 
   ;
 
@@ -69,11 +83,11 @@ public enum WellknownHoliday implements YearlyHoliday {
     return summary;
   }
 
-  public static WellknownHoliday fromSummary(String summary) {
+  public static Optional<WellknownHoliday> fromSummary(String summary) {
     if (summary == null || summary.trim().isEmpty()) {
-      return null;
+      return Optional.empty();
     }
-    return lookup.get(summary.toLowerCase());
+    return Optional.ofNullable(lookup.get(summary.toLowerCase()));
   }
 
 
