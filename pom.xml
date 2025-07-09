@@ -232,6 +232,7 @@
       <groupId>org.mnode.ical4j</groupId>
       <artifactId>ical4j</artifactId>
       <version>4.1.1</version>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -264,7 +265,7 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.17.0</version>
-      <scope>test</scope>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 </project>
