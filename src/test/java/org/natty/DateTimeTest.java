@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -28,7 +27,7 @@ public class DateTimeTest extends AbstractTest {
   @Test
   public void testSpecific()  {
     final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
-    Date reference = Timestamp.valueOf(refDateTime);
+    Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
 
     validateDateTime(reference, "1st oct in the year '89 1300 hours", 10, 1, 1989, 13, 0, 0);
@@ -50,7 +49,7 @@ public class DateTimeTest extends AbstractTest {
   @Test
   public void testRelative() {
     final LocalDateTime refDateTime = LocalDateTime.of(2011, 2, 24, 0, 0, 0);
-    Date reference = Timestamp.valueOf(refDateTime);
+    Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
 
     validateDateTime(reference, "seven years ago at 3pm", 2, 24, 2004, 15, 0, 0);

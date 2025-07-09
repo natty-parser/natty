@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 
+ *
  * @author Joe Stelmach
  */
 public abstract class AbstractTest {
@@ -30,10 +30,10 @@ public abstract class AbstractTest {
   public void before() {
     calendarSource = new CalendarSource();
   }
-  
+
   /**
    * Parses the given value into a collection of dates
-   * 
+   *
    * @param value
    * @return
    */
@@ -41,10 +41,10 @@ public abstract class AbstractTest {
     List<DateGroup> dateGroup = _parser.parse(value, referenceDate);
     return dateGroup.isEmpty() ? new ArrayList<Date>() : dateGroup.get(0).getDates();
   }
-  
+
   /**
    * Parses the given value, asserting that one and only one date is produced.
-   * 
+   *
    * @param value
    * @return
    */
@@ -53,11 +53,11 @@ public abstract class AbstractTest {
     Assert.assertEquals(1, dates.size());
     return dates.get(0);
   }
-  
+
   /**
-   * Asserts that the given string value parses down to the given 
+   * Asserts that the given string value parses down to the given
    * month, day, and year values.
-   * 
+   *
    * @param value
    * @param month
    * @param day
@@ -71,10 +71,10 @@ public abstract class AbstractTest {
   protected void validateDate(String value, int month, int day, int year) {
     validateDate(new Date(), value, month, day, year);
   }
-  
+
   /**
    * Asserts that the given date contains the given attributes
-   * 
+   *
    * @param date
    * @param month
    * @param day
@@ -82,16 +82,16 @@ public abstract class AbstractTest {
    */
   protected void validateDate(Date date, int month, int day, int year) {
     _calendar.setTime(date);
-    Assert.assertEquals(month -1, _calendar.get(Calendar.MONTH));
-    Assert.assertEquals(day, _calendar.get(Calendar.DAY_OF_MONTH));
-    Assert.assertEquals(year, _calendar.get(Calendar.YEAR));
+    Assert.assertEquals(date + ": month != " + month , month -1, _calendar.get(Calendar.MONTH));
+    Assert.assertEquals(date + ": day != " + day, day, _calendar.get(Calendar.DAY_OF_MONTH));
+    Assert.assertEquals(date + ": year != " + year, year, _calendar.get(Calendar.YEAR));
   }
-  
+
   /**
-   * 
-   * Asserts that the given string value parses down to the given 
+   *
+   * Asserts that the given string value parses down to the given
    * hours, minutes, and seconds
-   * 
+   *
    * @param value
    * @param hours
    * @param minutes
@@ -101,12 +101,12 @@ public abstract class AbstractTest {
     Date date = parseSingleDate(value, referenceDate);
     validateTime(date, hours, minutes, seconds);
   }
-  
+
   /**
-   * 
+   *
    * Asserts that the given date contains the given time attributes
-   * 
-   * @param date 
+   *
+   * @param date
    * @param hours
    * @param minutes
    * @param seconds
@@ -117,12 +117,12 @@ public abstract class AbstractTest {
     Assert.assertEquals(minutes, _calendar.get(Calendar.MINUTE));
     Assert.assertEquals(seconds, _calendar.get(Calendar.SECOND));
   }
-  
+
   /**
-   * 
-   * Asserts that the given string value parses down to the given 
+   *
+   * Asserts that the given string value parses down to the given
    * month, day, year, hours, minutes, and seconds
-   * 
+   *
    * @param value
    * @param month
    * @param day
@@ -133,14 +133,14 @@ public abstract class AbstractTest {
    */
   protected void validateDateTime(Date referenceDate, String value, int month, int day, int year,
       int hours, int minutes, int seconds) {
-    
+
     Date date = parseSingleDate(value, referenceDate);
     validateDateTime(date, month, day, year, hours, minutes, seconds);
   }
-  
+
   /**
    * Asserts that the given date contains the given attributes
-   * 
+   *
    * @param date
    * @param month
    * @param day
@@ -149,7 +149,7 @@ public abstract class AbstractTest {
    * @param minutes
    * @param seconds
    */
-  protected void validateDateTime(Date date, int month, int day, int year, 
+  protected void validateDateTime(Date date, int month, int day, int year,
       int hours, int minutes, int seconds) {
 
     _calendar.setTime(date);
