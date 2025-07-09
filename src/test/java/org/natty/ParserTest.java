@@ -2,10 +2,14 @@ package org.natty;
 
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import org.apache.commons.lang3.SerializationUtils;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,13 +18,21 @@ public class ParserTest {
 
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ParserTest.class);
   @Test
-  public void testParser() {
+  public void testParser() throws IOException, ClassNotFoundException {
     // Test serializing of a basic parser which does not have a
     // user-supplied TimeZone.
     Parser parser = new Parser();
 
-    byte[] serialized = SerializationUtils.serialize(parser);
-    Parser deserialized = SerializationUtils.deserialize(serialized);
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    try (ObjectOutputStream out = new ObjectOutputStream(bytes)) {
+      out.writeObject(parser);
+    }
+    byte[] serialized = bytes.toByteArray();
+
+    Parser deserialized;
+    try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(serialized))) {
+      deserialized = (Parser) in.readObject();
+    }
 
     // Check the parser
     // Note: if a.equals(b), then a.hashcode() MUST equal b.hashcode()
@@ -30,7 +42,7 @@ public class ParserTest {
   }
 
   @Test
-  public void testParserTimeZone() {
+  public void testParserTimeZone() throws IOException, ClassNotFoundException {
     // TODO this could be improved by mocking TimeZone since it is not part
     // of the system under test.
     TimeZone defaultTimeZone = TimeZone.getDefault();
@@ -39,8 +51,16 @@ public class ParserTest {
     // user-supplied TimeZone.
     Parser parser = new Parser(defaultTimeZone);
 
-    byte[] serialized = SerializationUtils.serialize(parser);
-    Parser deserialized = (Parser) SerializationUtils.deserialize(serialized);
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    try (ObjectOutputStream out = new ObjectOutputStream(bytes)) {
+      out.writeObject(parser);
+    }
+    byte[] serialized = bytes.toByteArray();
+
+    Parser deserialized;
+    try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(serialized))) {
+      deserialized = (Parser) in.readObject();
+    }
 
     // Check the parser
     // Note: if a.equals(b), then a.hashcode() MUST equal b.hashcode()
