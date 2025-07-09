@@ -11,7 +11,7 @@ syntax information.
 
 ## History
 
-Originally written by Joel Stelmach at https://github.com/joestelmach/natty and developed between 2010 and 2017. Abandoned since then. We keep it alive as fork here since 2022.
+Originally written by Joe Stelmach at https://github.com/joestelmach/natty and developed between 2010 and 2017. Abandoned since then. We keep it alive as fork here since 2022.
 
 ## Usage
 Maven:
