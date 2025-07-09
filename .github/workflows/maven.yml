@@ -9,12 +9,15 @@ on:
 jobs:
   build:
     name: Java ${{ matrix.java_version }}
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         java_version: ['11', '17', '21']
-
+        os: [ ubuntu-latest ]
+        include:
+          - java_version: '11'
+            os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     env:
       MAVEN_ARGS: '--no-transfer-progress'
 
