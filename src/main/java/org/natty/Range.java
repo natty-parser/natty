@@ -1,16 +1,27 @@
 package org.natty;
 
+import java.time.Year;
 import java.util.function.Predicate;
 
 /**
  * Simple range implementation for Comparable types.
- * author Michiel Meeuwissen
+ * @author Michiel Meeuwissen
+ * @since 1.1
  * @param <C>
  */
-class Range<C extends Comparable<C>> implements Predicate<C> {
+public class Range<C extends Comparable<C>> implements Predicate<C> {
 
   private final C start;
   private final C end;
+
+  public static Range<Year> ofYears(int startYear, int endYear) {
+    return new Range<>(Year.of(startYear), Year.of(endYear));
+  }
+
+  public static Range<Year> ofYear(int year) {
+    Year y = Year.of(year);
+    return new Range<>(y, y);
+  }
 
   public Range(C start, C end) {
     if (start == null || end == null) {
