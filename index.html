@@ -38,7 +38,7 @@
         Natty is a natural language date parser written in Java.  Given a date
         expression, natty will apply standard language recognition and translation
         techniques to produce a list of corresponding dates with optional parse
-        and syntax information.  <a href="/web/20210309115324/http://natty.joestelmach.com/try.jsp">Give it a try</a>.
+        and syntax information.  <a href="try.html">Give it a try</a>.
       </p>
       <p>
         Natty recognizes dates described in many ways, including formal dates
@@ -50,8 +50,8 @@
         of text, detect their structure, and report line and column information.
       </p>
       </p>
-        Take a look at the <a href="/web/20210309115324/http://natty.joestelmach.com/doc.jsp">documentation</a> for a complete
-        description, and <a href="http://web.archive.org/web/20210309115324/http://github.com/joestelmach/natty/issues">let
+        Take a look at the <a href="doc.html">documentation</a> for a complete
+        description, and <a href="http://github.com/natty-parser/natty/issues">let
         us know</a> if natty doesn't recognize something it should.
       </p>
 
@@ -63,14 +63,14 @@
         <li>
         Include the following dependency in your pom.xml file:
 <pre><code class="block">&lt;dependency&gt;
-  &lt;groupId&gt;com.joestelmach&lt;/groupId&gt;
+  &lt;groupId&gt;org.natty&lt;/groupId&gt;
   &lt;artifactId&gt;natty&lt;/artifactId&gt;
-  &lt;version&gt;0.11&lt;/version&gt;
+  &lt;version&gt;1.0.2&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
         <p>
           If you're not using Maven, you can download the latest jar file from
-          <a href="http://web.archive.org/web/20210309115324/https://github.com/joestelmach/natty">github</a>.
+          <a href="https://github.com/natty-parser/natty">github</a>.
         </p>
 
         <li>
@@ -81,7 +81,7 @@
             location of the matching text, granular parse and abstract syntax
             tree information, and simple recurrence information.
           </p>
-<pre><code class="block">import com.joestelmach.natty.*;
+<pre><code class="block">import org.natty.*;
 
 Parser parser = new Parser();
 List<dategroup> groups = parser.parse("the day before next thursday");
@@ -101,9 +101,8 @@ for(DateGroup group:groups) {
       <p>
         Keep in mind that natty is still quite young, and its API may change as
         it reaches maturity.  If you'd like to leave some feedback, you can
-        submit an issue on <a href="http://web.archive.org/web/20210309115324/http://github.com/joestelmach/natty/issues">
-        github</a>, or contact me directly at <a href="http://web.archive.org/web/20210309115324/mailto:joestelmach@gmail.com">
-        joestelmach@gmail.com</a>.
+        submit an issue on <a href="http://github.com/natty-parser/natty/issues">
+        github</a>.
       </p>
     </div>
   </body>
