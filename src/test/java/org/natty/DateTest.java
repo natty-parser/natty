@@ -1,5 +1,6 @@
 package org.natty;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
-import junit.framework.Assert;
 
 /**
  * Runs the parser through the various date formats
