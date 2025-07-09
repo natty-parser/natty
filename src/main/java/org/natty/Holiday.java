@@ -47,7 +47,7 @@ public enum Holiday {
   static {
     lookup = new HashMap<String, Holiday>();
     for(Holiday h:values()) {
-      lookup.put(h.getSummary(), h);
+      lookup.put(h.getSummary().toLowerCase(), h);
     }
   }
 
@@ -63,6 +63,6 @@ public enum Holiday {
     if(summary == null)  {
       return null;
     }
-    return lookup.get(summary);
+    return lookup.get(summary.toLowerCase());
   }
 }
