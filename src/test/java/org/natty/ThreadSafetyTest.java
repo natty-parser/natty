@@ -1,17 +1,15 @@
 package org.natty;
 
-import java.sql.Timestamp;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.TimeZone;
-
-import org.junit.Assert;
-
-import org.junit.Test;
-import org.junit.BeforeClass;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadSafetyTest extends AbstractTest {
 
@@ -19,7 +17,7 @@ public class ThreadSafetyTest extends AbstractTest {
   private final static int JOIN_TIMEOUT = 2000; // 2 seconds
   private static DateFormat dateFormat;
 
-  private AtomicInteger numOfCorrectResults = new AtomicInteger();
+  private final AtomicInteger numOfCorrectResults = new AtomicInteger();
 
   @BeforeClass
   public static void oneTime() {
@@ -51,7 +49,8 @@ public class ThreadSafetyTest extends AbstractTest {
 
     public Tester(int baseMinute) throws Exception {
       final LocalDateTime refDateTime = LocalDateTime.of(2011, 3, 3, 1, baseMinute, 0);
-      this.referenceDate = Timestamp.valueOf(refDateTime);
+      this.referenceDate = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
+
       this.baseMinute = baseMinute;
     }
 
