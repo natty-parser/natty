@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Java ${{ matrix.java_version }}
+    name: Java ${{ matrix.java_version }} ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
