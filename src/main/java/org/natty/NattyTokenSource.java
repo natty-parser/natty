@@ -9,9 +9,9 @@ import org.antlr.runtime.TokenSource;
 public class NattyTokenSource implements TokenSource {
   private static final Token EOF_TOKEN = new CommonToken(Token.EOF);
 
-  private List<Token> _tokens;
+  private final List<Token> _tokens;
   private int _index = 0;
-  
+
   public NattyTokenSource(List<Token> tokens) {
     _tokens = tokens;
   }
@@ -23,8 +23,8 @@ public class NattyTokenSource implements TokenSource {
   public String getSourceName() {
     return "natty";
   }
-  
+
   public List<Token> getTokens() {
-    return _tokens;  
+    return _tokens;
   }
 }
