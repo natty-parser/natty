@@ -60,7 +60,7 @@ public class Range<C extends Comparable<C>> implements Predicate<C> {
     if (value == null) {
       return false;
     }
-    return test(value.start) || test(value.end);
+    return !(end.compareTo(value.start) < 0 || start.compareTo(value.end) > 0);
   }
 
   @Override
