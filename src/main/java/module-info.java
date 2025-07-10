@@ -9,8 +9,7 @@ module org.natty {
   exports org.natty;
 
   requires antlr.runtime;
-  requires static ical4j.core;
-  requires static org.slf4j;
+  requires org.slf4j;
 
   provides EventSearcher with
     ChristianHolidaySearcher,

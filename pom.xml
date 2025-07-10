@@ -246,13 +246,13 @@
       <artifactId>antlr-runtime</artifactId>
       <version>3.5.3</version>
     </dependency>
-
+<!--
     <dependency>
       <groupId>org.mnode.ical4j</groupId>
       <artifactId>ical4j</artifactId>
       <version>4.1.1</version>
       <optional>true</optional>
-    </dependency>
+    </dependency>-->
 
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -280,11 +280,11 @@
       <version>3.5.3</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
+  <!--  <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.17.0</version>
       <optional>true</optional>
-    </dependency>
+    </dependency>-->
   </dependencies>
 </project>
