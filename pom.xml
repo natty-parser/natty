@@ -28,11 +28,20 @@
     <developer>
       <id>mccartney</id>
       <name>Greg Oledzki</name>
-      <url>http://github.com/mccartney</url>
+      <url>https://github.com/mccartney</url>
       <roles>
         <role>developer</role>
       </roles>
       <timezone>1</timezone>
+    </developer>
+    <developer>
+      <id>mihxil</id>
+      <name>Michiel Meeuwissen</name>
+      <url>https://github.com/mihxil</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Amsterdam</timezone>
     </developer>
   </developers>
 
