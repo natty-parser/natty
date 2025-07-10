@@ -80,6 +80,8 @@ public class EventSearchTest extends AbstractTest {
     calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "spring 2010", 3, 20, 2010);
+    validateDate(DateFormat.getDateInstance(DateFormat.SHORT).parse("11/05/2025"), "spring 2010", 3, 20, 2010);
+
     validateDate(reference, "spring 2018", 3, 20, 2018);
     validateDate(reference, "spring 1928", 3, 20, 1928);
 

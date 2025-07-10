@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
@@ -379,9 +380,25 @@ public class Parser implements Serializable {
     } else {
       input = "next monday at 3pm";
     }
+    System.out.println("Parsing input: " + input);
     List<DateGroup> groups = parser.parse(input);
     for (DateGroup group : groups) {
-      System.out.println("Found date group: " + group.getDates());
+      List<Date> dates = group.getDates();
+      int line = group.getLine();
+      int column = group.getPosition();
+      String matchingValue = group.getText();
+      String syntaxTree = group.getSyntaxTree().toStringTree();
+      System.out.println(matchingValue + " " + dates);
+      System.out.println(syntaxTree);
+      Map<String, List<ParseLocation>> parseMap = group.getParseLocations();
+      System.out.println("Parse locations: " + parseMap);
+      boolean isRecurring = group.isRecurring();
+      if (isRecurring) {
+
+        Date recursUntil = group.getRecursUntil();
+        System.out.println("Recurs until: " + parseMap);
+      }
     }
   }
+
 }
