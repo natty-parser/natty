@@ -13,7 +13,6 @@ import org.natty.Season;
  * @author Michiel Meeuwissen
  */
 public class SeasonsEventSearcher implements EventSearcher<Instant> {
-  ;
   @Override
   public Stream<Instant> findEvents(Range<Year> range, String eventSummary) {
 
