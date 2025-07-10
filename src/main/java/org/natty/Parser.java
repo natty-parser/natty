@@ -370,4 +370,18 @@ public class Parser implements Serializable {
   public int hashCode() {
     return Objects.hashCode(_defaultTimeZone);
   }
+
+  public static void main(String[] args) {
+    Parser parser = new Parser();
+    String input;
+    if (args.length > 0) {
+      input = args[0];
+    } else {
+      input = "next monday at 3pm";
+    }
+    List<DateGroup> groups = parser.parse(input);
+    for (DateGroup group : groups) {
+      System.out.println("Found date group: " + group.getDates());
+    }
+  }
 }
