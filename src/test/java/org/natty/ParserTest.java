@@ -18,7 +18,7 @@ public class ParserTest {
 
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ParserTest.class);
   @Test
-  public void testParser() throws IOException, ClassNotFoundException {
+  public void serializationOfParser() throws IOException, ClassNotFoundException {
     // Test serializing of a basic parser which does not have a
     // user-supplied TimeZone.
     Parser parser = new Parser();
@@ -42,7 +42,7 @@ public class ParserTest {
   }
 
   @Test
-  public void testParserTimeZone() throws IOException, ClassNotFoundException {
+  public void serializationOfParserTimeZone() throws IOException, ClassNotFoundException {
     // TODO this could be improved by mocking TimeZone since it is not part
     // of the system under test.
     TimeZone defaultTimeZone = TimeZone.getDefault();
@@ -84,12 +84,12 @@ public class ParserTest {
   }
 
   /**
-   * Still fails after 2020, because easter is not an holiday in the US.
+   * Test whether we have easter dates for a lot of years.
    */
 
   @Test
   public void lastEaster() {
-    for (int i = 2001; i < 2030; i++) {
+    for (int i = 1900; i < 2100; i++) {
       Date reference = new Date(i - 1900, 1, 1);
       final List<DateGroup> groups = new Parser().parse("last easter", reference);
       assertEquals(1, groups.size());
