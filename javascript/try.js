@@ -1,11 +1,10 @@
 console.log("Starting...");
-await cheerpjInit({ enableDebug: true, version: 17})
-/*
+await cheerpjInit({ enableDebug: false, version: 17})
 
-const cj = await cheerpjRunLibrary("/app/natty/natty-1.1.0-SNAPSHOT.jar:/app/natty/antlr-runtime-3.5.3.jar:/app/natty/slf4j-api-2.0.17.jar:/app/natty/slf4j-nop-2.0.17.jar");
-*/
-
-const cj = await cheerpjRunLibrary("/app/slf4j-api-2.0.17.jar:/app/slf4j-nop-2.0.17.jar:/app/antlr-runtime-3.5.3.jar:/app/natty-1.1.0-SNAPSHOT.jar")
+const prefix = window.location.pathname.startsWith("/natty") ? "/app/natty/" : "/app/";
+const classpath = `${prefix}natty-1.1.0-SNAPSHOT.jar:${prefix}antlr-runtime-3.5.3.jar:${prefix}slf4j-api-2.0.17.jar:${prefix}slf4j-nop-2.0.17.jar`;
+console.log("Classpath:", classpath);
+const cj = await cheerpjRunLibrary(classpath);
 
 
 const Parser= await cj.org.natty.Parser;
