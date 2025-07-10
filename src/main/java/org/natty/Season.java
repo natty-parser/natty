@@ -2,6 +2,7 @@ package org.natty;
 
 import java.time.Instant;
 import java.time.Year;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -200,7 +201,8 @@ public enum Season implements Function<Year, Instant> {
     double epochDay = jd - 2440587.5;
     long epochSecond = (long) (epochDay * 86400);
     double fractional = (epochDay * 86400) - epochSecond;
-    return Instant.ofEpochSecond(epochSecond, (long) (fractional * 1_000_000_000));
+    return Instant.ofEpochSecond(epochSecond, (long) (fractional * 1_000_000_000))
+      .plusMillis(500).truncatedTo(ChronoUnit.SECONDS); // round to nearest second
   }
   // Simple ΔT approximation for 2000–2100 (Meeus, Eq. 10.6)
   private static double deltaTSeconds(int year) {
