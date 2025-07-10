@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 import org.natty.eventsearchers.wellknown.WellknownHoliday;
@@ -22,7 +23,7 @@ public class WellknownHolidaysTest {
     Stream.of(WellknownHoliday.values()).forEach(holiday -> {
       strings.add(holiday.getSummary() + " on " + holiday.apply(Year.of(2012)));
     });
-    Assert.assertEquals( List.of(
+    Assert.assertEquals(Arrays.asList(
      "Earth Day on 2025-04-22",
     "April Fool's Day on 2025-04-01",
     "Thanksgiving Day on 2025-11-27",

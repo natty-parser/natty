@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +46,7 @@ public class Parser implements Serializable {
    * valid tokens, but could never add any meaningful parsing information when located at the
    * end of a token stream.
    */
-  private static final Set<Integer> IGNORED_TRAILING_TOKENS = Set.of(
+  private static final Set<Integer> IGNORED_TRAILING_TOKENS = new HashSet<>(Arrays.asList(
     DateLexer.DOT,
     DateLexer.COLON,
     DateLexer.COMMA,
@@ -52,7 +54,7 @@ public class Parser implements Serializable {
     DateLexer.SLASH,
     DateLexer.PLUS,
     DateLexer.SINGLE_QUOTE
-  );
+  ));
 
 
   /**

@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.time.Year;
 import java.time.ZoneId;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.natty.EventSearcherService;
@@ -16,12 +18,19 @@ import static org.natty.Season.*;
 
 public class SeasonsTest {
 
-  static final Map<Integer, Map<Season, String>> EXPECTED = Map.of(2025, Map.of(
-    SPRING, "2025-03-20T09:00:42Z",
-    SUMMER, "2025-06-21T02:31:08Z",
-    FALL, "2025-09-22T18:22:23Z",
-    WINTER, "2025-12-21T15:01:41Z"
-  ));
+  static final Map<Integer, Map<Season, String>> EXPECTED;
+  static {
+    Map<Season, String> seasons2025 = new HashMap<>();
+    seasons2025.put(SPRING, "2025-03-20T09:00:42Z");
+    seasons2025.put(SUMMER, "2025-06-21T02:31:08Z");
+    seasons2025.put(FALL,   "2025-09-22T18:22:23Z");
+    seasons2025.put(WINTER, "2025-12-21T15:01:41Z");
+
+    Map<Integer, Map<Season, String>> expected = new HashMap<>();
+    expected.put(2025, Collections.unmodifiableMap(seasons2025));
+
+    EXPECTED = Collections.unmodifiableMap(expected);
+  }
   @Test
   public void seasons() {
 

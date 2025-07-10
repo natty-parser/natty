@@ -12,9 +12,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ServiceLoader;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @SuppressWarnings("rawtypes")
 public class EventSearcherService implements EventSearcher<Temporal> {
@@ -34,9 +37,11 @@ public class EventSearcherService implements EventSearcher<Temporal> {
   @SuppressWarnings("unchecked")
   @Override
   public Stream<Temporal> findEvents(Range<Year> range, String eventSummary) {
-    return loader.stream().map(ServiceLoader.Provider::get)
+    Spliterator<? extends EventSearcher> splitIterator = Spliterators.spliteratorUnknownSize(loader.iterator(), Spliterator.ORDERED);
+
+    return StreamSupport.stream(splitIterator, false)
       .flatMap(searcher -> searcher.findEvents(range, eventSummary))
-      .filter(Objects::nonNull);
+      ;
   }
 
 
@@ -64,11 +69,12 @@ public class EventSearcherService implements EventSearcher<Temporal> {
   }
 
 
-    @SuppressWarnings("unchecked")
   public <T extends Temporal, E extends EventSearcher<T>> Stream<E> getEventSearchers(Class<E> eventSearcherClass) {
-    return  (Stream<E>) loader.stream()
-      .filter(provider -> eventSearcherClass.isAssignableFrom(provider.type()))
-      .map(ServiceLoader.Provider::get);
+    Spliterator<? extends EventSearcher> splitIterator = Spliterators.spliteratorUnknownSize(loader.iterator(), Spliterator.ORDERED);
+
+    return StreamSupport.stream(splitIterator, false)
+      .filter(eventSearcherClass::isInstance)
+      .map(eventSearcherClass::cast);
   }
 
   @SuppressWarnings("unchecked")
