@@ -18,12 +18,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java_version: ['11', '17', '21']
+        java_version: ['8', '11', '17', '21']
         os: [ ubuntu-latest ]
         include:
-          - java_version: '11'
+          - java_version: '8'
             os: windows-latest
-          - java_version: '11'
+          - java_version: '8'
             os: macos-latest
     runs-on: ${{ matrix.os }}
     env:
@@ -43,11 +43,11 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
       - name: Deploy with Maven
         run: mvn -B -Prelease deploy
-        if: matrix.java_version == '11' && github.event_name == 'push'
+        if: matrix.java_version == '8' && github.event_name == 'push'
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
       - name: Build with Maven
         run: mvn -B package
-        if: matrix.java_version != '11' || github.event_name != 'push'
+        if: matrix.java_version != '8' || github.event_name != 'push'
