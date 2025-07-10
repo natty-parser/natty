@@ -25,22 +25,43 @@ Form = Class.create({
 	/**
 	 *
 	 */
-	_submit: function () {
+	_submit: async function () {
 
 		this._summary.hide();
 		this._date.hide();
 		this._error.hide();
 		this._empty.hide();
-
 		if (this._input.value.strip().length === 0) {
 			this._empty.show();
 			return;
 		}
-
 		this._loadingIndicator.show();
-		this._structureDetails.update('');
+		try {
+			const value = this._input.value.strip();
+			console.log("Parsing value:", value);
+			const result = await window.nattyParser.parse(value);
+			if (await result.isEmpty()) {
+				console.log("No result found");
+				this._empty.show();
+			} else {
+				const firstGroup = await result.get(0);
+				const dates = await firstGroup.getDates();
+				const firstDate = await dates.get(0);
+				const string = await firstDate.toString();
+				console.log("firstDate", string);
+				this._date.update(string);
+				this._structureDetails.update('');
+			}
+		} catch (e) {
+			this._date.update("No date found");
+			this._error.update(await e.toString());
+			this._error.show();
+		}
+		this._date.show();
+		this._loadingIndicator.hide();
 	}
-});
+}
+);
 
 Event.observe(window, 'load', function() {
   new Form();
