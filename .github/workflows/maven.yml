@@ -23,7 +23,7 @@ jobs:
         include:
           - java_version: '8'
             os: windows-latest
-          - java_version: '8'
+          - java_version: '11'
             os: macos-latest
     runs-on: ${{ matrix.os }}
     env:
