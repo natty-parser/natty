@@ -45,12 +45,14 @@ Form = Class.create({
 				this._empty.show();
 			} else {
 				const firstGroup = await result.get(0);
+				const syntaxTree = await firstGroup.getSyntaxTree();
+				const syntaxTreeString = await syntaxTree.toStringTree();
 				const dates = await firstGroup.getDates();
 				const firstDate = await dates.get(0);
 				const string = await firstDate.toString();
-				console.log("firstDate", string);
 				this._date.update(string);
-				this._structureDetails.update('');
+				this._structureDetails.update(syntaxTreeString);
+				this._summary.show();
 			}
 		} catch (e) {
 			this._date.update("No date found");
