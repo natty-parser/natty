@@ -2,7 +2,6 @@ package org.natty.eventsearchers.seasons;
 
 import java.time.Instant;
 import java.time.Year;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.natty.EventSearcher;
@@ -25,8 +24,7 @@ public class SeasonsEventSearcher implements EventSearcher<Instant> {
 
     return IntStream.range(range.getStart().getValue(), range.getEnd().getValue() + 1)
       .mapToObj(Year::of)
-      .map(season)
-      .filter(Optional::isPresent)
-      .map(Optional::get);
+      .map(season);
+
   }
 }
