@@ -8,31 +8,35 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static java.util.Locale.US;
 
-public class IcsTest extends AbstractTest {
-   
+
+public class EventSearchTest extends AbstractTest {
+
   @BeforeClass
   public static void oneTime() {
-    Locale.setDefault(Locale.US);
+
+    // Setting defaults could interfere with other tests, so this should be done carefully.
+    Locale.setDefault(US);
     TimeZone.setDefault(TimeZone.getTimeZone("US/Eastern"));
     initCalendarAndParser();
   }
-  
+
   @Test
   public void testUpcomingSeason() throws Exception {
-    Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("5/05/2011");
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("5/05/2011");
     calendarSource = new CalendarSource(reference);
-    
+
     validateDate(reference, "spring", 3, 20, 2012);
     validateDate(reference, "summer", 6, 21, 2011);
     validateDate(reference, "fall", 9, 23, 2011);
     validateDate(reference, "autumn", 9, 23, 2011);
     validateDate(reference, "winter", 12, 22, 2011);
   }
-  
+
   @Test
   public void testUpcomingHoliday() throws Exception {
-    Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("11/05/2011");
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT,  US).parse("11/05/2011");
     calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "april fool's day", 4, 1, 2012);
@@ -64,22 +68,24 @@ public class IcsTest extends AbstractTest {
     validateDate(reference, "valentine day", 2, 14, 2012);
     validateDate(reference, "veterans day", 11, 11, 2011);
   }
-  
+
   @Test
   public void testRelativeHolidays() throws Exception {
-    Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("11/05/2011");
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT,  US).parse("11/05/2011");
     calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "2 black fridays from now", 11, 23, 2012);
     validateDate(reference, "three memorial days ago", 5, 25, 2009);
   }
-  
+
   @Test
   public void testSeasonsByYear() throws Exception {
-    Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("11/05/2011");
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2011");
     calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "spring 2010", 3, 20, 2010);
+    validateDate(DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2025"), "spring 2010", 3, 20, 2010);
+
     validateDate(reference, "spring 2018", 3, 20, 2018);
     validateDate(reference, "spring 1928", 3, 20, 1928);
 
@@ -96,10 +102,10 @@ public class IcsTest extends AbstractTest {
     validateDate(reference, "winter 2011", 12, 22, 2011);
     validateDate(reference, "winter 1900", 12, 22, 1900);
   }
-  
+
   @Test
   public void testHolidaysByYear() throws Exception {
-    Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("11/05/2011");
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2011");
     calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "april fool's day 2000", 4, 1, 2000);
@@ -131,19 +137,19 @@ public class IcsTest extends AbstractTest {
     validateDate(reference, "valentine day 2014", 2, 14, 2014);
     validateDate(reference, "veterans day 2013", 11, 11, 2013);
   }
-  
+
   @Test
   public void testHolidaysWithModifiers() throws Exception {
-    Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("11/05/2011");
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2011");
     calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "four days before veterans day 2013", 11, 7, 2013);
     validateDate(reference, "two days after two thanksgivings from now", 11, 24, 2012);
   }
-  
+
   @Test
   public void testSeasonsWithModifiers() throws Exception {
-    Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("11/05/2011");
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2011");
     calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "four days before fall 2013", 9, 18, 2013);

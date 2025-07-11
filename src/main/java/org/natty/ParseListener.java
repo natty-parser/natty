@@ -1,37 +1,40 @@
 package org.natty;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.debug.BlankDebugEventListener;
 
-import java.util.*;
-
 /**
  * Responsible for collecting parse information from the debug parser
- * 
- * @author Joe Stelmach 
+ *
+ * @author Joe Stelmach
  */
 public class ParseListener extends BlankDebugEventListener {
-  
+
   private int backtracking = 0;
-  private Map<String, Stack<List<Token>>> _ruleMap;
-  private Map<String, List<ParseLocation>> _locations;
+  private final Map<String, Stack<List<Token>>> _ruleMap;
+  private final Map<String, List<ParseLocation>> _locations;
   private ParseLocation _dateGroupLocation;
-  
+
   public ParseListener() {
-    _ruleMap = new HashMap<String, Stack<List<Token>>>();
-    _locations = new HashMap<String, List<ParseLocation>>();
+    _ruleMap = new HashMap<>();
+    _locations = new HashMap<>();
   }
-  
+
   public Map<String, List<ParseLocation>> getLocations() {
     return _locations;
   }
-  
+
   public ParseLocation getDateGroupLocation() {
     return _dateGroupLocation;
   }
-  
-  // don't add backtracking or cyclic DFA nodes 
+
+  // don't add backtracking or cyclic DFA nodes
   public void enterDecision(int d, boolean couldBacktrack) {
     backtracking++;
   }
@@ -39,24 +42,24 @@ public class ParseListener extends BlankDebugEventListener {
   public void exitDecision(int i) {
     backtracking--;
   }
-  
+
   public void enterRule(String filename, String ruleName) {
     if (backtracking > 0) return;
-    
+
     Stack<List<Token>> tokenListStack = _ruleMap.get(ruleName);
     if(tokenListStack == null) {
-      tokenListStack = new Stack<List<Token>>();
+      tokenListStack = new Stack<>();
       _ruleMap.put(ruleName, tokenListStack);
     }
-    
-    tokenListStack.push(new ArrayList<Token>());
+
+    tokenListStack.push(new ArrayList<>());
   }
 
   public void exitRule(String filename, String ruleName) {
     if (backtracking > 0) return;
-    
+
     List<Token> tokenList = _ruleMap.get(ruleName).pop();
-    
+
     if(tokenList.size() > 0) {
       boolean isAlternative = ruleName.equals("date_time_alternative");
       StringBuilder builder = new StringBuilder();
@@ -67,24 +70,24 @@ public class ParseListener extends BlankDebugEventListener {
       int line = tokenList.get(0).getLine();
       int start = tokenList.get(0).getCharPositionInLine() + 1;
       int end = start + text.length();
-        
+
       ParseLocation location = new ParseLocation();
       location.setRuleName(ruleName);
       location.setText(text);
       location.setLine(line);
       location.setStart(start);
       location.setEnd(end);
-      
+
       if(isAlternative) {
         _dateGroupLocation = location;
       }
-        
+
       List<ParseLocation> list = _locations.get(location.getRuleName());
       if(list == null) {
-        list = new ArrayList<ParseLocation>(); 
+        list = new ArrayList<>();
         _locations.put(location.getRuleName(), list);
       }
-      
+
       list.add(location);
     }
   }
@@ -105,5 +108,5 @@ public class ParseListener extends BlankDebugEventListener {
   public void recognitionException(RecognitionException e) {
     if (backtracking > 0) return;
   }
-  
+
 }

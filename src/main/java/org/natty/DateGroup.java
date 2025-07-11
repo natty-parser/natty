@@ -1,17 +1,16 @@
 package org.natty;
 
-import org.antlr.runtime.tree.Tree;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import org.antlr.runtime.tree.Tree;
 
 /**
  * @author Joe Stelmach
  */
 public class DateGroup {
-  private List<Date> _dates;
+  private final List<Date> _dates;
   private String _text;
   private String _fullText;
   private int _line;
@@ -151,7 +150,7 @@ public class DateGroup {
   public boolean isRecurring() {
     return _isRecurring;
   }
-  
+
   /**
    * @return true if the time information in this group has been inferred,
    * as opposed to being explicitly defined in the input
@@ -163,7 +162,7 @@ public class DateGroup {
   public void setDateInferred(boolean isDateInferred) {
     this._isDateInferred = isDateInferred;
   }
-  
+
   public void setFullText(String fullText) {
     this._fullText = fullText;
   }

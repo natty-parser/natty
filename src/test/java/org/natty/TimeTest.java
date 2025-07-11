@@ -75,7 +75,7 @@ public class TimeTest extends AbstractTest {
 
   @Test
   public void testRelative() throws Exception {
-    Date reference = Date.from(LocalDate.EPOCH.atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
+    Date reference = Date.from(LocalDate.ofEpochDay(0).atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
     validateTime(reference, "in 5 seconds", 12, 0, 5);
     validateTime(reference, "in 5 minutes", 12, 5, 0);
@@ -93,7 +93,7 @@ public class TimeTest extends AbstractTest {
 
   @Test
   public void testAlternatives() throws Exception {
-    Date reference = Date.from(LocalDate.EPOCH.atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
+    Date reference = Date.from(LocalDate.ofEpochDay(0).atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "12 or 12:30");
@@ -119,7 +119,7 @@ public class TimeTest extends AbstractTest {
 
   @Test
   public void testRange() throws Exception {
-    Date reference = Date.from(LocalDate.EPOCH.atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
+    Date reference = Date.from(LocalDate.ofEpochDay(0).atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "for six hours");
@@ -140,7 +140,7 @@ public class TimeTest extends AbstractTest {
 
   @Test
   public void testText() throws Exception {
-    Date reference = Date.from(LocalDate.EPOCH.atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
+    Date reference = Date.from(LocalDate.ofEpochDay(0).atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
 
     List<DateGroup> groups = _parser.parse("5.30pm", reference);
     Assert.assertEquals(1, groups.size());

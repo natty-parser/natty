@@ -1,0 +1,3 @@
+org.natty.eventsearchers.seasons.SeasonsEventSearcher
+org.natty.eventsearchers.christian.ChristianHolidaySearcher
+org.natty.eventsearchers.wellknown.WellknownHolidaySearcher

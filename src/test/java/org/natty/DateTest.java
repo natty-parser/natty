@@ -1,5 +1,6 @@
 package org.natty;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -11,11 +12,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.TimeZone;
-import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
-import junit.framework.Assert;
+
 
 /**
  * Runs the parser through the various date formats
@@ -381,7 +379,7 @@ public class DateTest extends AbstractTest {
 
     String value="easter '06";
 
-    ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.natty").setLevel(Level.INFO);
+    //((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.natty").setLevel(Level.INFO);
     Parser parser = new Parser();
     List<DateGroup> groups = parser.parse(value);
     for(DateGroup group:groups) {

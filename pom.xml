@@ -28,11 +28,20 @@
     <developer>
       <id>mccartney</id>
       <name>Greg Oledzki</name>
-      <url>http://github.com/mccartney</url>
+      <url>https://github.com/mccartney</url>
       <roles>
         <role>developer</role>
       </roles>
       <timezone>1</timezone>
+    </developer>
+    <developer>
+      <id>mihxil</id>
+      <name>Michiel Meeuwissen</name>
+      <url>https://github.com/mihxil</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Amsterdam</timezone>
     </developer>
   </developers>
 
@@ -41,8 +50,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <additionalparam>-Xdoclint:none</additionalparam>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
   </properties>
 
   <build>
@@ -74,6 +83,24 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.14.0</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.2</version>
+        <configuration>
+          <archive>
+            <index>true</index>
+            <manifest>
+              <mainClass>org.natty.Parser</mainClass>
+            </manifest>
+            <manifestEntries>
+              <mode>development</mode>
+              <url>${project.url}</url>
+              <key>value</key>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
 
       <!-- clean plugin -->
@@ -227,24 +254,18 @@
       <artifactId>antlr-runtime</artifactId>
       <version>3.5.3</version>
     </dependency>
-
+<!--
     <dependency>
       <groupId>org.mnode.ical4j</groupId>
       <artifactId>ical4j</artifactId>
       <version>4.1.1</version>
-    </dependency>
+      <optional>true</optional>
+    </dependency>-->
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>2.0.17</version>
-    </dependency>
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.5.18</version>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -260,11 +281,11 @@
       <version>3.5.3</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
+  <!--  <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.17.0</version>
-      <scope>test</scope>
-    </dependency>
+      <optional>true</optional>
+    </dependency>-->
   </dependencies>
 </project>
