@@ -99,79 +99,79 @@ The issues are grouped into rough categories to make it possible to prioritise t
 
 ## Feature requests
 
-| ID                                                      | Title                                                                                                                       |
-|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| [#276](https://github.com/joestelmach/natty/issues/276) | Parsing of quarter not supported                                                                                            |
-| [#270](https://github.com/joestelmach/natty/issues/270) | support canonical timezone id (not just abbreviations)                                                                      |
-| [#269](https://github.com/joestelmach/natty/issues/269) | Support for countries which use DD MM YYYY                                                                                  |
-| [#259](https://github.com/joestelmach/natty/issues/259) | Can't parse time fields like "60s"                                                                                          |
-| [#258](https://github.com/joestelmach/natty/issues/258) | Upgrade to Antlr4                                                                                                           |
-| [#256](https://github.com/joestelmach/natty/issues/256) | Year is added to current year 2018 jan 15 gives year 4036-01-01 3pm utc [other format]                                      |
-| [#255](https://github.com/joestelmach/natty/issues/255) | Year references would be nice to match                                                                                      |
-| [#264](https://github.com/joestelmach/natty/issues/264) | "23rd" not getting parsed. Expected result is current_MM/23/current_YYYY                                                    |
-| [#249](https://github.com/joestelmach/natty/issues/249) | Is it possible to make natty multilingual?                                                                                  |
-| [#248](https://github.com/joestelmach/natty/issues/248) | Feature request                                                                                                             |
-| [#245](https://github.com/joestelmach/natty/issues/245) | Feature Request: Set date format locale on call                                                                             |
-| [#239](https://github.com/joestelmach/natty/issues/239) | A fortnight happens to be absent from Natty's vocabulary                                                                    |
-| [#235](https://github.com/joestelmach/natty/issues/235) | java.lang.IllegalArgumentException: No enum constant com.joestelmach.natty.Holiday.INAUGURATION_DAY                         |
-| [#233](https://github.com/joestelmach/natty/issues/233) | Parsing week numbers                                                                                                        |
-| [#231](https://github.com/joestelmach/natty/issues/231) | Couple days from now / next leap year                                                                                       |
-| [#226](https://github.com/joestelmach/natty/issues/226) | RFC 2822 Support                                                                                                            |
-| [#223](https://github.com/joestelmach/natty/issues/223) | Add support for several languages                                                                                           |
-| [#222](https://github.com/joestelmach/natty/issues/222) | time period recognition                                                                                                     |
-| [#221](https://github.com/joestelmach/natty/issues/221) | Add time grain for date parsed                                                                                              |
-| [#220](https://github.com/joestelmach/natty/issues/220) | Add support for "1h2m" format?                                                                                              |
-| [#216](https://github.com/joestelmach/natty/issues/216) | First Quarter / Q1-Q3                                                                                                       |
-| [#205](https://github.com/joestelmach/natty/issues/205) | Unable to distinguish time range                                                                                            |
-| [#200](https://github.com/joestelmach/natty/issues/200) | some day in the feature                                                                                                     |
-| [#198](https://github.com/joestelmach/natty/issues/198) | 21st Oct last year is not supported                                                                                         |
-| [#197](https://github.com/joestelmach/natty/issues/197) | Not accepting the week after                                                                                                |
-| [#191](https://github.com/joestelmach/natty/issues/191) | "Mid August" parses to Aug. 01                                                                                              |
-| [#187](https://github.com/joestelmach/natty/issues/187) | Unable to determine the following date type                                                                                 |
-| [#186](https://github.com/joestelmach/natty/issues/186) | Enhancement: Locale/Internationalization support?                                                                           |
-| [#185](https://github.com/joestelmach/natty/issues/185) | Can't parse date from this :NT INT INST 2005 06 08 Let ECGD du 29 mars.pdf                                                  |
-| [#183](https://github.com/joestelmach/natty/issues/183) | quarter is not parsed                                                                                                       |
-| [#182](https://github.com/joestelmach/natty/issues/182) | 25th of every month is not parsed                                                                                           |
-| [#181](https://github.com/joestelmach/natty/issues/181) | Can't parse short format: 3h ago                                                                                            |
-| [#177](https://github.com/joestelmach/natty/issues/177) | Doesn't recognize "Last quarter"                                                                                            |
-| [#172](https://github.com/joestelmach/natty/issues/172) | Does not recognize 'previous' keyword                                                                                       |
-| [#168](https://github.com/joestelmach/natty/issues/168) | Natty ignores milliseconds                                                                                                  |
-| [#159](https://github.com/joestelmach/natty/issues/159) | parsing text with numbers                                                                                                   |
-| [#153](https://github.com/joestelmach/natty/issues/153) | Date ranges?                                                                                                                |
-| [#150](https://github.com/joestelmach/natty/issues/150) | "the beginning of (next) year"                                                                                              |
-| [#140](https://github.com/joestelmach/natty/issues/140) | recognize before month                                                                                                      |
-| [#138](https://github.com/joestelmach/natty/issues/138) | Quarters                                                                                                                    |
-| [#134](https://github.com/joestelmach/natty/issues/134) | Incorrect parsing for dd-mm-yyyy and similar                                                                                |
-| [#132](https://github.com/joestelmach/natty/issues/132) | Handle "Next Business Day" and "As Soon As Possible"                                                                        |
-| [#129](https://github.com/joestelmach/natty/issues/129) | How to refer to beginning of (computer) time?                                                                               |
-| [#123](https://github.com/joestelmach/natty/issues/123) | Parsing strings with only year information                                                                                  |
-| [#122](https://github.com/joestelmach/natty/issues/122) | How to translate natty recognition in other languages                                                                       |
-| [#121](https://github.com/joestelmach/natty/issues/121) | prefixes "3 days from <a date>" doesn't seem to work                                                                        |
-| [#120](https://github.com/joestelmach/natty/issues/120) | Date range doesn't take into account day of week                                                                            |
-| [#114](https://github.com/joestelmach/natty/issues/114) | Relative dates with respect to another date rather than now                                                                 |
-| [#110](https://github.com/joestelmach/natty/issues/110) | "JUNE 9TH - JUNE 23RD, 2014" is parsed as 06/09/201*5* - 06/23/2014                                                         |
-| [#106](https://github.com/joestelmach/natty/issues/106) | how to parse twelve to ten?                                                                                                 |
-| [#105](https://github.com/joestelmach/natty/issues/105) | java time zoneddatetime to string should be supported                                                                       |
-| [#93](https://github.com/joestelmach/natty/issues/93)   | need week end and work day aliases as we have for holidays                                                                  |
-| [#80](https://github.com/joestelmach/natty/issues/80)   | Four score and ten years ago                                                                                                |
-| [#77](https://github.com/joestelmach/natty/issues/77)   | Recalculate a time- inferred date                                                                                           |
-| [#69](https://github.com/joestelmach/natty/issues/69)   | Year bias...                                                                                                                |
-| [#64](https://github.com/joestelmach/natty/issues/64)   | How to parse dates of format DD/MM/YYYY?                                                                                    |
-| [#57](https://github.com/joestelmach/natty/issues/57)   | Fails to parse day of month (eg: "the 21st")                                                                                |
-| [#53](https://github.com/joestelmach/natty/issues/53)   | Include possible date/time range ?                                                                                          |
-| [#48](https://github.com/joestelmach/natty/issues/48)   | I18n support - different languages/countries                                                                                |
-| [#47](https://github.com/joestelmach/natty/issues/47)   | Make CalendarSource.setBaseDate an instance method                                                                          |
-| [#44](https://github.com/joestelmach/natty/issues/44)   | friendlier time rules                                                                                                       |
-| [#41](https://github.com/joestelmach/natty/issues/41)   | Feature: Future dates only option                                                                                           |
-| [#26](https://github.com/joestelmach/natty/issues/26)   | Not Parsing "March 9-13, 2012" properly                                                                                     |
-| [#25](https://github.com/joestelmach/natty/issues/25)   | can not parse "2011-09-12T13:55:00.004+02:00"                                                                               |
-| [#23](https://github.com/joestelmach/natty/issues/23)   | "each sunday in march" did not parse                                                                                        |
-| [#21](https://github.com/joestelmach/natty/issues/21)   | French Dates Like 07-10-2011                                                                                                |
-| [#20](https://github.com/joestelmach/natty/issues/20)   | German Dates Like 07.10.2011                                                                                                |
-| [#17](https://github.com/joestelmach/natty/issues/17)   | Feature requests: More date ranges, custom event support                                                                    |
-| [#16](https://github.com/joestelmach/natty/issues/16)   | Cannot parse Sat., Sept. 24, 10:30 a.m.-9 p.m. format                                                                       |
-| [#6](https://github.com/joestelmach/natty/issues/6)     | Add time precision option                                                                                                   |
-| [#3](https://github.com/joestelmach/natty/issues/3)     | UK-formatted dates won't parse                                                                                              |
+| ID                                                          | Title                                                                                                                       |
+|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| [#276](https://github.com/joestelmach/natty/issues/276)     | Parsing of quarter not supported                                                                                            |
+| [#270](https://github.com/joestelmach/natty/issues/270)     | support canonical timezone id (not just abbreviations)                                                                      |
+| [#269](https://github.com/joestelmach/natty/issues/269)     | Support for countries which use DD MM YYYY                                                                                  |
+| [#259](https://github.com/joestelmach/natty/issues/259)     | Can't parse time fields like "60s"                                                                                          |
+| [#258](https://github.com/joestelmach/natty/issues/258)     | Upgrade to Antlr4                                                                                                           |
+| [#256](https://github.com/joestelmach/natty/issues/256)     | Year is added to current year 2018 jan 15 gives year 4036-01-01 3pm utc [other format]                                      |
+| [#255](https://github.com/joestelmach/natty/issues/255)     | Year references would be nice to match                                                                                      |
+| [#264](https://github.com/joestelmach/natty/issues/264)     | "23rd" not getting parsed. Expected result is current_MM/23/current_YYYY                                                    |
+| [#249](https://github.com/joestelmach/natty/issues/249)     | Is it possible to make natty multilingual?                                                                                  |
+| [#248](https://github.com/joestelmach/natty/issues/248)     | Feature request                                                                                                             |
+| [#245](https://github.com/joestelmach/natty/issues/245)     | Feature Request: Set date format locale on call                                                                             |
+| [~~#239~~](https://github.com/joestelmach/natty/issues/239) | A fortnight happens to be absent from Natty's vocabulary                                                                    |
+| [#235](https://github.com/joestelmach/natty/issues/235)     | java.lang.IllegalArgumentException: No enum constant com.joestelmach.natty.Holiday.INAUGURATION_DAY                         |
+| [#233](https://github.com/joestelmach/natty/issues/233)     | Parsing week numbers                                                                                                        |
+| [#231](https://github.com/joestelmach/natty/issues/231)     | Couple days from now / next leap year                                                                                       |
+| [#226](https://github.com/joestelmach/natty/issues/226)     | RFC 2822 Support                                                                                                            |
+| [#223](https://github.com/joestelmach/natty/issues/223)     | Add support for several languages                                                                                           |
+| [#222](https://github.com/joestelmach/natty/issues/222)     | time period recognition                                                                                                     |
+| [#221](https://github.com/joestelmach/natty/issues/221)     | Add time grain for date parsed                                                                                              |
+| [#220](https://github.com/joestelmach/natty/issues/220)     | Add support for "1h2m" format?                                                                                              |
+| [#216](https://github.com/joestelmach/natty/issues/216)     | First Quarter / Q1-Q3                                                                                                       |
+| [#205](https://github.com/joestelmach/natty/issues/205)     | Unable to distinguish time range                                                                                            |
+| [#200](https://github.com/joestelmach/natty/issues/200)     | some day in the feature                                                                                                     |
+| [#198](https://github.com/joestelmach/natty/issues/198)     | 21st Oct last year is not supported                                                                                         |
+| [#197](https://github.com/joestelmach/natty/issues/197)     | Not accepting the week after                                                                                                |
+| [#191](https://github.com/joestelmach/natty/issues/191)     | "Mid August" parses to Aug. 01                                                                                              |
+| [#187](https://github.com/joestelmach/natty/issues/187)     | Unable to determine the following date type                                                                                 |
+| [#186](https://github.com/joestelmach/natty/issues/186)     | Enhancement: Locale/Internationalization support?                                                                           |
+| [#185](https://github.com/joestelmach/natty/issues/185)     | Can't parse date from this :NT INT INST 2005 06 08 Let ECGD du 29 mars.pdf                                                  |
+| [#183](https://github.com/joestelmach/natty/issues/183)     | quarter is not parsed                                                                                                       |
+| [#182](https://github.com/joestelmach/natty/issues/182)     | 25th of every month is not parsed                                                                                           |
+| [#181](https://github.com/joestelmach/natty/issues/181)     | Can't parse short format: 3h ago                                                                                            |
+| [#177](https://github.com/joestelmach/natty/issues/177)     | Doesn't recognize "Last quarter"                                                                                            |
+| [#172](https://github.com/joestelmach/natty/issues/172)     | Does not recognize 'previous' keyword                                                                                       |
+| [#168](https://github.com/joestelmach/natty/issues/168)     | Natty ignores milliseconds                                                                                                  |
+| [#159](https://github.com/joestelmach/natty/issues/159)     | parsing text with numbers                                                                                                   |
+| [#153](https://github.com/joestelmach/natty/issues/153)     | Date ranges?                                                                                                                |
+| [#150](https://github.com/joestelmach/natty/issues/150)     | "the beginning of (next) year"                                                                                              |
+| [#140](https://github.com/joestelmach/natty/issues/140)     | recognize before month                                                                                                      |
+| [#138](https://github.com/joestelmach/natty/issues/138)     | Quarters                                                                                                                    |
+| [#134](https://github.com/joestelmach/natty/issues/134)     | Incorrect parsing for dd-mm-yyyy and similar                                                                                |
+| [#132](https://github.com/joestelmach/natty/issues/132)     | Handle "Next Business Day" and "As Soon As Possible"                                                                        |
+| [#129](https://github.com/joestelmach/natty/issues/129)     | How to refer to beginning of (computer) time?                                                                               |
+| [#123](https://github.com/joestelmach/natty/issues/123)     | Parsing strings with only year information                                                                                  |
+| [#122](https://github.com/joestelmach/natty/issues/122)     | How to translate natty recognition in other languages                                                                       |
+| [#121](https://github.com/joestelmach/natty/issues/121)     | prefixes "3 days from <a date>" doesn't seem to work                                                                        |
+| [#120](https://github.com/joestelmach/natty/issues/120)     | Date range doesn't take into account day of week                                                                            |
+| [#114](https://github.com/joestelmach/natty/issues/114)     | Relative dates with respect to another date rather than now                                                                 |
+| [#110](https://github.com/joestelmach/natty/issues/110)     | "JUNE 9TH - JUNE 23RD, 2014" is parsed as 06/09/201*5* - 06/23/2014                                                         |
+| [#106](https://github.com/joestelmach/natty/issues/106)     | how to parse twelve to ten?                                                                                                 |
+| [#105](https://github.com/joestelmach/natty/issues/105)     | java time zoneddatetime to string should be supported                                                                       |
+| [#93](https://github.com/joestelmach/natty/issues/93)       | need week end and work day aliases as we have for holidays                                                                  |
+| [#80](https://github.com/joestelmach/natty/issues/80)       | Four score and ten years ago                                                                                                |
+| [#77](https://github.com/joestelmach/natty/issues/77)       | Recalculate a time- inferred date                                                                                           |
+| [#69](https://github.com/joestelmach/natty/issues/69)       | Year bias...                                                                                                                |
+| [#64](https://github.com/joestelmach/natty/issues/64)       | How to parse dates of format DD/MM/YYYY?                                                                                    |
+| [#57](https://github.com/joestelmach/natty/issues/57)       | Fails to parse day of month (eg: "the 21st")                                                                                |
+| [#53](https://github.com/joestelmach/natty/issues/53)       | Include possible date/time range ?                                                                                          |
+| [#48](https://github.com/joestelmach/natty/issues/48)       | I18n support - different languages/countries                                                                                |
+| [#47](https://github.com/joestelmach/natty/issues/47)       | Make CalendarSource.setBaseDate an instance method                                                                          |
+| [#44](https://github.com/joestelmach/natty/issues/44)       | friendlier time rules                                                                                                       |
+| [#41](https://github.com/joestelmach/natty/issues/41)       | Feature: Future dates only option                                                                                           |
+| [#26](https://github.com/joestelmach/natty/issues/26)       | Not Parsing "March 9-13, 2012" properly                                                                                     |
+| [#25](https://github.com/joestelmach/natty/issues/25)       | can not parse "2011-09-12T13:55:00.004+02:00"                                                                               |
+| [#23](https://github.com/joestelmach/natty/issues/23)       | "each sunday in march" did not parse                                                                                        |
+| [#21](https://github.com/joestelmach/natty/issues/21)       | French Dates Like 07-10-2011                                                                                                |
+| [#20](https://github.com/joestelmach/natty/issues/20)       | German Dates Like 07.10.2011                                                                                                |
+| [#17](https://github.com/joestelmach/natty/issues/17)       | Feature requests: More date ranges, custom event support                                                                    |
+| [#16](https://github.com/joestelmach/natty/issues/16)       | Cannot parse Sat., Sept. 24, 10:30 a.m.-9 p.m. format                                                                       |
+| [#6](https://github.com/joestelmach/natty/issues/6)         | Add time precision option                                                                                                   |
+| [#3](https://github.com/joestelmach/natty/issues/3)         | UK-formatted dates won't parse                                                                                              |
 
 ## Misc
 
