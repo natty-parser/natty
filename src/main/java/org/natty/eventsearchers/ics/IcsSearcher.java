@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * NOT USED, contains commented (because dependency on ical dropped) code for searching ICS files.
  */
 class IcsSearcher {
 

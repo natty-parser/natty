@@ -9,10 +9,14 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public enum Season implements Function<Year, Instant> {
-  WINTER("Winter Solstice"),
-  SPRING("Vernal Equinox"),
-  SUMMER("Summer Solstice"),
-  FALL("Autumnal Equinox");
+  /** Winter Solstice, marking the start of winter (around December 21 in the Northern Hemisphere). */
+    WINTER("Winter Solstice"),
+    /** Vernal Equinox, marking the start of spring (around March 20 in the Northern Hemisphere). */
+    SPRING("Vernal Equinox"),
+    /** Summer Solstice, marking the start of summer (around June 21 in the Northern Hemisphere). */
+    SUMMER("Summer Solstice"),
+    /** Autumnal Equinox, marking the start of fall (around September 22 in the Northern Hemisphere). */
+    FALL("Autumnal Equinox");
 
   private final String summary;
   private static final Map<String, Season> lookup;

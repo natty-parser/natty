@@ -10,7 +10,11 @@ import java.util.stream.Stream;
 import org.natty.EventSearcher;
 import org.natty.Range;
 
-public class IcsHolidaysSearcher implements EventSearcher<LocalDate> {
+/**
+ * NOT USED
+ */
+
+class IcsHolidaysSearcher implements EventSearcher<LocalDate> {
 
 
   private static final Map<Range<Year>, String> HOLIDAY_ICS_FILES;
