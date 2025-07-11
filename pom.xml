@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.natty-parser</groupId>
   <artifactId>natty</artifactId>
@@ -20,7 +20,7 @@
   <scm>
     <connection>scm:git:${project.scm.url}.git</connection>
     <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
-    <url>https://github.com/natty-parser/natty</url>
+    <url>${project.url}</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -52,6 +52,8 @@
     <additionalparam>-Xdoclint:none</additionalparam>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+
+    <antlr.version>3.5.3</antlr.version>
   </properties>
 
   <build>
@@ -98,6 +100,7 @@
               <mode>development</mode>
               <url>${project.url}</url>
               <key>value</key>
+              <Automatic-Module-Name>org.natty</Automatic-Module-Name>
             </manifestEntries>
           </archive>
         </configuration>
@@ -124,8 +127,7 @@
       <plugin>
         <groupId>org.antlr</groupId>
         <artifactId>antlr3-maven-plugin</artifactId>
-        <version>3.5.3</version>
-
+        <version>${antlr.version}</version>
         <executions>
           <execution>
             <id>debug</id>
@@ -170,7 +172,7 @@
       <plugin>
         <groupId>org.antlr</groupId>
         <artifactId>maven-gunit-plugin</artifactId>
-        <version>3.5.3</version>
+        <version>${antlr.version}</version>
         <executions>
           <execution>
             <id>maven-gunit-plugin</id>
@@ -181,6 +183,7 @@
           </execution>
         </executions>
       </plugin>
+
     </plugins>
   </build>
 
@@ -252,9 +255,11 @@
     <dependency>
       <groupId>org.antlr</groupId>
       <artifactId>antlr-runtime</artifactId>
-      <version>3.5.3</version>
+      <version>${antlr.version}</version>
     </dependency>
-<!--
+
+    <!--
+    dependency on ical is dropped, as it is (provisionally?) not used anymore
     <dependency>
       <groupId>org.mnode.ical4j</groupId>
       <artifactId>ical4j</artifactId>
@@ -281,11 +286,6 @@
       <version>3.5.3</version>
       <scope>test</scope>
     </dependency>
-  <!--  <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.17.0</version>
-      <optional>true</optional>
-    </dependency>-->
+
   </dependencies>
 </project>

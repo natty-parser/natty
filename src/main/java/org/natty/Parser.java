@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
@@ -46,16 +45,16 @@ public class Parser implements Serializable {
    * valid tokens, but could never add any meaningful parsing information when located at the
    * end of a token stream.
    */
-  private static final Set<Integer> IGNORED_TRAILING_TOKENS = new HashSet<>(Arrays.asList(
-    DateLexer.DOT,
-    DateLexer.COLON,
-    DateLexer.COMMA,
-    DateLexer.DASH,
-    DateLexer.SLASH,
-    DateLexer.PLUS,
-    DateLexer.SINGLE_QUOTE
-  ));
-
+  private static final Set<Integer> IGNORED_TRAILING_TOKENS =
+      new HashSet<Integer>(Arrays.asList(new Integer[] {
+          DateLexer.DOT,
+          DateLexer.COLON,
+          DateLexer.COMMA,
+          DateLexer.DASH,
+          DateLexer.SLASH,
+          DateLexer.PLUS,
+          DateLexer.SINGLE_QUOTE
+      }));
 
   /**
    * Creates a new parser using the given time zone as the default
@@ -373,34 +372,4 @@ public class Parser implements Serializable {
   public int hashCode() {
     return Objects.hashCode(_defaultTimeZone);
   }
-
-  public static void main(String[] args) {
-    Parser parser = new Parser();
-    String input;
-    if (args.length > 0) {
-      input = args[0];
-    } else {
-      input = "next monday at 3pm";
-    }
-    System.out.println("Parsing input: " + input);
-    List<DateGroup> groups = parser.parse(input);
-    for (DateGroup group : groups) {
-      List<Date> dates = group.getDates();
-      int line = group.getLine();
-      int column = group.getPosition();
-      String matchingValue = group.getText();
-      String syntaxTree = group.getSyntaxTree().toStringTree();
-      System.out.println(matchingValue + " " + dates);
-      System.out.println(syntaxTree);
-      Map<String, List<ParseLocation>> parseMap = group.getParseLocations();
-      System.out.println("Parse locations: " + parseMap);
-      boolean isRecurring = group.isRecurring();
-      if (isRecurring) {
-
-        Date recursUntil = group.getRecursUntil();
-        System.out.println("Recurs until: " + parseMap);
-      }
-    }
-  }
-
 }
