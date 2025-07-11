@@ -122,4 +122,16 @@ public class ParserTest {
 
     log.info("Parsed date: {}", parse2.get(0).getDates().get(0));
   }
+
+  @Test
+  public void issue234() {
+
+    Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
+
+    List<DateGroup> parse1 = parser.parse("While the FIFA Executive Committee is still expected to back a switch to the 2021 winter and potential clashes with the Winter Olympics, Superbowl and European soccer leagues, Mayne-Nicholls is angling for a challenge to President Sepp Blatter in next May's FIFA elections.", new Date(117, 11, 30));
+    log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
+    assertEquals("2018-05-01T23:00:00Z", parse1.get(0).getDates().get(0).toInstant().toString());
+
+  }
+
 }
