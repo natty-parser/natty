@@ -19,6 +19,7 @@ public class WalkerState {
   private static final String MONTH = "month";
   private static final String DAY = "day";
   private static final String YEAR = "year";
+  private static final String FORTNIGHT = "fortnight";
   private static final String WEEK = "week";
   private static final String HOUR = "hour";
   private static final String MINUTE = "minute";
@@ -211,32 +212,38 @@ public class WalkerState {
   public void seekBySpan(String direction, String seekAmount, String span) {
     if(span.startsWith(SEEK_PREFIX)) span = span.substring(3);
     int seekAmountInt = Integer.parseInt(seekAmount);
-    assert(direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT));
-    assert(span.equals(DAY) || span.equals(WEEK) || span.equals(MONTH) ||
+    assert direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT);
+    assert span.equals(DAY) || span.equals(WEEK) || span.equals(FORTNIGHT) || span.equals(MONTH) ||
         span.equals(YEAR) || span.equals(HOUR) || span.equals(MINUTE) ||
-        span.equals(SECOND));
+        span.equals(SECOND);
 
-    boolean isDateSeek = span.equals(DAY) || span.equals(WEEK) ||
-      span.equals(MONTH) || span.equals(YEAR);
+    boolean isDateSeek = span.equals(DAY) || span.equals(WEEK) || span.equals(FORTNIGHT) || span.equals(MONTH) || span.equals(YEAR);
 
     if(isDateSeek) {
       markDateInvocation();
-    }
-    else {
+    } else {
       markTimeInvocation(null);
     }
 
     int sign = direction.equals(DIR_RIGHT) ? 1 : -1;
     int field =
       span.equals(DAY) ? Calendar.DAY_OF_YEAR :
-      span.equals(WEEK) ? Calendar.WEEK_OF_YEAR :
-      span.equals(MONTH) ? Calendar.MONTH :
-      span.equals(YEAR) ? Calendar.YEAR :
-      span.equals(HOUR) ? Calendar.HOUR:
-      span.equals(MINUTE) ? Calendar.MINUTE:
-      span.equals(SECOND) ? Calendar.SECOND:
-      null;
-    if(field > 0) _calendar.add(field, seekAmountInt * sign);
+        span.equals(WEEK) ? Calendar.WEEK_OF_YEAR :
+          span.equals(FORTNIGHT) ? Calendar.WEEK_OF_YEAR :
+
+            span.equals(MONTH) ? Calendar.MONTH :
+              span.equals(YEAR) ? Calendar.YEAR :
+                span.equals(HOUR) ? Calendar.HOUR:
+                  span.equals(MINUTE) ? Calendar.MINUTE:
+                    span.equals(SECOND) ? Calendar.SECOND:
+                      null;
+
+    if (span.equals(FORTNIGHT)) {
+      seekAmountInt *= 2; // a fortnight is two weeks
+    }
+    if(field > 0) {
+      _calendar.add(field, seekAmountInt * sign);
+    }
   }
 
   public void setDayOfWeekIndex(String index, String dayOfWeek) {
