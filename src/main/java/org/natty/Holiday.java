@@ -68,7 +68,10 @@ public enum Holiday {
   /** February 14th, celebrating love and affection. */
   VALENTINES_DAY("Valentine's Day"),
   /** November 11th, honoring military veterans. */
-  VETERANS_DAY("Veteran's Day");
+  VETERANS_DAY("Veteran's Day"),
+
+  INAUGURATION_DAY("Inauguration day")
+  ;
 
   private final String summary;
   private static final Map<String, Holiday> lookup;
