@@ -1,10 +1,21 @@
 package org.natty;
 
 import java.time.Year;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Simple range implementation for Comparable types.
+ * It always as a start. The end value can be null, which means it is unbounded.
+ *
+ * The end value may also be less than the start value, which means it is a backward range.
+ *
  * @author Michiel Meeuwissen
  * @since 1.1
  * @param <C>
@@ -13,6 +24,7 @@ public class Range<C extends Comparable<C>> implements Predicate<C> {
 
   private final C start;
   private final C end;
+  private final boolean forward;
 
   public static Range<Year> ofYears(int startYear, int endYear) {
     return new Range<>(Year.of(startYear), Year.of(endYear));
@@ -23,15 +35,37 @@ public class Range<C extends Comparable<C>> implements Predicate<C> {
     return new Range<>(y, y);
   }
 
+  public static Range<Year> fromYear(int year) {
+    Year y = Year.of(year);
+    return new Range<>(y, Year.of(9999));
+  }
+
+  public static Range<Year> fromYear(int year, boolean forward) {
+    Year y = Year.of(year);
+    return new Range<>(y, forward);
+  }
+
+
+  public static Stream<Year> stream(Range<Year> range) {
+    return range.stream(Year::plusYears);
+  }
+
   public Range(C start, C end) {
-    if (start == null || end == null) {
-      throw new IllegalArgumentException("Start and end cannot be null");
-    }
-    if (start.compareTo(end) > 0) {
-      throw new IllegalArgumentException("Start cannot be greater than end");
+    if (start == null) {
+      throw new IllegalArgumentException("Start cannot be null");
     }
     this.start = start;
     this.end = end;
+    this.forward = end == null || start.compareTo(end) <= 0;
+  }
+
+  public Range(C start, boolean forward) {
+    if (start == null) {
+      throw new IllegalArgumentException("Start cannot be null");
+    }
+    this.start = start;
+    this.end = null;
+    this.forward = forward;
   }
 
   public C getStart() {
@@ -40,6 +74,32 @@ public class Range<C extends Comparable<C>> implements Predicate<C> {
 
   public C getEnd() {
     return end;
+  }
+
+  public boolean forward() {
+    return forward;
+  }
+
+  public Stream<C> stream(BiFunction<C, Integer, C> nextFunction) {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<C>() {
+      C current = null; ;
+      final int step = forward ? 1 : -1;
+      @Override
+      public boolean hasNext() {
+        return current == null || (forward ? current.compareTo(end) < 0 : current.compareTo(end) > 0);
+      }
+
+      @Override
+      public C next() {
+        if (!hasNext()) {
+          throw new NoSuchElementException("No more elements in the range");
+        }
+
+        current = current == null ? start : nextFunction.apply(current, step);
+        return current;
+      }
+    }, Spliterator.ORDERED | Spliterator.IMMUTABLE | Spliterator.NONNULL), false);
+
   }
 
   @Override
@@ -62,6 +122,8 @@ public class Range<C extends Comparable<C>> implements Predicate<C> {
     }
     return !(end.compareTo(value.start) < 0 || start.compareTo(value.end) > 0);
   }
+
+
 
   @Override
   public String toString() {
