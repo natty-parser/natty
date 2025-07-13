@@ -81,7 +81,7 @@
         </configuration>
       </plugin>
 
-      <!-- compiler plugin -->
+
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.14.0</version>
@@ -97,30 +97,16 @@
               <mainClass>org.natty.Parser</mainClass>
             </manifest>
             <manifestEntries>
-              <mode>development</mode>
               <url>${project.url}</url>
-              <key>value</key>
               <Automatic-Module-Name>org.natty</Automatic-Module-Name>
             </manifestEntries>
           </archive>
         </configuration>
       </plugin>
 
-      <!-- clean plugin -->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <version>3.5.0</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>src/main/java/org/natty/generated</directory>
-              <includes>
-                <include>**/*.java</include>
-              </includes>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
-        </configuration>
       </plugin>
 
       <!-- ANTLR code generation plugin -->
@@ -137,7 +123,6 @@
             <configuration>
               <debug>true</debug>
               <libDirectory>src/main/antlr3/org/natty/generated/imports</libDirectory>
-              <outputDirectory>src/main/java</outputDirectory>
               <includes>
                 <include>org/natty/generated/DateLexer.g</include>
                 <include>org/natty/generated/DateParser.g</include>
@@ -147,7 +132,6 @@
               </excludes>
             </configuration>
           </execution>
-
           <execution>
             <id>non-debug</id>
             <goals>
@@ -155,7 +139,6 @@
             </goals>
             <configuration>
               <debug>false</debug>
-              <outputDirectory>src/main/java</outputDirectory>
               <libDirectory>src/main/antlr3/org/natty/generated/imports</libDirectory>
               <excludes>
                 <exclude>org/natty/generated/DateLexer.g</exclude>
@@ -168,7 +151,7 @@
         </executions>
       </plugin>
 
-      <!-- gUnit plugin -->
+
       <plugin>
         <groupId>org.antlr</groupId>
         <artifactId>maven-gunit-plugin</artifactId>
@@ -187,7 +170,7 @@
     </plugins>
   </build>
 
-  <!-- release profile -->
+
   <profiles>
     <profile>
       <id>release</id>
@@ -202,7 +185,6 @@
 
           <!-- sign artifacts -->
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>3.2.8</version>
             <executions>
@@ -215,9 +197,8 @@
               </execution>
             </executions>
           </plugin>
-
+          <!-- attach sources and javadocs -->
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
             <version>3.3.1</version>
             <executions>
@@ -230,12 +211,8 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <version>3.11.2</version>
-            <configuration>
-
-            </configuration>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
@@ -244,13 +221,18 @@
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <excludePackageNames>
+                org.natty.generated
+              </excludePackageNames>
+            </configuration>
           </plugin>
         </plugins>
       </build>
     </profile>
   </profiles>
 
-  <!-- dependencies -->
+
   <dependencies>
     <dependency>
       <groupId>org.antlr</groupId>
