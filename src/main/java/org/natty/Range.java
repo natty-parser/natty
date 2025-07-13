@@ -86,7 +86,7 @@ public class Range<C extends Comparable<C>> implements Predicate<C> {
       final int step = forward ? 1 : -1;
       @Override
       public boolean hasNext() {
-        return current == null || (forward ? current.compareTo(end) < 0 : current.compareTo(end) > 0);
+        return current == null || end == null || (forward ? current.compareTo(end) < 0 : current.compareTo(end) > 0);
       }
 
       @Override
