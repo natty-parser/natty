@@ -11,7 +11,7 @@ syntax information.
 
 ## Documentation
 
-Used to live at http://natty.joestelmach.com/, we'll try to get something up at https://natty-parser.github.io/natty/
+Used to live at http://natty.joestelmach.com/, we'll try to get something up at https://natty-parser.github.io/
 
 ## History
 
