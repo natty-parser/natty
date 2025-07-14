@@ -1,5 +1,6 @@
 package org.natty;
 
+import static java.util.Locale.US;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,7 +24,7 @@ import java.util.TimeZone;
 public class DateTest extends AbstractTest {
   @BeforeClass
   public static void oneTime() {
-    Locale.setDefault(Locale.US);
+    Locale.setDefault(US);
     TimeZone.setDefault(TimeZone.getTimeZone("US/Eastern"));
     initCalendarAndParser();
   }
@@ -168,6 +169,16 @@ public class DateTest extends AbstractTest {
     validateDate(reference, "2 years 4 months 5 days ago", 10, 23, 2008);
   }
 
+  @Test
+  public void fortnight() throws Exception {
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("2/28/2011");
+    calendarSource = new CalendarSource(reference);
+
+
+    validateDate(reference, "in 2 fortnights", 3, 28, 2011);
+    validateDate(reference, "in 30 fortnights", 4, 23, 2012);
+
+  }
   @Test
   public void testRange() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("1/02/2011");

@@ -2,7 +2,6 @@ package org.natty.eventsearchers.seasons;
 
 import java.time.Instant;
 import java.time.Year;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.natty.EventSearcher;
 import org.natty.Range;
@@ -20,10 +19,6 @@ public class SeasonsEventSearcher implements EventSearcher<Instant> {
     if (season == null) {
       return Stream.empty();
     }
-
-    return IntStream.range(range.getStart().getValue(), range.getEnd().getValue() + 1)
-      .mapToObj(Year::of)
-      .map(season);
-
+    return Range.stream(range).map(season);
   }
 }

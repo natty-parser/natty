@@ -3,7 +3,6 @@ package org.natty.eventsearchers;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.Optional;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.natty.EventSearcher;
 import org.natty.Range;
@@ -20,9 +19,7 @@ public abstract class AbstractYearlyHolidayEventSearcher implements EventSearche
     if (holiday == null) {
       return Stream.empty();
     }
+     return Range.stream(range).map(holiday);
 
-    return IntStream.range(range.getStart().getValue(), range.getEnd().getValue() + 1)
-      .mapToObj(Year::of)
-      .map(holiday);
   }
 }
