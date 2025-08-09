@@ -109,6 +109,11 @@ public class ParserTest {
     }
   }
 
+
+  /**
+   * Just showing #279 now. Indeed it doesn't seem to make much sense what is happening now.
+   */
+
   @Test
   public void issue279() {
     Parser parser = new Parser();
@@ -135,4 +140,13 @@ public class ParserTest {
     List<DateGroup> parse1 = parser.parse("MIGUEL JESSIE REYEZ - QUEEN NAIJA - J.I.D - MASEGO - TIERRA WHACK SUMMER WALKER KIANA LEDE - SNOH AALEGRA - RAVEENA TOBI LOU - JESS CONNELLY UMI - DAVEB IVY SOLE - PARISALEXA");
     log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
   }
+
+  @Test
+  public void issue246() {
+    Parser parser = new Parser();
+    List<DateGroup> parsed = parser.parse("the day before next 10/11/2016");
+    log.info("Parsed date: {}", parsed.get(0).getDates().get(0));
+  }
+
+
 }
