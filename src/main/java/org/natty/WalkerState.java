@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+import org.natty.eventsearchers.EventNotAvailable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +66,8 @@ public class WalkerState {
     resetCalendar();
     _dateGroup = new DateGroup();
   }
+
+
 
   public void setTimeZone(final TimeZone zone) {
     _timeZone = zone;
@@ -397,11 +400,11 @@ public class WalkerState {
    * @param direction     The direction to seek
    * @param seekAmount    The number of years to seek
    */
-  public void seekToHoliday(String holidayString, String direction, String seekAmount) {
+  public void seekToHoliday(String holidayString, String direction, String seekAmount) throws EventNotAvailable {
     Holiday holiday = Holiday.valueOf(holidayString);
     assert holiday != null;
-
     seekToEvent(holiday.getSummary(), direction, seekAmount);
+
   }
 
   /**
@@ -424,10 +427,9 @@ public class WalkerState {
    * @param direction     The direction to seek
    * @param seekAmount    The number of years to seek
    */
-  public void seekToSeason(String seasonString, String direction, String seekAmount) {
+  public void seekToSeason(String seasonString, String direction, String seekAmount) throws EventNotAvailable {
     Season season = Season.valueOf(seasonString);
     assert season!= null;
-
     seekToEvent(season.getSummary(), direction, seekAmount);
   }
 
@@ -562,7 +564,11 @@ public class WalkerState {
     }
   }
 
-  private void seekToEvent(final String eventSummary, final String direction, final String seekAmount) {
+
+  /**
+   * @throws IllegalStateException If the event cannot be found.
+   */
+  private void seekToEvent(final String eventSummary, final String direction, final String seekAmount) throws EventNotAvailable {
     final int seekAmountInt = Integer.parseInt(seekAmount);
     assert direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT);
     assert seekAmountInt >= 0;
@@ -586,8 +592,7 @@ public class WalkerState {
 
     Date currentYearDate = dates.get(currentYear);
     if (currentYearDate == null) {
-      return;
-      //throw new IllegalArgumentException("No date found for event '" + eventSummary + "' for year " + currentYear);
+      throw new EventNotAvailable("No date found for event '" + eventSummary + "' for year " + currentYear);
     }
     // grab the right one
     boolean hasPassed = cal.getTime().after(currentYearDate);
@@ -598,9 +603,7 @@ public class WalkerState {
     cal.setTimeZone(_calendar.getTimeZone());
     Date targetYearDate = dates.get(targetYear);
     if (targetYearDate == null) {
-      return;
-
-      ///  "No date found for event '" + eventSummary + "' for year " + targetYear);
+      throw new EventNotAvailable("No date found for event '" + eventSummary + "' for year " + targetYear);
     }
     cal.setTime(dates.get(targetYear));
     _calendar.set(Calendar.YEAR, cal.get(Calendar.YEAR));

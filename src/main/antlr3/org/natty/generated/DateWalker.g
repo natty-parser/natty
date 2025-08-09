@@ -112,10 +112,22 @@ seek
     {_walkerState.seekBySpan($DIRECTION.text, $INT.text, $SEEK_BY.text);}
 
   | ^(SEEK DIRECTION SEEK_BY INT HOLIDAY)
-    {_walkerState.seekToHoliday($HOLIDAY.text, $DIRECTION.text, $INT.text);}
+    { try {
+        _walkerState.seekToHoliday($HOLIDAY.text, $DIRECTION.text, $INT.text);
+        } catch (org.natty.eventsearchers.EventNotAvailable ise) {
+          throw new RecognitionException(input);
+        }
+     }
 
   | ^(SEEK DIRECTION SEEK_BY INT SEASON)
-    {_walkerState.seekToSeason($SEASON.text, $DIRECTION.text, $INT.text);}
+    {
+      try {
+       _walkerState.seekToSeason($SEASON.text, $DIRECTION.text, $INT.text);
+       } catch (org.natty.eventsearchers.EventNotAvailable ise) {
+          throw new RecognitionException(input);
+        }
+
+       }
   ;
 
 explicit_seek

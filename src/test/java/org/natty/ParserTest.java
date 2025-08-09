@@ -9,7 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -149,14 +148,34 @@ public class ParserTest {
 
   }
 
+  /**
+   * inauguration day string is not present. It should just match 20 january
+   */
   @Test
-  public void issue235() {
+  public void issue235_clean() {
 
     Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
 
-    List<DateGroup> parse1 = parser.parse("Department of Justice will be blocked by the order from viewing any identifying information from third-party Facebook users who are not under investigation but viewed or interacted with a Facebook account that was used to organize Inauguration Day protests on January 20, 2017", new Date(116, Calendar.NOVEMBER, 30));
+    List<DateGroup> parse1 = parser.parse("Department of Justice will be blocked by the order from viewing any identifying information from third-party Facebook users who are not under investigation but viewed or interacted with a Facebook account that was used to organize protests on January 20, 2017", Date.from(Instant.parse("2016-11-30T00:00:00Z")));
     log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
-    assertEquals("2018-05-01T23:00:00Z", parse1.get(0).getDates().get(0).toInstant().toString());
+    assertEquals("2017-01-20T00:00:00Z", parse1.get(0).getDates().get(0).toInstant().toString());
   }
+
+
+  /**
+   * inauguration day string <em>is</em> present. But not for the current year. It should be ignored. And it should still match 20 january.
+   */
+  @Test
+  public void issue235_inauguration_day() {
+
+    Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
+
+    List<DateGroup> parse1 = parser.parse("Department of Justice will be blocked by the order from viewing any identifying information from third-party Facebook users who are not under investigation but viewed or interacted with a Facebook account that was used to organize Inauguration Day protests on January 20, 2017", Date.from(Instant.parse("2016-11-30T00:00:00Z")));
+    log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
+    assertEquals("2017-01-20T00:00:00Z", parse1.get(0).getDates().get(0).toInstant().toString());
+  }
+
+
+
 
 }
