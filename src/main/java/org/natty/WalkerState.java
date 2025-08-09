@@ -27,6 +27,7 @@ public class WalkerState {
   private static final String YEAR = "year";
   private static final String FORTNIGHT = "fortnight";
   private static final String WEEK = "week";
+  private static final String FORTNIGHT = "fortnight";
   private static final String HOUR = "hour";
   private static final String MINUTE = "minute";
   private static final String SECOND = "second";
