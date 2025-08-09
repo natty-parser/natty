@@ -250,7 +250,6 @@ public class WalkerState {
 
     if (span.equals(FORTNIGHT)) {
       seekAmountInt *= 2; // a fortnight is two weeks
-    }
     if(field > 0) {
       _calendar.add(field, seekAmountInt * sign);
     }
