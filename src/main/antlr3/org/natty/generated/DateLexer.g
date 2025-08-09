@@ -44,6 +44,7 @@ HOUR   : 'hour'   | 'hours'   | 'hr' DOT?  | 'hrs' DOT?;
 MINUTE : 'minute' | 'minutes' | 'min' DOT? | 'mins' DOT?;
 DAY    : 'day'    | 'days' ;
 WEEK   : 'week'   | 'weeks'   | 'wks' DOT?;
+FORTNIGHT   : 'fortnight'   | 'fortnights'   DOT?;
 MONTH  : 'month'  | 'months';
 YEAR   : 'year'   | 'year' SINGLE_QUOTE? 's' | 'yrs' DOT?;
 

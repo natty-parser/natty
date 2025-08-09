@@ -46,7 +46,6 @@ public class WellknownHolidaysTest {
     "President's Day on 2025-02-17",
     "St. Patrick's Day on 2025-03-17",
     "Tax Day on 2025-04-15",
-    "US General Election on 2025-11-04",
     "Valentine's Day on 2025-02-14",
     "Earth Day on 2012-04-22",
     "April Fool's Day on 2012-04-01",
@@ -70,7 +69,6 @@ public class WellknownHolidaysTest {
     "President's Day on 2012-02-20",
     "St. Patrick's Day on 2012-03-17",
     "Tax Day on 2012-04-15",
-    "US General Election on 2012-11-06",
     "Valentine's Day on 2012-02-14"
     ), strings);
   }

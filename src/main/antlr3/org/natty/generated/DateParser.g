@@ -484,6 +484,24 @@ explicit_relative_week_seek
       -> ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["2"] SPAN["week"])
   ;
 
+ explicit_relative_fortnight_seek
+  // after next
+  : AFTER WHITE_SPACE NEXT
+      -> ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["2"] SPAN["fortnight"])
+
+  // before last
+  | BEFORE WHITE_SPACE LAST
+      -> ^(SEEK DIRECTION["<"] SEEK_BY["by_day"] INT["2"] SPAN["fortnight"])
+
+  // 2 fortnights ago, tuesday of 3 fortnights from now
+  | spelled_or_int_optional_prefix WHITE_SPACE FORTNIGHT WHITE_SPACE relative_date_suffix
+      -> ^(SEEK relative_date_suffix spelled_or_int_optional_prefix SPAN["fortnight"])
+
+  // the week after next
+  | THE WHITE_SPACE FORTNIGHT WHITE_SPACE AFTER WHITE_SPACE NEXT
+      -> ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["2"] SPAN["fortnight"])
+  ;
+
 explicit_day_of_month_part
   // first of, 10th of, 31st of,
   : (THE WHITE_SPACE)? relaxed_day_of_month day_of_month_suffix?
@@ -641,6 +659,7 @@ relative_time_suffix_anchor
 relative_date_span
   : DAY   -> SPAN["day"]
   | WEEK  -> SPAN["week"]
+  | FORTNIGHT  -> SPAN["fortnight"]
   | MONTH -> SPAN["month"]
   | YEAR  -> SPAN["year"]
   ;

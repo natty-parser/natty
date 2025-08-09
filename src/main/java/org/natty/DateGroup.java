@@ -23,10 +23,11 @@ public class DateGroup {
   private Tree _syntaxTree;
 
   public DateGroup() {
-    _dates = new ArrayList<Date>();
+    _dates = new ArrayList<>();
     _isDateInferred = true;
     _isTimeInferred = true;
   }
+
 
   /**
    * Adds a date to this group

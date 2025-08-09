@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.TimeZone;
+
+import static java.util.Locale.US;
 
 
 
@@ -23,7 +26,7 @@ import java.util.TimeZone;
 public class DateTest extends AbstractTest {
   @BeforeClass
   public static void oneTime() {
-    Locale.setDefault(Locale.US);
+    Locale.setDefault(US);
     TimeZone.setDefault(TimeZone.getTimeZone("US/Eastern"));
     initCalendarAndParser();
   }
@@ -166,6 +169,26 @@ public class DateTest extends AbstractTest {
     validateDate(reference, "1 year 9 months 1 day from now", 11, 29, 2012);
     validateDate(reference, "2 years 4 months ago", 10, 28, 2008);
     validateDate(reference, "2 years 4 months 5 days ago", 10, 23, 2008);
+  }
+
+  @Test
+  public void fortnight() throws Exception {
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("2/28/2011");
+    calendarSource = new CalendarSource(reference);
+
+
+    validateDate(reference, "in 2 fortnights", 3, 28, 2011);
+    validateDate(reference, "in 30 fortnights", 4, 23, 2012);
+  }
+
+  /**
+   * 'inauguration day' currently just finds the next inauguration day in the current year, so it actually only works in january of some years.
+   * Probably not very useful?
+   */
+  @Test
+  public void inaugurationDay() throws ParseException {
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("1/1/2013");
+    validateDate(reference, "inauguration day", 1, 21, 2013);
   }
 
   @Test
