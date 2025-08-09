@@ -5,7 +5,7 @@ import java.util.GregorianCalendar;
 
 /**
  * Responsible for generating new Calendars that represent
- * the current point in time.  This is necessary so we can
+ * the current point in time.  This is necessary, so we can
  * manipulate what the software thinks is the 'current'
  * time, which may be different from the system time
  *
@@ -23,6 +23,9 @@ public class CalendarSource {
   }
 
   public GregorianCalendar getCurrentCalendar() {
+    if (referenceDate == null) {
+      return null;
+    }
     GregorianCalendar calendar = new GregorianCalendar();
     calendar.setTime(referenceDate);
     return calendar;
