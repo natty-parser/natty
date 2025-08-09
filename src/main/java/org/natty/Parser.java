@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
@@ -36,6 +37,7 @@ public class Parser implements Serializable {
   private static final long serialVersionUID = 233282586086252203L;
   private static final Logger _logger = LoggerFactory.getLogger(Parser.class);
 
+
   private final TimeZone _defaultTimeZone;
 
 
@@ -46,15 +48,15 @@ public class Parser implements Serializable {
    * end of a token stream.
    */
   private static final Set<Integer> IGNORED_TRAILING_TOKENS =
-      new HashSet<Integer>(Arrays.asList(new Integer[] {
-          DateLexer.DOT,
-          DateLexer.COLON,
-          DateLexer.COMMA,
-          DateLexer.DASH,
-          DateLexer.SLASH,
-          DateLexer.PLUS,
-          DateLexer.SINGLE_QUOTE
-      }));
+    new HashSet<>(Arrays.asList(
+      DateLexer.DOT,
+      DateLexer.COLON,
+      DateLexer.COMMA,
+      DateLexer.DASH,
+      DateLexer.SLASH,
+      DateLexer.PLUS,
+      DateLexer.SINGLE_QUOTE)
+    );
 
   /**
    * Creates a new parser using the given time zone as the default
@@ -65,7 +67,7 @@ public class Parser implements Serializable {
   }
 
   /**
-   * Creates a new parser with no explicit default time zone (default will be US/Eastern)
+   * Creates a new parser with no explicit default time zone (default will be {@link TimeZone#getDefault()})
    */
   public Parser() {
     _defaultTimeZone = TimeZone.getDefault();
@@ -100,26 +102,26 @@ public class Parser implements Serializable {
     } catch (IOException e) {
       _logger.error("could not lex input", e);
     }
-    DateLexer lexer = new DateLexer(input);
+    final DateLexer lexer = new DateLexer(input);
 
     // collect all sub-token streams that may include date information
-    List<TokenStream> streams = collectTokenStreams(new CommonTokenStream(lexer));
+    final List<TokenStream> streams = collectTokenStreams(new CommonTokenStream(lexer));
 
     // and parse each of them
-    List<DateGroup> groups = new ArrayList<DateGroup>();
-    TokenStream lastStream = null;
+    final List<DateGroup> groups = new ArrayList<>();
+    TokenStream lastStream;
     for(TokenStream stream:streams) {
       lastStream = stream;
       List<Token> tokens = ((NattyTokenSource) stream.getTokenSource()).getTokens();
       DateGroup group = singleParse(stream, value, referenceDate);
-      while((group == null || group.getDates().size() == 0) && tokens.size() > 0) {
-        if(group == null || group.getDates().size() == 0) {
+      while((group == null || group.getDates().isEmpty()) && !tokens.isEmpty()) {
+        if(group == null || group.getDates().isEmpty()) {
 
           // we have two options:
           // 1. Continuously remove tokens from the end of the stream and re-parse.  This will
           //    recover from the case of an extraneous token at the end of the token stream.
-          //    For example: 'june 20th on'
-          List<Token> endRemovedTokens = new ArrayList<Token>(tokens);
+          //    For example, 'june 20th on'
+          List<Token> endRemovedTokens = new ArrayList<>(tokens);
           while((group == null || group.getDates().isEmpty()) && !endRemovedTokens.isEmpty()) {
             endRemovedTokens = endRemovedTokens.subList(0, endRemovedTokens.size() - 1);
             TokenStream newStream = new CommonTokenStream(new NattyTokenSource(endRemovedTokens));
@@ -129,7 +131,7 @@ public class Parser implements Serializable {
 
           // 2. Continuously look for another possible starting point in the token
           //    stream and re-parse.
-          while((group == null || group.getDates().isEmpty()) && tokens.size() >= 1) {
+          while((group == null || group.getDates().isEmpty()) && !tokens.isEmpty()) {
             tokens = tokens.subList(1, tokens.size());
             Iterator<Token> iter = tokens.iterator();
             while(iter.hasNext()) {
@@ -198,10 +200,9 @@ public class Parser implements Serializable {
    * @return
    */
   private DateGroup singleParse(TokenStream stream, String fullText, Date referenceDate) {
-	DateGroup group = null;
-	List<Token> tokens = ((NattyTokenSource) stream.getTokenSource()).getTokens();
-	if(tokens.isEmpty()) return group;
-
+    DateGroup group = null;
+    List<Token> tokens = ((NattyTokenSource) stream.getTokenSource()).getTokens();
+    if(tokens.isEmpty()) return group;
     StringBuilder tokenString = new StringBuilder();
     for(Token token:tokens) {
       tokenString.append(DateParser.tokenNames[token.getType()]);
@@ -230,7 +231,7 @@ public class Parser implements Serializable {
         nodes.setTokenStream(stream);
         DateWalker walker = new DateWalker(nodes);
         walker.setReferenceDate(referenceDate);
-        walker.getState().setDefaultTimeZone(_defaultTimeZone);
+        walker.getState().setTimeZone(_defaultTimeZone);
         walker.parse();
         _logger.debug("AST: {}", tree.toStringTree());
 
@@ -276,7 +277,7 @@ public class Parser implements Serializable {
     // walk through the token stream and build a collection
     // of sub token streams that represent possible date locations
     List<Token> currentGroup = null;
-    List<List<Token>> groups = new ArrayList<List<Token>>();
+    List<List<Token>> groups = new ArrayList<>();
     Token currentToken;
     int currentTokenType;
     StringBuilder tokenString = new StringBuilder();
@@ -290,7 +291,7 @@ public class Parser implements Serializable {
         if(currentTokenType != DateLexer.WHITE_SPACE &&
             DateParser.FOLLOW_empty_in_parse186.member(currentTokenType)) {
 
-          currentGroup = new ArrayList<Token>();
+          currentGroup = new ArrayList<>();
           currentGroup.add(currentToken);
         }
       }
@@ -322,7 +323,7 @@ public class Parser implements Serializable {
     }
 
     _logger.debug("STREAM: {}", tokenString);
-    List<TokenStream> streams = new ArrayList<TokenStream>();
+    List<TokenStream> streams = new ArrayList<>();
     for(List<Token> group:groups) {
       if(!group.isEmpty()) {
         StringBuilder builder = new StringBuilder();
@@ -360,6 +361,8 @@ public class Parser implements Serializable {
     }
   }
 
+
+
   @Override
   public final boolean equals(Object o) {
     if (!(o instanceof Parser)) return false;
@@ -367,9 +370,38 @@ public class Parser implements Serializable {
     Parser parser = (Parser) o;
     return Objects.equals(_defaultTimeZone, parser._defaultTimeZone);
   }
-
   @Override
   public int hashCode() {
     return Objects.hashCode(_defaultTimeZone);
   }
+
+  public static void main(String[] args) {
+    Parser parser = new Parser();
+    String input;
+    if (args.length > 0) {
+      input = args[0];
+    } else {
+      input = "next monday at 3pm";
+    }
+    System.out.println("Parsing input: " + input);
+    List<DateGroup> groups = parser.parse(input);
+    for (DateGroup group : groups) {
+      List<Date> dates = group.getDates();
+      int line = group.getLine();
+      int column = group.getPosition();
+      String matchingValue = group.getText();
+      String syntaxTree = group.getSyntaxTree().toStringTree();
+      System.out.println(matchingValue + " " + dates);
+      System.out.println(syntaxTree);
+      Map<String, List<ParseLocation>> parseMap = group.getParseLocations();
+      System.out.println("Parse locations: " + parseMap);
+      boolean isRecurring = group.isRecurring();
+      if (isRecurring) {
+
+        Date recursUntil = group.getRecursUntil();
+        System.out.println("Recurse until: " + parseMap);
+      }
+    }
+  }
+
 }
