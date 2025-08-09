@@ -73,7 +73,7 @@ relative_date
   ;
 
 week_index
-  : ^(WEEK_INDEX index=INT ^(DAY_OF_ day=INT))
+  : ^(WEEK_INDEX index=INT ^(DAY_OF_WEEK day=INT))
     {_walkerState.setDayOfWeekIndex($index.text, $day.text);}
   ;
 
