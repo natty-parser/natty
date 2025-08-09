@@ -237,6 +237,7 @@ public class WalkerState {
     int field =
       span.equals(DAY) ? Calendar.DAY_OF_YEAR :
         span.equals(WEEK) ? Calendar.WEEK_OF_YEAR :
+          // FORTNIGHT uses WEEK_OF_YEAR field, with seekAmount doubled below (see line 250)
           span.equals(FORTNIGHT) ? Calendar.WEEK_OF_YEAR :
 
             span.equals(MONTH) ? Calendar.MONTH :
