@@ -43,8 +43,8 @@ public class WellknownIrregularHolidaySearcher implements EventSearcher<LocalDat
     LocalDate.of(1809, 3, 4),
     LocalDate.of(1813, 3, 4),
     LocalDate.of(1817, 3, 4),
-    LocalDate.of(1821, 3, 5),
-    LocalDate.of(1923, 8, 3), // Harding died, Coolidge inaugurated// March 4 was Sunday
+    LocalDate.of(1821, 3, 5), // March 4 was Sunday
+    LocalDate.of(1923, 8, 3), // Harding died, Coolidge inaugurated
     LocalDate.of(1825, 3, 4),
     LocalDate.of(1829, 3, 4),
     LocalDate.of(1833, 3, 4),
