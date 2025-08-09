@@ -8,7 +8,7 @@ The issues are grouped into rough categories to make it possible to prioritise t
 | ID                                                          | Title                                                                                                       |
 |-------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | [~~#278~~](https://github.com/joestelmach/natty/issues/278) | 'last easter' gives NPE since 2021                                                                          |
-| [#277](https://github.com/joestelmach/natty/issues/277)     | Cant parse this oddly specific string.                                                                      |
+| [~~#277~~](https://github.com/joestelmach/natty/issues/277) | Cant parse this oddly specific string.                                                                      |
 | [~~#263~~](https://github.com/joestelmach/natty/issues/263) | "Christma-eve" before 2000 throws NPE                                                                       |
 | [#246](https://github.com/joestelmach/natty/issues/246)     | Could not parse input org.antlr.runtime.EarlyExitException: null                                            |
 | [~~#238~~](https://github.com/joestelmach/natty/issues/238) | natty line 1:23 no viable alternative at input '4' - Just override the emitErrorMessage method @joestelmach |
