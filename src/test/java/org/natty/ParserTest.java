@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
@@ -128,13 +129,12 @@ public class ParserTest {
 
   @Test
   public void issue234() {
-
     Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
 
     {
-      List<DateGroup> parse1 = parser.parse("next may", new Date(117, 11, 30));
+      List<DateGroup> parse1 = parser.parse("next may", Date.from(Instant.parse("2017-11-30T00:00:00Z")));
       log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
-      assertEquals("2018-05-01T23:00", parse1.get(0).getDates().get(0).toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime().toString());
+      assertEquals("2018-05-01T00:00", parse1.get(0).getDates().get(0).toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime().toString());
     }
   }
   @Test
@@ -142,9 +142,9 @@ public class ParserTest {
     Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
 
     {
-      List<DateGroup> parse1 = parser.parse("While the FIFA Executive Committee is still expected to back a switch to the 2021 winter and potential clashes with the Winter Olympics, Superbowl and European soccer leagues, Mayne-Nicholls is angling for a challenge to President Sepp Blatter in next May's FIFA elections.", new Date(117, 11, 30));
+      List<DateGroup> parse1 = parser.parse("While the FIFA Executive Committee is still expected to back a switch to the 2021 winter and potential clashes with the Winter Olympics, Superbowl and European soccer leagues, Mayne-Nicholls is angling for a challenge to President Sepp Blatter in next May's FIFA elections.", Date.from(Instant.parse("2017-11-30T00:00:00Z")));
       log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
-      //assertEquals("2018-05-01T23:00:00Z", parse1.get(0).getDates().get(0).toInstant().atZone(parser.getTimeZone().toZoneId()).toLocalDateTime().toString());
+      assertEquals("2018-05-01T00:00", parse1.get(0).getDates().get(0).toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime().toString());
     }
 
   }
@@ -154,7 +154,7 @@ public class ParserTest {
 
     Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
 
-    List<DateGroup> parse1 = parser.parse("Department of Justice will be blocked by the order from viewing any identifying information from third-party Facebook users who are not under investigation but viewed or interacted with a Facebook account that was used to organize Inauguration Day protests on January 20, 2017", new Date(117, Calendar.NOVEMBER, 30));
+    List<DateGroup> parse1 = parser.parse("Department of Justice will be blocked by the order from viewing any identifying information from third-party Facebook users who are not under investigation but viewed or interacted with a Facebook account that was used to organize Inauguration Day protests on January 20, 2017", new Date(116, Calendar.NOVEMBER, 30));
     log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
     assertEquals("2018-05-01T23:00:00Z", parse1.get(0).getDates().get(0).toInstant().toString());
   }
