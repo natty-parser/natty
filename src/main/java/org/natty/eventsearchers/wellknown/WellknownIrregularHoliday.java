@@ -32,8 +32,6 @@ public enum WellknownIrregularHoliday implements Function<Year, List<LocalDate>>
     int y = year.getValue();
     if (y < 1789) return Collections.emptyList();
 
-
-
     List<LocalDate> d = SPECIAL_INAUGURATIONS.get(y);
     if (d != null) {
       return d;
