@@ -1,11 +1,11 @@
 package org.natty;
 
-import static java.util.Locale.US;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.TimeZone;
+
+import static java.util.Locale.US;
 
 
 
@@ -177,8 +179,20 @@ public class DateTest extends AbstractTest {
 
     validateDate(reference, "in 2 fortnights", 3, 28, 2011);
     validateDate(reference, "in 30 fortnights", 4, 23, 2012);
-
   }
+
+  @Test
+  public void inaugurationDay() throws ParseException {
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("2/28/2013");
+    validateDate(reference, "inauguration day", 1, 21, 2013);
+  }
+
+  @Test
+  public void inaugurationDay2() throws ParseException {
+    Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("2/28/2011");
+    validateDate(reference, "inauguration day", 1, 21, 2013);
+  }
+
   @Test
   public void testRange() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("1/02/2011");
