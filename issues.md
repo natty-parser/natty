@@ -177,10 +177,10 @@ The issues are grouped into rough categories to make it possible to prioritise t
 
 | ID                                                          | Title                                                                                                                       |
 |-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| [#281](https://github.com/joestelmach/natty/issues/281)     | Documentation - 500 internal server error - http://natty.joestelmach.com/                                                   |
+| [~~#281~~](https://github.com/joestelmach/natty/issues/281) | Documentation - 500 internal server error - http://natty.joestelmach.com/                                                   |
 | [#274](https://github.com/joestelmach/natty/issues/274)     | abandonware and forks diverge wildly                                                                                        |
 | [#253](https://github.com/joestelmach/natty/issues/253)     | Runtime VerifyError: Verifier rejected class  with Android <= 21                                                            |
-| [#251](https://github.com/joestelmach/natty/issues/251)     | Strange Memory Issue (leak)                                                                                                 |
+| [~~#251~~](https://github.com/joestelmach/natty/issues/251) | Strange Memory Issue (leak) -> rejected                                                                                     |
 | [#230](https://github.com/joestelmach/natty/issues/230)     | Can't import project into android studio                                                                                    |
 | [#219](https://github.com/joestelmach/natty/issues/219)     | How can I add a needed format?                                                                                              |
 | [#218](https://github.com/joestelmach/natty/issues/218)     | Inferences could be more specific                                                                                           |
