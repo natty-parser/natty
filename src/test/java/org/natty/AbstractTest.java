@@ -82,9 +82,10 @@ public abstract class AbstractTest {
    */
   protected void validateDate(Date date, int month, int day, int year) {
     _calendar.setTime(date);
+    Assert.assertEquals(date + ": year != " + year, year, _calendar.get(Calendar.YEAR));
     Assert.assertEquals(date + ": month != " + month , month, _calendar.get(Calendar.MONTH) + 1);
     Assert.assertEquals(date + ": day != " + day, day, _calendar.get(Calendar.DAY_OF_MONTH));
-    Assert.assertEquals(date + ": year != " + year, year, _calendar.get(Calendar.YEAR));
+
   }
 
   /**
