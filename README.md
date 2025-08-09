@@ -27,7 +27,7 @@ Maven:
 </dependency>
 ```
 
-or [consult maven.org](https://search.maven.org/artifact/io.github.natty-parser/natty) for other build systems.
+or [consult maven central](https://central.sonatype.com/artifact/io.github.natty-parser/natty/versions) for other build systems.
 
 for snapshot dependencies, add maven-snapshots repository to your `pom.xml`:
 ```xml
