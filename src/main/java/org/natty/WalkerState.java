@@ -9,11 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Joe Stelmach
  */
 public class WalkerState {
+
+  private static final Logger _logger = LoggerFactory.getLogger(WalkerState.class);
+
 
   private static final int TWO_DIGIT_YEAR_CENTURY_THRESHOLD = 20;
   private static final String MONTH = "month";
@@ -37,15 +42,15 @@ public class WalkerState {
 
   private final CalendarSource calendarSource;
   private GregorianCalendar _calendar;
-  private TimeZone _defaultTimeZone;
+  private TimeZone _timeZone;
   private int _currentYear;
   private boolean _firstDateInvocationInGroup = true;
   private boolean _timeGivenInGroup = false;
   private boolean _dateGivenInGroup = false;
   private boolean _updatePreviousDates = false;
   private DateGroup _dateGroup;
-  private final List<String> _amPmGivenPerCapture = new ArrayList<String>();
-  private final List<Boolean> _timeGivenPerCapture = new ArrayList<Boolean>();
+  private final List<String> _amPmGivenPerCapture = new ArrayList<>();
+  private final List<Boolean> _timeGivenPerCapture = new ArrayList<>();
 
   /**
    * Creates a new WalkerState representing the start of
@@ -61,8 +66,8 @@ public class WalkerState {
     _dateGroup = new DateGroup();
   }
 
-  public void setDefaultTimeZone(final TimeZone zone) {
-    _defaultTimeZone = zone;
+  public void setTimeZone(final TimeZone zone) {
+    _timeZone = zone;
     resetCalendar();
   }
 
@@ -76,7 +81,7 @@ public class WalkerState {
    * @param seekType the type of seek to perform (by_day or by_week)
    *     by_day means we seek to the very next occurrence of the given day
    *     by_week means we seek to the first occurrence of the given day week in the
-   *     next (or previous,) week (or multiple of next or previous week depending
+   *     next (or previous), week (or multiple of next, or previous week depending
    *     on the seek amount.)
    *
    * @param seekAmount the amount to seek.  Must be guaranteed to parse as an integer
@@ -174,13 +179,13 @@ public class WalkerState {
   public void seekToMonth(String direction, String seekAmount, String month) {
     int seekAmountInt = Integer.parseInt(seekAmount);
     int monthInt = Integer.parseInt(month);
-    assert(direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT));
-    assert(monthInt >= 1 && monthInt <= 12);
+    assert direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT);
+    assert monthInt >= 1 && monthInt <= 12;
 
     markDateInvocation();
 
     // set the day to the first of month. This step is necessary because if we seek to the
-    // current day of a month whose number of days is less than the current day, we will
+    // current day of a month whose number of days is less than the current day, will
     // pushed into the next month.
     _calendar.set(Calendar.DAY_OF_MONTH, 1);
 
@@ -312,7 +317,7 @@ public class WalkerState {
     // date falls on the given day of week.
     else if(dayOfWeek != null) {
       int dayOfWeekInt = Integer.parseInt(dayOfWeek);
-      assert(dayOfWeekInt >= 1 && dayOfWeekInt <= 7);
+      assert dayOfWeekInt >= 1 && dayOfWeekInt <= 7;
       while(_calendar.get(Calendar.DAY_OF_WEEK) != dayOfWeekInt) {
         _calendar.roll(Calendar.YEAR, false);
       }
@@ -358,7 +363,7 @@ public class WalkerState {
       zone = TimeZone.getTimeZone(zoneString);
     }
 
-    _calendar.setTimeZone(zone != null ? zone : _defaultTimeZone);
+    _calendar.setTimeZone(zone != null ? zone : _timeZone);
 
     _calendar.set(Calendar.HOUR_OF_DAY, hoursInt);
     // hours greater than 12 are in 24-hour time
@@ -407,7 +412,7 @@ public class WalkerState {
    */
   public void seekToHolidayYear(String holidayString, String yearString) {
     Holiday holiday = Holiday.valueOf(holidayString);
-    assert(holiday != null);
+    assert holiday != null;
 
     seekToEventYear(yearString, holiday.getSummary());
   }
@@ -546,16 +551,19 @@ public class WalkerState {
   /**
    *  Resets the calendar
    */
-  private void resetCalendar() {
+  public void resetCalendar() {
     _calendar = getCalendar();
-    if (_defaultTimeZone != null) {
-      _calendar.setTimeZone(_defaultTimeZone);
+    if (_calendar != null) {
+      if (_timeZone != null) {
+        _calendar.setTimeZone(_timeZone);
+      }
+      _currentYear = _calendar.get(Calendar.YEAR);
+      _logger.debug("Resetting calendar to current date: {} (timezone {})", _calendar.getTime(), _timeZone);
     }
-    _currentYear = _calendar.get(Calendar.YEAR);
   }
 
-  private void seekToEvent(String eventSummary, String direction, String seekAmount) {
-    int seekAmountInt = Integer.parseInt(seekAmount);
+  private void seekToEvent(final String eventSummary, final String direction, final String seekAmount) {
+    final int seekAmountInt = Integer.parseInt(seekAmount);
     assert direction.equals(DIR_LEFT) || direction.equals(DIR_RIGHT);
     assert seekAmountInt >= 0;
 
@@ -563,24 +571,23 @@ public class WalkerState {
 
     // get the current year
     Calendar cal = getCalendar();
-    cal.setTimeZone(_defaultTimeZone);
+    cal.setTimeZone(_timeZone);
     int currentYear = cal.get(Calendar.YEAR);
 
     // look up a suitable period of occurrences
-    boolean forwards = direction.equals(DIR_RIGHT);
-    int startYear = forwards ? currentYear : currentYear - seekAmountInt - 1;
-    int endYear = forwards ? currentYear + seekAmountInt + 1 : currentYear;
+    final boolean forwards = direction.equals(DIR_RIGHT);
     Map<Integer, Date> dates = EventSearcherService.INSTANCE
-      .findEvents(Range.ofYears(startYear, endYear), _defaultTimeZone, eventSummary)
+      .findEvents(Range.fromYear(currentYear, forwards), _timeZone, eventSummary)
+      .limit(10)
       .collect(Collectors.toMap((d) -> {
-        return d.atZone(_defaultTimeZone.toZoneId()).getYear();
+        return d.atZone(_timeZone.toZoneId()).getYear();
       }, Date::from));
 
 
     Date currentYearDate = dates.get(currentYear);
     if (currentYearDate == null) {
-      throw new IllegalArgumentException(
-          "No date found for event '" + eventSummary + "' for year " + currentYear);
+      return;
+      //throw new IllegalArgumentException("No date found for event '" + eventSummary + "' for year " + currentYear);
     }
     // grab the right one
     boolean hasPassed = cal.getTime().after(currentYearDate);
@@ -591,8 +598,9 @@ public class WalkerState {
     cal.setTimeZone(_calendar.getTimeZone());
     Date targetYearDate = dates.get(targetYear);
     if (targetYearDate == null) {
-      throw new IllegalArgumentException(
-        "No date found for event '" + eventSummary + "' for year " + targetYear);
+      return;
+
+      ///  "No date found for event '" + eventSummary + "' for year " + targetYear);
     }
     cal.setTime(dates.get(targetYear));
     _calendar.set(Calendar.YEAR, cal.get(Calendar.YEAR));
@@ -637,7 +645,7 @@ public class WalkerState {
    * or null if not present.
    */
   private Date seasonalDate(String eventSummary, int year) {
-    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year), _defaultTimeZone, eventSummary).findFirst().orElse(null);
+    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year),_timeZone, eventSummary).findFirst().orElse(null);
     return instant == null ? null : Date.from(instant);
   }
 
