@@ -23,7 +23,7 @@ Maven:
 <dependency>
   <groupId>io.github.natty-parser</groupId>
   <artifactId>natty</artifactId>
-  <version>1.0.2</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -50,7 +50,7 @@ and
 <dependency>
   <groupId>io.github.natty-parser</groupId>
   <artifactId>natty</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
 </dependency>
 ```
 
