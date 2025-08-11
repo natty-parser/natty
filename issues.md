@@ -16,7 +16,7 @@ The issues are grouped into rough categories to make it possible to prioritise t
 | [~~#234~~](https://github.com/joestelmach/natty/issues/234) | NullPointerException                                                                                      |
 | [#193](https://github.com/joestelmach/natty/issues/193)     | NumberFormatException                                                                                     |
 | [#190](https://github.com/joestelmach/natty/issues/190)     | NullPointerExceptions                                                                                     |
-| [#162](https://github.com/joestelmach/natty/issues/162)     | NPE / NumberFormatExceptions in WalkerState on Seasons and year seaks with miscalculated target year      |
+| [~~#162~~](https://github.com/joestelmach/natty/issues/162) | NPE / NumberFormatExceptions in WalkerState on Seasons and year seaks with miscalculated target year      |
 | [#147](https://github.com/joestelmach/natty/issues/147)     | NumberFormatException for "match-up on Saturday, February 22, 64-44, against Lynwood"                     |
 
 ## Errors + Incorrect Parsing
