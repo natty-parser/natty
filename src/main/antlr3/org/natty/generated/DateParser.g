@@ -355,6 +355,10 @@ formal_date
   // 15-Apr-2014
   | formal_day_of_month formal_date_separator relaxed_month (formal_date_separator formal_year_four_digits)?
       -> ^(EXPLICIT_DATE relaxed_month formal_day_of_month formal_year_four_digits?)
+
+  // chinese/japanese, year first: 1979Y02M22D, 2 or 4 digit year is acceptable
+  | relaxed_day_of_week? formal_year CJK_YEAR formal_month_of_year CJK_MONTH formal_day_of_month CJK_DAY
+      -> ^(EXPLICIT_DATE formal_month_of_year formal_day_of_month relaxed_day_of_week? formal_year)
   ;
 
 formal_month_of_year
