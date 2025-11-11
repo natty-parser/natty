@@ -25,7 +25,7 @@ public class DateTimeTest extends AbstractTest {
   }
 
   @Test
-  public void testSpecific()  {
+  public void testSpecific() {
     final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
     calendarSource = new CalendarSource(reference);
@@ -44,13 +44,21 @@ public class DateTimeTest extends AbstractTest {
     validateDateTime(reference, "April 20 10", 4, 20, 2012, 10, 0, 0);
     validateDateTime(reference, "April 20 at 10 am", 4, 20, 2012, 10, 0, 0);
     validateDateTime(reference, "Mar 16, 2015 3:33:39 PM", 3, 16, 2015, 15, 33, 39);
-    validateDateTime(reference, "1980年3月19日 13:00", 3, 19, 1980, 13, 0, 0);
-    validateDateTime(reference, "1980년3월19일 13:00", 3, 19, 1980, 13, 0, 0);
     validateDateTime(reference, "5/1/13 01:00:00-8", 5, 1, 2013, 5, 0, 0);
     validateDateTime(reference, "5/1/13 01:00:00 UTC", 4, 30, 2013, 21, 0, 0);
     validateDateTime(reference, "5/1/13 01:00:00 UTC+8", 4, 30, 2013, 13, 0, 0);
     validateDateTime(reference, "5/1/13 01:00:00 UTC+4:30", 4, 30, 2013, 16, 30, 0);
     validateDateTime(reference, "5/1/13 01:00:00 GMT-1", 4, 30, 2013, 22, 0, 0);
+  }
+
+  @Test
+  public void testSpecificCJK() {
+    final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
+    Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
+    calendarSource = new CalendarSource(reference);
+    validateDateTime(reference, "1980年3月19日 13:00", 3, 19, 1980, 13, 0, 0);
+    validateDateTime(reference, "1980년3월19일 13:00", 3, 19, 1980, 13, 0, 0);
+
   }
 
   @Test

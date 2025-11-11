@@ -255,6 +255,7 @@
       <version>2.0.17</version>
     </dependency>
 
+    <!-- using junit 4 because of gunit -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

@@ -47,6 +47,10 @@ public class DateTest extends AbstractTest {
     validateDate("28-Feb-2010", 2, 28, 2010);
     validateDate("9-Apr", 4, 9, Calendar.getInstance().get(Calendar.YEAR));
     validateDate("jan 10, '00", 1, 10, 2000);
+  }
+
+  @Test
+  public void testFormalCJK() {
     validateDate("1980年3月19日", 3, 19, 1980);
     validateDate("1980년3월19일", 3, 19, 1980);
   }
