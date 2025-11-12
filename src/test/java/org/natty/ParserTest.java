@@ -79,8 +79,6 @@ public class ParserTest {
   @Test
   public void issue278() {
     final List<DateGroup> groups = new Parser().parse("last easter", new Date(121, 1, 1));
-
-
   }
 
   /**
@@ -111,15 +109,32 @@ public class ParserTest {
 
 
   /**
-   * Just showing #279 now. Indeed it doesn't seem to make much sense what is happening now.
+   * Just showing #279 now. Indeed, it doesn't seem to make much sense what is happening now.
    */
 
   @Test
   public void issue279() {
     Parser parser = new Parser();
+    Date d2000  = new Date(100, 1, 1);
+    Date d2010  = new Date(110, 1, 1);
+    Date d2020  = new Date(120, 1, 1);
 
-    List<DateGroup> parse1 = parser.parse("Fri Mar 04 00:00:00 UTC 2016", new Date(100, 1, 1));
-    log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
+    log.info("Parsed date: {} ({})",
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016",
+      d2000).get(0).getDates().get(0),
+      d2000);
+
+    log.info("Parsed date: {} ({})",
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016",
+      d2010).get(0).getDates().get(0),
+      d2010);
+
+
+    log.info("Parsed date: {} ({})",
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016",
+      d2020).get(0).getDates().get(0),
+      d2020);
+
 
 
 
@@ -133,10 +148,7 @@ public class ParserTest {
    */
   @Test
   public void issue277() {
-     Parser parser = new Parser();
-
-
-
+    Parser parser = new Parser();
     List<DateGroup> parse1 = parser.parse("MIGUEL JESSIE REYEZ - QUEEN NAIJA - J.I.D - MASEGO - TIERRA WHACK SUMMER WALKER KIANA LEDE - SNOH AALEGRA - RAVEENA TOBI LOU - JESS CONNELLY UMI - DAVEB IVY SOLE - PARISALEXA");
     log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
   }
