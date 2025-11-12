@@ -11,7 +11,7 @@ syntax information.
 
 ## Documentation
 
-Documentation can be found at https://natty-parser.github.io/ (This used to live at http://natty.joestelmach.com/) 
+Documentation (with a working demo) can be found at https://natty-parser.github.io/ (This used to live at http://natty.joestelmach.com/) 
 
 ## History
 
