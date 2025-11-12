@@ -113,7 +113,7 @@ The issues are grouped into rough categories to make it possible to prioritise t
 | [#248](https://github.com/joestelmach/natty/issues/248)     | Feature request                                                                                                             |
 | [#245](https://github.com/joestelmach/natty/issues/245)     | Feature Request: Set date format locale on call                                                                             |
 | [~~#239~~](https://github.com/joestelmach/natty/issues/239) | A fortnight happens to be absent from Natty's vocabulary                                                                    |
-| [#235](https://github.com/joestelmach/natty/issues/235)     | java.lang.IllegalArgumentException: No enum constant com.joestelmach.natty.Holiday.INAUGURATION_DAY                         |
+| [~~#235~~](https://github.com/joestelmach/natty/issues/235)     | java.lang.IllegalArgumentException: No enum constant com.joestelmach.natty.Holiday.INAUGURATION_DAY                         |
 | [#233](https://github.com/joestelmach/natty/issues/233)     | Parsing week numbers                                                                                                        |
 | [#231](https://github.com/joestelmach/natty/issues/231)     | Couple days from now / next leap year                                                                                       |
 | [#226](https://github.com/joestelmach/natty/issues/226)     | RFC 2822 Support                                                                                                            |
