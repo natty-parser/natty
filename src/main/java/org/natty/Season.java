@@ -7,9 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import org.slf4j.Logger;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import java.util.logging.Logger;
 
 public enum Season implements Function<Year, Instant> {
 
@@ -22,7 +21,7 @@ public enum Season implements Function<Year, Instant> {
     /** Autumnal Equinox, marking the start of fall (around September 22 in the Northern Hemisphere). */
     FALL("Autumnal Equinox");
 
-  private static final Logger log = getLogger(Season.class);
+  private static final Logger log = Logger.getLogger(Season.class.getName());
 
   private static final Map<String, Season> lookup;
 
@@ -183,7 +182,7 @@ public enum Season implements Function<Year, Instant> {
 
     if (year < 1000 || year > 3000) {
       // Meeus algorithm does not support years before 1000 or after 3000
-      log.debug("Year ({}) must be between 1000 and 3000. Result may be unprecise", year);
+      log.fine(() -> String.format("Year (%d) must be between 1000 and 3000. Result may be unprecise", year));
     }
 
 

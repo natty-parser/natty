@@ -8,17 +8,16 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.natty.eventsearchers.EventNotAvailable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Joe Stelmach
  */
 public class WalkerState {
 
-  private static final Logger _logger = LoggerFactory.getLogger(WalkerState.class);
+  private static final Logger _logger = Logger.getLogger(WalkerState.class.getName());
 
 
   private static final int TWO_DIGIT_YEAR_CENTURY_THRESHOLD = 20;
@@ -561,7 +560,7 @@ public class WalkerState {
         _calendar.setTimeZone(_timeZone);
       }
       _currentYear = _calendar.get(Calendar.YEAR);
-      _logger.debug("Resetting calendar to current date: {} (timezone {})", _calendar.getTime(), _timeZone);
+      _logger.fine(() -> String.format("Resetting calendar to current date: %s (timezone %s)", _calendar.getTime(), _timeZone));
     }
   }
 

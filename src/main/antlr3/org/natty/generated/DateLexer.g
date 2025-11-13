@@ -3,16 +3,16 @@ lexer grammar DateLexer;
 @header { package org.natty.generated; }
 
 @members {
-  private static org.slf4j.Logger _logger =
-    org.slf4j.LoggerFactory.getLogger(org.natty.generated.DateLexer.class);
+  private static java.util.logging.Logger _logger =
+     java.util.logging.Logger.getLogger(org.natty.generated.DateLexer.class.getName());
 
   @Override
   public void displayRecognitionError(String[] tokenNames, RecognitionException re) {
-    if (_logger.isDebugEnabled()) {
+    if (_logger.isLoggable(java.util.logging.Level.FINE)) {
 
        String message = getErrorHeader(re);
        try { message += getErrorMessage(re, tokenNames); } catch(Exception e) {}
-       _logger.debug(message);
+       _logger.fine(message);
     }
   }
 }

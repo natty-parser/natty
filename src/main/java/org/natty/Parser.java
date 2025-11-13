@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -25,8 +27,6 @@ import org.natty.generated.DateLexer;
 import org.natty.generated.DateParser;
 import org.natty.generated.DateWalker;
 import org.natty.generated.TreeRewrite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class Parser implements Serializable {
 
   private static final long serialVersionUID = 233282586086252203L;
-  private static final Logger _logger = LoggerFactory.getLogger(Parser.class);
+  private static final Logger _logger = Logger.getLogger(Parser.class.getName());
 
 
   private final TimeZone _defaultTimeZone;
@@ -100,7 +100,7 @@ public class Parser implements Serializable {
       input = new ANTLRNoCaseInputStream(new ByteArrayInputStream(value.getBytes()));
 
     } catch (IOException e) {
-      _logger.error("could not lex input", e);
+      _logger.log(Level.WARNING, "could not lex input", e);
     }
     final DateLexer lexer = new DateLexer(input);
 
@@ -219,7 +219,7 @@ public class Parser implements Serializable {
 
       // we only continue if a meaningful syntax tree has been built
       if(tree.getChildCount() > 0) {
-        _logger.debug("PARSE: {}", tokenString);
+        _logger.finer(() -> String.format("PARSE: %s",  tokenString));
 
         // rewrite the tree (temporary fix for http://www.antlr.org/jira/browse/ANTLR-427)
         CommonTreeNodeStream nodes = new CommonTreeNodeStream(tree);
@@ -233,7 +233,8 @@ public class Parser implements Serializable {
         walker.setReferenceDate(referenceDate);
         walker.getState().setTimeZone(_defaultTimeZone);
         walker.parse();
-        _logger.debug("AST: {}", tree.toStringTree());
+        Tree finalTree = tree;
+        _logger.finer(() -> String.format("AST: %s", finalTree.toStringTree()));
 
         // run through the results and append the parse information
         group = walker.getState().getDateGroup();
@@ -258,7 +259,7 @@ public class Parser implements Serializable {
       }
 
     } catch(RecognitionException e) {
-      _logger.debug("Could not parse input", e);
+      _logger.log(Level.FINE, "Could not parse input", e);
     }
 
     return group;
@@ -322,7 +323,7 @@ public class Parser implements Serializable {
       addGroup(currentGroup, groups);
     }
 
-    _logger.debug("STREAM: {}", tokenString);
+    _logger.fine(() -> String.format("STREAM: %s",  tokenString));
     List<TokenStream> streams = new ArrayList<>();
     for(List<Token> group:groups) {
       if(!group.isEmpty()) {
@@ -331,7 +332,7 @@ public class Parser implements Serializable {
         for (Token token : group) {
           builder.append(DateParser.tokenNames[token.getType()]).append(" ");
         }
-        _logger.debug(builder.toString());
+        _logger.fine(builder::toString);
 
         streams.add(new CommonTokenStream(new NattyTokenSource(group)));
       }

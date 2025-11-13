@@ -276,6 +276,7 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <!-- using junit 4 because of gunit -->
