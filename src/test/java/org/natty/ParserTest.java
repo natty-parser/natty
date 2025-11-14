@@ -10,13 +10,15 @@ import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
 
 
 public class ParserTest {
 
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ParserTest.class);
+  private static final Logger log  = Logger.getLogger(ParserTest.class.getName());
+
   @Test
   public void serializationOfParser() throws IOException, ClassNotFoundException {
     // Test serializing of a basic parser which does not have a
@@ -92,7 +94,7 @@ public class ParserTest {
       final List<DateGroup> groups = new Parser().parse("last easter", reference);
       assertEquals(1, groups.size());
       Date easter = groups.get(0).getDates().get(0);
-      log.info("Last easter for year {}: {}", i, easter);
+      log.info("Last easter for year " + i + ": " +easter);
     }
   }
 
@@ -103,7 +105,7 @@ public class ParserTest {
       final List<DateGroup> groups = new Parser().parse("last election day", reference);
       assertEquals(1, groups.size());
       Date easter = groups.get(0).getDates().get(0);
-      log.info("Last election day for year {}: {}", i, easter);
+      log.info("Last election day for year " +  i + ": " + easter);
     }
   }
 
@@ -119,28 +121,23 @@ public class ParserTest {
     Date d2010  = new Date(110, 1, 1);
     Date d2020  = new Date(120, 1, 1);
 
-    log.info("Parsed date: {} ({})",
-      parser.parse("Fri Mar 04 00:00:00 UTC 2016",
-      d2000).get(0).getDates().get(0),
-      d2000);
+    log.info("Parsed date: " +
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2000).get(0).getDates().get(0) +
+      " (" + d2000 + ")");
 
-    log.info("Parsed date: {} ({})",
-      parser.parse("Fri Mar 04 00:00:00 UTC 2016",
-      d2010).get(0).getDates().get(0),
-      d2010);
+    log.info("Parsed date: " +
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2010).get(0).getDates().get(0) +
+      " (" + d2010 + ")");
 
-
-    log.info("Parsed date: {} ({})",
-      parser.parse("Fri Mar 04 00:00:00 UTC 2016",
-      d2020).get(0).getDates().get(0),
-      d2020);
-
+    log.info("Parsed date: " +
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2020).get(0).getDates().get(0) +
+      " (" + d2020 + ")");
 
 
 
     List<DateGroup> parse2 = parser.parse("Tue Jan 12 00:00:00 UTC 2016");
 
-    log.info("Parsed date: {}", parse2.get(0).getDates().get(0));
+    log.info("Parsed date: " +  parse2.get(0).getDates().get(0));
   }
 
   /**
@@ -150,14 +147,14 @@ public class ParserTest {
   public void issue277() {
     Parser parser = new Parser();
     List<DateGroup> parse1 = parser.parse("MIGUEL JESSIE REYEZ - QUEEN NAIJA - J.I.D - MASEGO - TIERRA WHACK SUMMER WALKER KIANA LEDE - SNOH AALEGRA - RAVEENA TOBI LOU - JESS CONNELLY UMI - DAVEB IVY SOLE - PARISALEXA");
-    log.info("Parsed date: {}", parse1.get(0).getDates().get(0));
+    log.info("Parsed date: " + parse1.get(0).getDates().get(0));
   }
 
   @Test
   public void issue246() {
     Parser parser = new Parser();
     List<DateGroup> parsed = parser.parse("the day before next 10/11/2016");
-    log.info("Parsed date: {}", parsed.get(0).getDates().get(0));
+    log.info("Parsed date: " + parsed.get(0).getDates().get(0));
   }
 
 
