@@ -263,22 +263,6 @@
       <version>${antlr.version}</version>
     </dependency>
 
-    <!--
-    dependency on ical is dropped, as it is (provisionally?) not used anymore
-    <dependency>
-      <groupId>org.mnode.ical4j</groupId>
-      <artifactId>ical4j</artifactId>
-      <version>4.1.1</version>
-      <optional>true</optional>
-    </dependency>-->
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-      <scope>test</scope>
-    </dependency>
-
     <!-- using junit 4 because of gunit -->
     <dependency>
       <groupId>junit</groupId>
