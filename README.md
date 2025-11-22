@@ -23,7 +23,7 @@ Originally written by Joe Stelmach at https://github.com/joestelmach/natty and d
 
 Besides the package, maven coordinates, and bugfixes this project still behaves pretty much the same as the original thing.
 
- - 1.1.2: will only have a antl3 dependency. So, even slf4j was dropped. If you need to have the debug-logging of natty (but why would you?), configure your logging framework to capture jul-logging.
+ - 1.1.2: will only have a antlr3 dependency. So, even slf4j was dropped. If you need to have the debug-logging of natty (but why would you?), configure your logging framework to capture jul-logging.
  - 1.1.*: In these version the 'ics' support is dropped and replaced with algorithmic versions. The ics-files were heavily outdated and all 'holiday' and other recognized named date references where not working for recent dates.  E.g. the easter date (and dependents) will be correct for hundreds of years to come now.
  - 1.0.x: First versions release from this fork at new maven coordinates /package. Pus some bug fixes
  - 0.x: original versions at  https://github.com/joestelmach/natty
