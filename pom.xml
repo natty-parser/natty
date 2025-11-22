@@ -4,7 +4,7 @@
   <artifactId>natty</artifactId>
   <packaging>jar</packaging>
 
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.1.3-SNAPSHOT</version>
 
   <name>Natty Date Parser</name>
   <description>natural language date parser</description>
@@ -90,7 +90,7 @@
 
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.4.2</version>
+        <version>3.5.0</version>
         <configuration>
           <archive>
             <index>true</index>
