@@ -110,6 +110,12 @@ public class DateTest extends AbstractTest {
     validateDate(reference, "4 mondays from now", 3, 28, 2011);
     validateDate(reference, "4 mondays from today", 3, 28, 2011);
     validateDate(reference, "next weekend", 3, 12, 2011);
+    // "after the weekend" returns the Monday following the upcoming weekend (Mar 5-6)
+    validateDate(reference, "after the weekend", 3, 7, 2011);
+    validateDate(reference, "After The Weekend", 3, 7, 2011);
+    // "before the weekend" returns the Friday immediately before the upcoming weekend (Mar 5-6)
+    validateDate(reference, "before the weekend", 3, 4, 2011);
+    validateDate(reference, "Before The Weekend", 3, 4, 2011);
     validateDate(reference, "six mondays ago", 1, 17, 2011);
     validateDate(reference, "last monday", 2, 21, 2011);
     validateDate(reference, "last mon", 2, 21, 2011);
