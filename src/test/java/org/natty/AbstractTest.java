@@ -50,7 +50,7 @@ public abstract class AbstractTest {
    */
   protected Date parseSingleDate(String value, Date referenceDate) {
     List<Date> dates = parseCollection(referenceDate, value);
-    Assert.assertEquals(1, dates.size());
+    Assert.assertEquals("didn't find a date in '" + value + "' at all", 1, dates.size());
     return dates.get(0);
   }
 
