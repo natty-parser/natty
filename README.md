@@ -61,7 +61,7 @@ and
 <dependency>
   <groupId>io.github.natty-parser</groupId>
   <artifactId>natty</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.3-SNAPSHOT</version>
 </dependency>
 ```
 
