@@ -418,6 +418,18 @@ relative_date
   | (THE WHITE_SPACE)? relative_date_span WHITE_SPACE AFTER WHITE_SPACE NEXT
       -> ^(RELATIVE_DATE ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["2"] relative_date_span))
 
+  // after the weekend -> next monday
+  // Note: "weekend" is lexed as SATURDAY token (see DateLexer.g); the result is the
+  // Monday following the upcoming weekend, matching "after the weekend" semantics.
+  | AFTER WHITE_SPACE THE WHITE_SPACE SATURDAY
+      -> ^(RELATIVE_DATE ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["1"] ^(DAY_OF_WEEK INT["2"])))
+
+  // before the weekend -> next friday
+  // Note: "weekend" is lexed as SATURDAY token (see DateLexer.g); the result is the
+  // Friday immediately preceding the upcoming weekend.
+  | BEFORE WHITE_SPACE THE WHITE_SPACE SATURDAY
+      -> ^(RELATIVE_DATE ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["1"] ^(DAY_OF_WEEK INT["6"])))
+
   // today, tomorrow
   | named_relative_date
 
