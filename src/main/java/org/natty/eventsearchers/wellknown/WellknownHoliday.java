@@ -11,8 +11,13 @@ import java.util.function.Function;
 import org.natty.YearlyHoliday;
 
 /**
-  * @since 1.1
-  * @author Michiel Meeuwissen
+ * Implmenets a number of well-known holidays that are not necessarily Christian, and that are not necessarily fixed. For example,
+ * Thanksgiving is the fourth Thursday in November, and thus falls on a different date each year.
+ * <p>
+ * This list is pretty US centric and mainly represents the holidays that were supported by natty originally.
+ * @since 1.1
+ * @author Michiel Meeuwissen
+ * @see org.natty.eventsearchers.christian.ChristianHoliday
  */
 public enum WellknownHoliday implements YearlyHoliday {
   /** April 22nd, promoting environmental protection. */

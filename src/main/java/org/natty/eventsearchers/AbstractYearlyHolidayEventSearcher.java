@@ -8,6 +8,11 @@ import org.natty.EventSearcher;
 import org.natty.Range;
 import org.natty.YearlyHoliday;
 
+
+/**
+ * @since 1.1
+ * @author Michiel Meeuwissen
+ */
 public abstract class AbstractYearlyHolidayEventSearcher implements EventSearcher<LocalDate> {
 
 

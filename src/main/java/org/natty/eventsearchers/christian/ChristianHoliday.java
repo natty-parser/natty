@@ -7,8 +7,8 @@ import java.util.function.Function;
 import org.natty.YearlyHoliday;
 
 /**
-  * @since 1.1
-  * @author Michiel Meeuwissen
+ * Enumeration of Christian holidays was are well known in the US.
+ * @author Michiel Meeuwissen
  */
 public enum ChristianHoliday implements YearlyHoliday {
    /** December 25th, celebrating the birth of Jesus Christ. */
