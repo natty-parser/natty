@@ -461,6 +461,10 @@ explicit_relative_month_seek
   | THE WHITE_SPACE MONTH WHITE_SPACE AFTER WHITE_SPACE NEXT
       -> ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["2"] SPAN["month"])
 
+  // the month (current month)
+  | THE WHITE_SPACE MONTH
+      -> ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["0"] SPAN["month"])
+
   // september
   | relaxed_month
       -> ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["0"] relaxed_month)
@@ -486,6 +490,10 @@ explicit_relative_week_seek
   // the week after next
   | THE WHITE_SPACE WEEK WHITE_SPACE AFTER WHITE_SPACE NEXT
       -> ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["2"] SPAN["week"])
+
+  // the week (current week)
+  | THE WHITE_SPACE WEEK
+      -> ^(SEEK DIRECTION[">"] SEEK_BY["by_day"] INT["0"] SPAN["week"])
   ;
 
  explicit_relative_fortnight_seek

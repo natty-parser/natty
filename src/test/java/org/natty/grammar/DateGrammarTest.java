@@ -389,6 +389,18 @@ public class DateGrammarTest extends AbstractGrammarTest {
     assertAST("at the end of last month",
         "(RELATIVE_DATE (SEEK < by_week 1 month) (EXPLICIT_SEEK (DAY_OF_MONTH 31)))");
     
+    assertAST("end of the week",
+        "(RELATIVE_DATE (SEEK > by_day 0 week) (EXPLICIT_SEEK (DAY_OF_WEEK 6)))");
+    
+    assertAST("end of the month",
+        "(RELATIVE_DATE (SEEK > by_day 0 month) (EXPLICIT_SEEK (DAY_OF_MONTH 31)))");
+    
+    assertAST("beginning of the week",
+        "(RELATIVE_DATE (SEEK > by_day 0 week) (EXPLICIT_SEEK (DAY_OF_WEEK 2)))");
+    
+    assertAST("beginning of the month",
+        "(RELATIVE_DATE (SEEK > by_day 0 month) (EXPLICIT_SEEK (DAY_OF_MONTH 1)))");
+    
     assertAST("the second day of april",
         "(RELATIVE_DATE (SEEK > by_day 0 (MONTH_OF_YEAR 4)) (EXPLICIT_SEEK (DAY_OF_MONTH 2)))");
     
