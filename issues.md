@@ -58,7 +58,7 @@ The issues are grouped into rough categories to make it possible to prioritise t
 | [#146](https://github.com/joestelmach/natty/issues/146) | "In 2 weeks at 2pm"                                                                                                         |
 | [#143](https://github.com/joestelmach/natty/issues/143) | Won't parse just the year                                                                                                   |
 | [#142](https://github.com/joestelmach/natty/issues/142) | A minute ago                                                                                                                |
-| [#139](https://github.com/joestelmach/natty/issues/139) | the vs. this                                                                                                                |
+| [~~139~~](https://github.com/joestelmach/natty/issues/139) | the vs. this                                                                                                                |
 | [#137](https://github.com/joestelmach/natty/issues/137) | "First day of this year" returns current date                                                                               |
 | [#119](https://github.com/joestelmach/natty/issues/119) | "A380 tomorrow" parses as 0 as explicit hour                                                                                |
 | [#96](https://github.com/joestelmach/natty/issues/96)   | "an hour ago" and "a minute ago"                                                                                            |
