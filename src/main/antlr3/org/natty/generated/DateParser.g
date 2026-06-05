@@ -34,6 +34,7 @@ tokens {
   RECURRENCE;
   HOLIDAY;
   SEASON;
+  UPCOMING_DAY_OF_MONTH;
 }
 
 @header {
@@ -52,6 +53,10 @@ tokens {
     try { message += getErrorMessage(re, tokenNames); } catch(Exception e) {}
     _logger.fine(message);
     }
+  }
+
+  private boolean isStandaloneOrdinalAllowed(int startType) {
+    return startType != FIRST && startType != SECOND && startType != THIRD && startType != FOURTH && startType != FIFTH;
   }
 }
 
@@ -92,8 +97,19 @@ date
   | relaxed_date
   | relative_date
   | explicit_relative_date
+  | standalone_day_of_month
   | global_date_prefix WHITE_SPACE date
       -> ^(RELATIVE_DATE ^(SEEK global_date_prefix date))
+  ;
+
+standalone_day_of_month
+  : (ON WHITE_SPACE)? (THE WHITE_SPACE)? ordinal_day_of_month WHITE_SPACE? EOF
+      -> ^(RELATIVE_DATE ^(EXPLICIT_SEEK ^(UPCOMING_DAY_OF_MONTH ^(DAY_OF_MONTH ordinal_day_of_month))))
+  ;
+
+ordinal_day_of_month
+  : day=spelled_first_to_thirty_first {isStandaloneOrdinalAllowed($day.start.getType())}?
+      -> $day
   ;
 
 date_time_alternative

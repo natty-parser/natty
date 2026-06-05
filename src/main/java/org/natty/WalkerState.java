@@ -137,6 +137,26 @@ public class WalkerState {
   }
 
   /**
+   * Seeks to the nearest upcoming occurrence of a day-of-month. If the day has already passed
+   * in the current month, this seeks to that day in the next month.
+   *
+   * @param dayOfMonth the requested day of month, from 1 to 31.
+   */
+  public void seekToUpcomingDayOfMonth(String dayOfMonth) {
+    int dayOfMonthInt = Integer.parseInt(dayOfMonth);
+    assert(dayOfMonthInt >= 1 && dayOfMonthInt <= 31);
+
+    markDateInvocation();
+
+    if (_calendar.get(Calendar.DAY_OF_MONTH) > dayOfMonthInt) {
+      _calendar.add(Calendar.MONTH, 1);
+    }
+
+    dayOfMonthInt = Math.min(dayOfMonthInt, _calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+    _calendar.set(Calendar.DAY_OF_MONTH, dayOfMonthInt);
+  }
+
+  /**
    * Seeks to the given day within the current year
    * @param dayOfYear the day of the year to seek to, represented as an integer
    *     from 1 to 366. Must be guaranteed to parse as an Integer.  If this day is

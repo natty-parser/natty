@@ -12,6 +12,9 @@ public class DateGrammarTest extends AbstractGrammarTest {
     assertAST("2009-10-10", "(EXPLICIT_DATE (MONTH_OF_YEAR 10) (DAY_OF_MONTH 10) (YEAR_OF 2009))");
     assertAST("seven years ago", "(RELATIVE_DATE (SEEK < by_day 7 year))");
     assertAST("next monday", "(RELATIVE_DATE (SEEK > by_week 1 (DAY_OF_WEEK 2)))");
+    assertAST("on the 11th", "(RELATIVE_DATE (EXPLICIT_SEEK (UPCOMING_DAY_OF_MONTH (DAY_OF_MONTH 11))))");
+    assertAST("the eleventh", "(RELATIVE_DATE (EXPLICIT_SEEK (UPCOMING_DAY_OF_MONTH (DAY_OF_MONTH 11))))");
+    assertAST("the 23rd", "(RELATIVE_DATE (EXPLICIT_SEEK (UPCOMING_DAY_OF_MONTH (DAY_OF_MONTH 23))))");
   }
   
   @Test

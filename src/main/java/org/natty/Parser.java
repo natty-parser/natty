@@ -66,6 +66,12 @@ public class Parser implements Serializable {
     _defaultTimeZone = defaultTimeZone;
   }
 
+  private boolean isPossibleDateStartToken(int tokenType) {
+    return tokenType != DateLexer.WHITE_SPACE
+      && tokenType != DateLexer.UNKNOWN
+      && tokenType != DateLexer.ON;
+  }
+
   /**
    * Creates a new parser with no explicit default time zone (default will be {@link TimeZone#getDefault()})
    */
@@ -136,7 +142,7 @@ public class Parser implements Serializable {
             Iterator<Token> iter = tokens.iterator();
             while(iter.hasNext()) {
               Token token = iter.next();
-              if(!DateParser.FOLLOW_empty_in_parse186.member(token.getType())) {
+              if (!isPossibleDateStartToken(token.getType())) {
                 iter.remove();
               }
               else {
@@ -290,7 +296,7 @@ public class Parser implements Serializable {
       if(currentGroup == null) {
         // skip over white space and known tokens that cannot be the start of a date
         if(currentTokenType != DateLexer.WHITE_SPACE &&
-            DateParser.FOLLOW_empty_in_parse186.member(currentTokenType)) {
+            isPossibleDateStartToken(currentTokenType)) {
 
           currentGroup = new ArrayList<>();
           currentGroup.add(currentToken);
