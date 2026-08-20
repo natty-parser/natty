@@ -212,7 +212,7 @@ public class WalkerState {
    *    '&lt;' go backward
    *    '&gt;' go forward
    *
-   * @param seekAmount the amount to seek.  Must be guaranteed to parse as an integer
+   * @param seekAmount the amount to seek. May be an integer or a decimal value (e.g., "1.5")
    *
    * @param span the span to seek by, one of DAY, WEEK, MONTH, YEAR, HOUR, MINUTE, SECOND
    */
