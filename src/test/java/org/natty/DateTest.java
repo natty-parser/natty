@@ -83,6 +83,20 @@ public class DateTest extends AbstractTest {
   }
 
   @Test
+  public void testStandaloneOrdinals() throws Exception {
+    Date earlyInMonthReference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/5/2011");
+    calendarSource = new CalendarSource(earlyInMonthReference);
+    validateDate(earlyInMonthReference, "on the 11th", 2, 11, 2011);
+    validateDate(earlyInMonthReference, "the eleventh", 2, 11, 2011);
+    validateDate(earlyInMonthReference, "by the 23rd", 2, 23, 2011);
+
+    Date lateInMonthReference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/28/2011");
+    calendarSource = new CalendarSource(lateInMonthReference);
+    validateDate(lateInMonthReference, "the 2nd", 3, 2, 2011);
+    validateDate(lateInMonthReference, "the 1st", 3, 1, 2011);
+  }
+
+  @Test
   public void testRelative() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/28/2011");
     calendarSource = new CalendarSource(reference);

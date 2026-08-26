@@ -137,6 +137,9 @@ explicit_seek
   | ^(EXPLICIT_SEEK ^(DAY_OF_MONTH month=INT))
     {_walkerState.seekToDayOfMonth($month.text);}
 
+  | ^(EXPLICIT_SEEK ^(UPCOMING_DAY_OF_MONTH ^(DAY_OF_MONTH day=INT)))
+    {_walkerState.seekToUpcomingDayOfMonth($day.text);}
+
   | ^(EXPLICIT_SEEK ^(DAY_OF_WEEK day=INT))
     {_walkerState.seekToDayOfWeek(">", "by_week", "0", $day.text);}
 
