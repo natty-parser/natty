@@ -13,7 +13,8 @@ public interface EventSearcher<T extends Temporal> {
 
     /**
      * Finds dates within the specified range that match the given event summary.
-
+     *
+     * @param range The range of years to search within.
      * @param eventSummary The summary of the event to search for.
      * @return A stream of LocalDate objects that match the criteria.
      */

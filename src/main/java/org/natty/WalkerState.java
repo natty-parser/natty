@@ -399,6 +399,7 @@ public class WalkerState {
    * @param holidayString The holiday to seek to
    * @param direction     The direction to seek
    * @param seekAmount    The number of years to seek
+   * @throws EventNotAvailable if the holiday is not available in the given direction and seek amount
    */
   public void seekToHoliday(String holidayString, String direction, String seekAmount) throws EventNotAvailable {
     Holiday holiday = Holiday.valueOf(holidayString);
@@ -426,6 +427,7 @@ public class WalkerState {
    * @param seasonString The season to seek to
    * @param direction     The direction to seek
    * @param seekAmount    The number of years to seek
+   * @throws EventNotAvailable if the season is not available in the given direction and seek amount
    */
   public void seekToSeason(String seasonString, String direction, String seekAmount) throws EventNotAvailable {
     Season season = Season.valueOf(seasonString);

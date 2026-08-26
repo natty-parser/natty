@@ -13,12 +13,12 @@ import java.util.stream.StreamSupport;
 /**
  * Simple range implementation for Comparable types.
  * It always as a start. The end value can be null, which means it is unbounded.
- *
+ * <p>
  * The end value may also be less than the start value, which means it is a backward range.
  *
  * @author Michiel Meeuwissen
  * @since 1.1
- * @param <C>
+ * @param <C> The type of the endpoints of the range. A comparable type. E.g. a {@link Number} or a {@link Year}
  */
 public class Range<C extends Comparable<C>> implements Predicate<C> {
 
