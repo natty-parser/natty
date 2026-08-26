@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -59,6 +61,15 @@ public class Parser implements Serializable {
     );
 
   /**
+   * Pattern that matches a decimal (fractional) amount followed by a duration unit,
+   * e.g. "1.5 days", "2.5 hours", "0.5 weeks".
+   */
+  private static final Pattern FRACTIONAL_DURATION_PATTERN = Pattern.compile(
+    "(\\d+\\.\\d+)\\s*(year|month|week|fortnight|day|hour|hr|minute|min|second|sec)s?",
+    Pattern.CASE_INSENSITIVE
+  );
+
+  /**
    * Creates a new parser using the given time zone as the default
    * @param defaultTimeZone the timezone
    */
@@ -99,6 +110,9 @@ public class Parser implements Serializable {
    * @return list of date alternatives
    */
   public List<DateGroup> parse(String value, Date referenceDate) {
+    // convert fractional durations (e.g. "1.5 days") to integer sub-unit equivalents
+    // that the parser can handle (e.g. "36 hours")
+    value = normalizeFractionalDurations(value);
 
     // lex the input value to obtain our global token stream
     ANTLRInputStream input = null;
@@ -380,6 +394,80 @@ public class Parser implements Serializable {
   @Override
   public int hashCode() {
     return Objects.hashCode(_defaultTimeZone);
+  }
+
+  /**
+   * Converts fractional duration amounts in the input string to integer sub-unit equivalents
+   * that the parser's grammar can handle. For example:
+   * <ul>
+   *   <li>"1.5 days" → "36 hours"</li>
+   *   <li>"2.5 hours" → "150 minutes"</li>
+   *   <li>"0.5 weeks" → "4 days"</li>
+   * </ul>
+   *
+   * @param value the raw input string
+   * @return the input string with fractional durations converted
+   */
+  static String normalizeFractionalDurations(String value) {
+    Matcher matcher = FRACTIONAL_DURATION_PATTERN.matcher(value);
+    StringBuffer sb = new StringBuffer();
+    while (matcher.find()) {
+      double amount = Double.parseDouble(matcher.group(1));
+      String unit = matcher.group(2).toLowerCase();
+      String replacement = convertFractionalDuration(amount, unit);
+      if (replacement != null) {
+        matcher.appendReplacement(sb, replacement);
+      } else {
+        matcher.appendReplacement(sb, matcher.group(0));
+      }
+    }
+    matcher.appendTail(sb);
+    return sb.toString();
+  }
+
+  private static String convertFractionalDuration(double amount, String unit) {
+    long rounded;
+    String subUnit;
+    switch (unit) {
+      case "year":
+        rounded = Math.round(amount * 12);
+        subUnit = "months";
+        break;
+      case "month":
+        rounded = Math.round(amount * 30);
+        subUnit = "days";
+        break;
+      case "week":
+        rounded = Math.round(amount * 7);
+        subUnit = "days";
+        break;
+      case "fortnight":
+        rounded = Math.round(amount * 14);
+        subUnit = "days";
+        break;
+      case "day":
+        rounded = Math.round(amount * 24);
+        subUnit = "hours";
+        break;
+      case "hour":
+      case "hr":
+        rounded = Math.round(amount * 60);
+        subUnit = "minutes";
+        break;
+      case "minute":
+      case "min":
+        rounded = Math.round(amount * 60);
+        subUnit = "seconds";
+        break;
+      case "second":
+      case "sec":
+        rounded = Math.round(amount);
+        subUnit = "seconds";
+        break;
+      default:
+        return null;
+    }
+    return rounded + " " + subUnit;
   }
 
   public static void main(String[] args) {
