@@ -147,7 +147,6 @@
               </excludes>
             </configuration>
           </execution>
-
         </executions>
       </plugin>
 
@@ -187,10 +186,8 @@
           <rulesUri>file:///${maven.multiModuleProjectDirectory}/rules.xml</rulesUri>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
-
 
   <profiles>
     <profile>
@@ -203,7 +200,6 @@
       </activation>
       <build>
         <plugins>
-
           <!-- sign artifacts -->
           <plugin>
             <artifactId>maven-gpg-plugin</artifactId>
@@ -252,7 +248,6 @@
       </build>
     </profile>
   </profiles>
-
 
   <dependencies>
     <dependency>
