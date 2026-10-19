@@ -40,6 +40,10 @@ jobs:
           server-username-env-var: CENTRAL_USERNAME
           server-password-env-var: CENTRAL_PASSWORD
           gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
+      - uses: stCarolas/setup-maven@v5
+        # https://github.com/mavenplugins/central-publishing-maven-plugin/issues/78
+        with:
+          maven-version: 3.9.16
       - name: Deploy with Maven
         run: mvn -B -Prelease deploy
         if: matrix.java_version == '8' && github.event_name == 'push'
