@@ -3,10 +3,14 @@ package org.natty;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
+import java.util.SimpleTimeZone;
 import java.util.TimeZone;
+
+import static org.junit.Assert.assertEquals;
 
 public class TimeZoneTest extends AbstractTest {
 
@@ -37,5 +41,16 @@ public class TimeZoneTest extends AbstractTest {
     validateDateTime(reference, "tomorrow, 10pm pacific", 5, 21, 2012, 1, 0, 0);
     validateDateTime(reference, "tomorrow, 10 alaska time", 5, 20, 2012, 14, 0, 0);
     validateDateTime(reference, "tomorrow, 10 hawaii time", 5, 20, 2012, 16, 0, 0);
+  }
+
+  @Test
+  public void testCustomTimeZoneId() {
+    TimeZone timeZone = new SimpleTimeZone(60 * 60 * 1000, "ApplicationZone");
+    Parser parser = new Parser(timeZone);
+    Date reference = Date.from(Instant.parse("2012-05-19T11:00:00Z"));
+
+    Date parsed = parser.parse("5/20/12 12:00:00", reference).get(0).getDates().get(0);
+
+    assertEquals(Date.from(Instant.parse("2012-05-20T11:00:00Z")), parsed);
   }
 }
