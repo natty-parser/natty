@@ -3,6 +3,7 @@ package org.natty;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -42,6 +43,7 @@ public class Parser implements Serializable {
 
   private final TimeZone _defaultTimeZone;
 
+  private final Clock _clock;
 
 
   /**
@@ -74,8 +76,19 @@ public class Parser implements Serializable {
    * @param defaultTimeZone the timezone
    */
   public Parser(TimeZone defaultTimeZone) {
-    _defaultTimeZone = defaultTimeZone;
+    this(defaultTimeZone, Clock.systemUTC());
   }
+
+  public Parser(TimeZone defaultTimeZone, Clock clock) {
+    this._defaultTimeZone = defaultTimeZone;
+    this._clock = clock;
+  }
+
+  public Parser(Clock clock) {
+    this(TimeZone.getTimeZone(clock.getZone()), clock);
+  }
+
+
 
   private boolean isPossibleDateStartToken(int tokenType) {
     return tokenType != DateLexer.WHITE_SPACE
@@ -87,7 +100,7 @@ public class Parser implements Serializable {
    * Creates a new parser with no explicit default time zone (default will be {@link TimeZone#getDefault()})
    */
   public Parser() {
-    _defaultTimeZone = TimeZone.getDefault();
+    this(TimeZone.getDefault());
   }
 
   /**
@@ -97,7 +110,7 @@ public class Parser implements Serializable {
    * @return list of date alternatives
    */
   public List<DateGroup> parse(String value) {
-    return parse(value, new Date());
+    return parse(value, Date.from(_clock.instant()));
   }
 
   /**
