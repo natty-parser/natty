@@ -73,15 +73,23 @@ public class DateGroup {
    * @return The list of dates in this group
    */
   public List<Date> getDates() {
-    return _dates.stream().map(i -> Date.from(Instant.from(i))).collect(Collectors.toList());
+    return _dates.stream().
+      map(i -> Date.from(Instant.from(i)))
+      .collect(Collectors.toList());
   }
 
   public List<Temporal> getTemporals() {
     return _dates;
   }
 
+  public Temporal get(int i) {
+    return _dates.get(i);
+  }
 
 
+  public void set(int i, Temporal date) {
+    _dates.set(i, date);
+  }
 
   /**
    * @return The fullText this date group was found within

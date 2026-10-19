@@ -1,6 +1,7 @@
 package org.natty;
 
 import java.time.Instant;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -494,15 +495,15 @@ public class WalkerState {
     // if other dates have already been added to the date group, we'll
     // update them to match this one
     if(_updatePreviousDates) {
-      List<Date> dates = _dateGroup.getDates();
+      List<Temporal> dates = _dateGroup.getTemporals();
       if (!dates.isEmpty()) {
-        for (Date date : dates) {
-          Calendar calendar = getCalendar();
-          calendar.setTime(date);
+        for (int i = 0; i < dates.size(); i++) {
+          GregorianCalendar calendar = getCalendar();
+          calendar.setTime(Date.from(Instant.from(dates.get(i))));
           for (int field : new int[] { Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR }) {
             calendar.set(field, _calendar.get(field));
           }
-          date.setTime(calendar.getTimeInMillis());
+          dates.set(i, calendar.toZonedDateTime());
         }
       }
       _updatePreviousDates = false;
@@ -515,13 +516,13 @@ public class WalkerState {
       for (int i = 0; i < _timeGivenPerCapture.size() - 1; i++) {
         boolean timeGiven = _timeGivenPerCapture.get(i);
         if (!timeGiven) {
-          Date date = _dateGroup.getDates().get(i);
-          Calendar calendar = getCalendar();
-          calendar.setTime(date);
+          Temporal date = _dateGroup.get(i);
+          GregorianCalendar calendar = getCalendar();
+          calendar.setTime(Date.from(Instant.from(date)));
           for (int field : new int[] { Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND}) {
             calendar.set(field, _calendar.get(field));
           }
-          date.setTime(calendar.getTimeInMillis());
+          _dateGroup.set(i, calendar.toZonedDateTime());
         }
       }
     }
@@ -533,9 +534,9 @@ public class WalkerState {
       for (int i = 0; i < _amPmGivenPerCapture.size() - 1; i++) {
         String amPm = _amPmGivenPerCapture.get(i);
         if (amPm == null && _timeGivenPerCapture.get(i)) {
-          Date date = _dateGroup.getDates().get(i);
-          Calendar calendar = getCalendar();
-          calendar.setTime(date);
+          Temporal date = _dateGroup.getTemporals().get(i);
+          GregorianCalendar calendar = getCalendar();
+          calendar.setTime(Date.from(Instant.from(date)));
           int hour = calendar.get(Calendar.HOUR_OF_DAY);
           if(thisAmPm.equals("am") && hour > 11) {
             calendar.set(Calendar.HOUR_OF_DAY, hour - 12);
@@ -543,7 +544,7 @@ public class WalkerState {
           if(thisAmPm.equals("pm") && calendar.get(Calendar.HOUR_OF_DAY) < 12) {
             calendar.set(Calendar.HOUR_OF_DAY, hour + 12);
           }
-          date.setTime(calendar.getTimeInMillis());
+          _dateGroup.set(i, calendar.toZonedDateTime());
         }
       }
     }
