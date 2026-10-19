@@ -100,7 +100,10 @@ public class Parser implements Serializable {
    * @since 1.1.5
    */
   public Parser(String now, String zoneId) {
-    this(Clock.fixed(Instant.parse(now), ZoneId.of(zoneId)));
+    this(
+      now == null || now.isEmpty() ?
+        Clock.system(zoneId == null || zoneId.isEmpty() ? ZoneId.systemDefault() : ZoneId.of(zoneId)) :
+        Clock.fixed(Instant.parse(now), zoneId == null || zoneId.isEmpty() ? ZoneId.systemDefault() : ZoneId.of(zoneId)));
   }
 
 
