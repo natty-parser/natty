@@ -167,7 +167,10 @@ public class ParserTest {
     assertEquals(Instant.parse("2026-10-19T22:00:30Z"), _30secs.get(0).getDates().get(0).toInstant());
     List<DateGroup> _20secs = parser.parse("20 seconds");
     assertEquals(Instant.parse("2026-10-19T22:00:20Z"), _20secs.get(0).getDates().get(0).toInstant());
-
+    List<DateGroup> twentySecs = parser.parse("twenty seconds");
+    assertEquals(Instant.parse("2026-10-19T22:00:20Z"), twentySecs.get(0).getDates().get(0).toInstant());
+    List<DateGroup> _5secs = parser.parse("5 seconds");
+    assertEquals(Instant.parse("2026-10-19T22:00:05Z"), _5secs.get(0).getDates().get(0).toInstant());
   }
 
 

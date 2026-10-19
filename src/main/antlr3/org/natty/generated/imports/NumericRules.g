@@ -139,7 +139,22 @@ spelled_first_to_thirty_first
   | (THIRD       | INT_3 RD)  -> INT["3"]
   | (FOURTH      | INT_4 TH)  -> INT["4"]
   | (FIFTH       | INT_5 TH)  -> INT["5"]
-  | (SIXTH       | INT_6 TH)  -> INT["6"]
+  | spelled_sixth_to_thirty_first
+  ;
+
+// first to thirty-first, except the bare words 'first' to 'fifth', which are too ambiguous
+// to stand alone as a day of month ('second' is also the time unit, 'first' is 'first monday', etc)
+unambiguous_first_to_thirty_first
+  : INT_1 ST -> INT["1"]
+  | INT_2 ND -> INT["2"]
+  | INT_3 RD -> INT["3"]
+  | INT_4 TH -> INT["4"]
+  | INT_5 TH -> INT["5"]
+  | spelled_sixth_to_thirty_first
+  ;
+
+spelled_sixth_to_thirty_first
+  : (SIXTH       | INT_6 TH)  -> INT["6"]
   | (SEVENTH     | INT_7 TH)  -> INT["7"]
   | (EIGHTH      | INT_8 TH)  -> INT["8"]
   | (NINTH       | INT_9 TH)  -> INT["9"]

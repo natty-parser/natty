@@ -54,10 +54,6 @@ tokens {
     _logger.fine(message);
     }
   }
-
-  private boolean isStandaloneOrdinalAllowed(int startType) {
-    return startType != FIRST && startType != SECOND && startType != THIRD && startType != FOURTH && startType != FIFTH;
-  }
 }
 
 parse
@@ -103,13 +99,9 @@ date
   ;
 
 standalone_day_of_month
-  : (ON WHITE_SPACE)? (THE WHITE_SPACE)? ordinal_day_of_month WHITE_SPACE? EOF
-      -> ^(RELATIVE_DATE ^(EXPLICIT_SEEK ^(UPCOMING_DAY_OF_MONTH ^(DAY_OF_MONTH ordinal_day_of_month))))
-  ;
-
-ordinal_day_of_month
-  : day=spelled_first_to_thirty_first {isStandaloneOrdinalAllowed($day.start.getType())}?
-      -> $day
+  // 'the' is required, otherwise e.g. 'twenty seconds' would be the twenty-second
+  : (ON WHITE_SPACE)? THE WHITE_SPACE unambiguous_first_to_thirty_first
+      -> ^(RELATIVE_DATE ^(EXPLICIT_SEEK ^(UPCOMING_DAY_OF_MONTH ^(DAY_OF_MONTH unambiguous_first_to_thirty_first))))
   ;
 
 date_time_alternative
