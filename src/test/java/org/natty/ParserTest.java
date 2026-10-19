@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -153,16 +154,20 @@ public class ParserTest {
 
   @Test
   public void issue246() {
-    Parser parser = new Parser();
+    Parser parser = new Parser("2026-10-19T22:00:00Z", "Europe/Amsterdam");
     List<DateGroup> parsed = parser.parse("the day before next 10/11/2016");
     log.info("Parsed date: " + parsed.get(0).getDates().get(0));
+    //assertEquals(Instant.parse("2026-10-19T22:00:30Z"), _30secs.get(0).getDates().get(0).toInstant());
+
   }
 
   @Test
   public void issue149() {
     Parser parser = new Parser("2026-10-19T22:00:00Z", "Europe/Amsterdam");
     List<DateGroup> _30secs = parser.parse("30 seconds");
-    assertEquals(Instant.parse("2026-10-19T22:00:30Z"), _30secs.get(0).getDates().get(0).toInstant());
+    assertEquals(Instant.parse("2026-10-19T22:00:30Z"), Instant.from(_30secs.get(0).getTemporals().get(0)));
+    assertEquals(ZonedDateTime.parse("2026-10-20T00:00:30+02:00[Europe/Amsterdam]"), _30secs.get(0).getTemporals().get(0));
+
     List<DateGroup> _20secs = parser.parse("20 seconds");
     assertEquals(Instant.parse("2026-10-19T22:00:20Z"), _20secs.get(0).getDates().get(0).toInstant());
     List<DateGroup> twentySecs = parser.parse("twenty seconds");
