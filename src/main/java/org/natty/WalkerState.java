@@ -548,12 +548,10 @@ public class WalkerState {
       }
     }
 
-    Date date = _calendar.getTime();
     if(_dateGroup.isRecurring()) {
-      _dateGroup.setRecurringUntil(date);
-    }
-    else {
-      _dateGroup.addDate(date);
+      _dateGroup.setRecurringUntil(_calendar.getTime());
+    } else {
+      _dateGroup.addZonedDateTime(_calendar.toZonedDateTime());
     }
     _firstDateInvocationInGroup = true;
   }

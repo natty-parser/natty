@@ -1,16 +1,20 @@
 package org.natty;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.antlr.runtime.tree.Tree;
 
 /**
  * @author Joe Stelmach
  */
 public class DateGroup {
-  private final List<Date> _dates;
+  private final List<Temporal> _dates;
   private String _text;
   private String _fullText;
   private int _line;
@@ -34,6 +38,10 @@ public class DateGroup {
    * @param date the date
    */
   public void addDate(Date date) {
+    _dates.add(date.toInstant());
+  }
+
+  public void addZonedDateTime(ZonedDateTime date) {
     _dates.add(date);
   }
 
@@ -65,8 +73,15 @@ public class DateGroup {
    * @return The list of dates in this group
    */
   public List<Date> getDates() {
+    return _dates.stream().map(i -> Date.from(Instant.from(i))).collect(Collectors.toList());
+  }
+
+  public List<Temporal> getTemporals() {
     return _dates;
   }
+
+
+
 
   /**
    * @return The fullText this date group was found within
