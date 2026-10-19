@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -79,14 +81,28 @@ public class Parser implements Serializable {
     this(defaultTimeZone, Clock.systemUTC());
   }
 
+  /**
+   * @since 1.1.5
+   */
   public Parser(TimeZone defaultTimeZone, Clock clock) {
     this._defaultTimeZone = defaultTimeZone;
     this._clock = clock;
   }
 
+  /**
+   * @since 1.1.5
+   */
   public Parser(Clock clock) {
     this(TimeZone.getTimeZone(clock.getZone()), clock);
   }
+
+  /**
+   * @since 1.1.5
+   */
+  public Parser(String now, String zoneId) {
+    this(Clock.fixed(Instant.parse(now), ZoneId.of(zoneId)));
+  }
+
 
 
 

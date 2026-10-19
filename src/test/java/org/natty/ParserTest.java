@@ -7,9 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -162,7 +160,7 @@ public class ParserTest {
 
   @Test
   public void issue149() {
-    Parser parser = new Parser(Clock.fixed(Instant.parse("2026-10-19T22:00:00Z"), ZoneId.of("Europe/Amsterdam")));
+    Parser parser = new Parser("2026-10-19T22:00:00Z", "Europe/Amsterdam");
     List<DateGroup> _30secs = parser.parse("30 seconds");
     assertEquals(Instant.parse("2026-10-19T22:00:30Z"), _30secs.get(0).getDates().get(0).toInstant());
     List<DateGroup> _20secs = parser.parse("20 seconds");
