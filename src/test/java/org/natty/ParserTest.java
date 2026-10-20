@@ -95,7 +95,7 @@ public class ParserTest {
       Date reference = new Date(i - 1900, 1, 1);
       final List<DateGroup> groups = new Parser().parse("last easter", reference);
       assertEquals(1, groups.size());
-      Date easter = groups.get(0).getDates().get(0);
+      Instant easter = groups.get(0).getInstants().get(0);
       log.info("Last easter for year " + i + ": " +easter);
     }
   }
@@ -106,7 +106,7 @@ public class ParserTest {
       Date reference = new Date(i - 1900, 1, 1);
       final List<DateGroup> groups = new Parser().parse("last election day", reference);
       assertEquals(1, groups.size());
-      Date easter = groups.get(0).getDates().get(0);
+      Instant easter = groups.get(0).getInstants().get(0);
       log.info("Last election day for year " +  i + ": " + easter);
     }
   }
@@ -124,22 +124,22 @@ public class ParserTest {
     Date d2020  = new Date(120, 1, 1);
 
     log.info("Parsed date: " +
-      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2000).get(0).getDates().get(0) +
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2000).get(0).getTemporals().get(0) +
       " (" + d2000 + ")");
 
     log.info("Parsed date: " +
-      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2010).get(0).getDates().get(0) +
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2010).get(0).getTemporals().get(0) +
       " (" + d2010 + ")");
 
     log.info("Parsed date: " +
-      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2020).get(0).getDates().get(0) +
+      parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2020).get(0).getTemporals().get(0) +
       " (" + d2020 + ")");
 
 
 
     List<DateGroup> parse2 = parser.parse("Tue Jan 12 00:00:00 UTC 2016");
 
-    log.info("Parsed date: " +  parse2.get(0).getDates().get(0));
+    log.info("Parsed date: " +  parse2.get(0).getTemporals().get(0));
   }
 
   /**
@@ -149,14 +149,14 @@ public class ParserTest {
   public void issue277() {
     Parser parser = new Parser();
     List<DateGroup> parse1 = parser.parse("MIGUEL JESSIE REYEZ - QUEEN NAIJA - J.I.D - MASEGO - TIERRA WHACK SUMMER WALKER KIANA LEDE - SNOH AALEGRA - RAVEENA TOBI LOU - JESS CONNELLY UMI - DAVEB IVY SOLE - PARISALEXA");
-    log.info("Parsed date: " + parse1.get(0).getDates().get(0));
+    log.info("Parsed date: " + parse1.get(0).getTemporals().get(0));
   }
 
   @Test
   public void issue246() {
     Parser parser = new Parser("2026-10-19T22:00:00Z", "Europe/Amsterdam");
     List<DateGroup> parsed = parser.parse("the day before next 10/11/2016");
-    log.info("Parsed date: " + parsed.get(0).getDates().get(0));
+    log.info("Parsed date: " + parsed.get(0).getTemporals().get(0));
     //assertEquals(Instant.parse("2026-10-19T22:00:30Z"), _30secs.get(0).getDates().get(0).toInstant());
 
   }
@@ -169,11 +169,11 @@ public class ParserTest {
     assertEquals(ZonedDateTime.parse("2026-10-20T00:00:30+02:00[Europe/Amsterdam]"), _30secs.get(0).getTemporals().get(0));
 
     List<DateGroup> _20secs = parser.parse("20 seconds");
-    assertEquals(Instant.parse("2026-10-19T22:00:20Z"), _20secs.get(0).getDates().get(0).toInstant());
+    assertEquals(Instant.parse("2026-10-19T22:00:20Z"), _20secs.get(0).getInstants().get(0));
     List<DateGroup> twentySecs = parser.parse("twenty seconds");
-    assertEquals(Instant.parse("2026-10-19T22:00:20Z"), twentySecs.get(0).getDates().get(0).toInstant());
+    assertEquals(Instant.parse("2026-10-19T22:00:20Z"), twentySecs.get(0).getInstants().get(0));
     List<DateGroup> _5secs = parser.parse("5 seconds");
-    assertEquals(Instant.parse("2026-10-19T22:00:05Z"), _5secs.get(0).getDates().get(0).toInstant());
+    assertEquals(Instant.parse("2026-10-19T22:00:05Z"), _5secs.get(0).getInstants().get(0));
   }
 
 

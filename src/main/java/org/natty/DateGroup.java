@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -71,23 +72,52 @@ public class DateGroup {
 
   /**
    * @return The list of dates in this group
+   * @deprecated
    */
+  @Deprecated
   public List<Date> getDates() {
-    return _dates.stream().
+    return Collections.unmodifiableList(_dates.stream().
       map(i -> Date.from(Instant.from(i)))
-      .collect(Collectors.toList());
+      .collect(Collectors.toList()));
   }
 
+  /**
+   *
+   * @since 1.2
+   */
+  public List<Instant> getInstants() {
+    return Collections.unmodifiableList(_dates.stream().
+      map(Instant::from)
+      .collect(Collectors.toList()));
+  }
+
+  /**
+   *
+   * @since 1.2
+   */
   public List<Temporal> getTemporals() {
-    return _dates;
+    return Collections.unmodifiableList(_dates);
   }
 
+
+  /**
+   *
+   * @since 1.2
+   */
   public Temporal get(int i) {
     return _dates.get(i);
   }
 
+  public boolean isEmpty() {
+    return _dates.isEmpty();
+  }
 
-  public void set(int i, Temporal date) {
+
+  /**
+   *
+   * @since 1.2
+   */
+  void set(int i, Temporal date) {
     _dates.set(i, date);
   }
 

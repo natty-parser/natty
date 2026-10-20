@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -163,15 +164,15 @@ public class Parser implements Serializable {
       lastStream = stream;
       List<Token> tokens = ((NattyTokenSource) stream.getTokenSource()).getTokens();
       DateGroup group = singleParse(stream, value, referenceDate);
-      while((group == null || group.getDates().isEmpty()) && !tokens.isEmpty()) {
-        if(group == null || group.getDates().isEmpty()) {
+      while((group == null || group.isEmpty()) && !tokens.isEmpty()) {
+        if(group == null || group.isEmpty()) {
 
           // we have two options:
           // 1. Continuously remove tokens from the end of the stream and re-parse.  This will
           //    recover from the case of an extraneous token at the end of the token stream.
           //    For example, 'june 20th on'
           List<Token> endRemovedTokens = new ArrayList<>(tokens);
-          while((group == null || group.getDates().isEmpty()) && !endRemovedTokens.isEmpty()) {
+          while((group == null || group.isEmpty()) && !endRemovedTokens.isEmpty()) {
             endRemovedTokens = endRemovedTokens.subList(0, endRemovedTokens.size() - 1);
             TokenStream newStream = new CommonTokenStream(new NattyTokenSource(endRemovedTokens));
             group = singleParse(newStream, value, referenceDate);
@@ -180,7 +181,7 @@ public class Parser implements Serializable {
 
           // 2. Continuously look for another possible starting point in the token
           //    stream and re-parse.
-          while((group == null || group.getDates().isEmpty()) && !tokens.isEmpty()) {
+          while((group == null || group.isEmpty()) && !tokens.isEmpty()) {
             tokens = tokens.subList(1, tokens.size());
             Iterator<Token> iter = tokens.iterator();
             while(iter.hasNext()) {
@@ -203,7 +204,7 @@ public class Parser implements Serializable {
       // but not if multiple streams were found and the group contains only numeric time information.
       // For example: A full text string of '1' should parse to 1 o'clock, but 'I need 1 hard drive'
       // should result in no groups found.
-      if(group != null && !group.getDates().isEmpty() &&
+      if(group != null && !group.isEmpty() &&
           (streams.size() == 1 || !group.isDateInferred() || !isAllNumeric(lastStream))) {
 
         // Additionally, we'll only accept this group if the associated text does not have an
@@ -510,7 +511,7 @@ public class Parser implements Serializable {
     System.out.println("Parsing input: " + input);
     List<DateGroup> groups = parser.parse(input);
     for (DateGroup group : groups) {
-      List<Date> dates = group.getDates();
+      List<Temporal> dates = group.getTemporals();
       int line = group.getLine();
       int column = group.getPosition();
       String matchingValue = group.getText();
