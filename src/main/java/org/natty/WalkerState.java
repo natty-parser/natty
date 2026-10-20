@@ -1,7 +1,10 @@
 package org.natty;
 
 import java.time.Instant;
+import java.time.DateTimeException;
+import java.time.ZoneOffset;
 import java.time.temporal.Temporal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -503,7 +506,7 @@ public class WalkerState {
           for (int field : new int[] { Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR }) {
             calendar.set(field, _calendar.get(field));
           }
-          dates.set(i, calendar.toZonedDateTime());
+          dates.set(i, toZonedDateTime(calendar));
         }
       }
       _updatePreviousDates = false;
@@ -522,7 +525,7 @@ public class WalkerState {
           for (int field : new int[] { Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND}) {
             calendar.set(field, _calendar.get(field));
           }
-          _dateGroup.set(i, calendar.toZonedDateTime());
+          _dateGroup.set(i, toZonedDateTime(calendar));
         }
       }
     }
@@ -544,7 +547,7 @@ public class WalkerState {
           if(thisAmPm.equals("pm") && calendar.get(Calendar.HOUR_OF_DAY) < 12) {
             calendar.set(Calendar.HOUR_OF_DAY, hour + 12);
           }
-          _dateGroup.set(i, calendar.toZonedDateTime());
+          _dateGroup.set(i, toZonedDateTime(calendar));
         }
       }
     }
@@ -552,9 +555,18 @@ public class WalkerState {
     if(_dateGroup.isRecurring()) {
       _dateGroup.setRecurringUntil(_calendar.getTime());
     } else {
-      _dateGroup.addZonedDateTime(_calendar.toZonedDateTime());
+      _dateGroup.addZonedDateTime(toZonedDateTime(_calendar));
     }
     _firstDateInvocationInGroup = true;
+  }
+
+  private ZonedDateTime toZonedDateTime(GregorianCalendar calendar) {
+    try {
+      return calendar.toZonedDateTime();
+    } catch (DateTimeException e) {
+      int offset = calendar.getTimeZone().getOffset(calendar.getTimeInMillis());
+      return calendar.toInstant().atZone(ZoneOffset.ofTotalSeconds(offset / 1000));
+    }
   }
 
   /**
