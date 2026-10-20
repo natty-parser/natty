@@ -25,7 +25,6 @@ public class TimeZoneTest extends AbstractTest {
   public void testSpecific() throws Exception {
     final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
 
     validateDateTime(reference, "2011-06-17T07:00:00Z", 6, 17, 2011, 3, 0, 0);
     validateDateTime(reference, "05-Aug-2013 14:10:56 UTC", 8, 5, 2013, 10, 10, 56);

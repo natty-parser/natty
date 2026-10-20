@@ -31,7 +31,6 @@ public class TimeTest extends AbstractTest {
   @Test
   public void testFormal() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("1/02/2011");
-    calendarSource = new CalendarSource(reference);
     validateTime(reference, "0600h", 6, 0, 0);
     validateTime(reference, "06:00h", 6, 0, 0);
     validateTime(reference, "06:00 hours", 6, 0, 0);
@@ -57,7 +56,6 @@ public class TimeTest extends AbstractTest {
   @Test
   public void testRelaxed() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("1/02/2011");
-    calendarSource = new CalendarSource(reference);
     validateTime(reference, "noon", 12, 0, 0);
     validateTime(reference, "at noon", 12, 0, 0);
     validateTime(reference, "afternoon", 12, 0, 0);
@@ -76,7 +74,6 @@ public class TimeTest extends AbstractTest {
   @Test
   public void testRelative() throws Exception {
     Date reference = Date.from(LocalDate.ofEpochDay(0).atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
     validateTime(reference, "in 5 seconds", 12, 0, 5);
     validateTime(reference, "in 5 minutes", 12, 5, 0);
     validateTime(reference, "in 5 hours", 17, 0, 0);
@@ -94,7 +91,6 @@ public class TimeTest extends AbstractTest {
   @Test
   public void testAlternatives() throws Exception {
     Date reference = Date.from(LocalDate.ofEpochDay(0).atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "12 or 12:30");
     Assert.assertEquals(2, dates.size());
@@ -120,7 +116,6 @@ public class TimeTest extends AbstractTest {
   @Test
   public void testRange() throws Exception {
     Date reference = Date.from(LocalDate.ofEpochDay(0).atTime(12, 0).atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "for six hours");
     Assert.assertEquals(2, dates.size());

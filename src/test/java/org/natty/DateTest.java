@@ -17,7 +17,6 @@ import java.util.TimeZone;
 import static java.util.Locale.US;
 
 
-
 /**
  * Runs the parser through the various date formats
  *
@@ -75,7 +74,6 @@ public class DateTest extends AbstractTest {
   @Test
   public void testExplicitRelative() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/28/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "final thursday in april", 4, 28, 2011);
     validateDate(reference, "final thurs in sep", 9, 29, 2011);
@@ -85,13 +83,11 @@ public class DateTest extends AbstractTest {
   @Test
   public void testStandaloneOrdinals() throws Exception {
     Date earlyInMonthReference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/5/2011");
-    calendarSource = new CalendarSource(earlyInMonthReference);
     validateDate(earlyInMonthReference, "on the 11th", 2, 11, 2011);
     validateDate(earlyInMonthReference, "the eleventh", 2, 11, 2011);
     validateDate(earlyInMonthReference, "by the 23rd", 2, 23, 2011);
 
     Date lateInMonthReference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/28/2011");
-    calendarSource = new CalendarSource(lateInMonthReference);
     validateDate(lateInMonthReference, "the 2nd", 3, 2, 2011);
     validateDate(lateInMonthReference, "the 1st", 3, 1, 2011);
   }
@@ -99,7 +95,6 @@ public class DateTest extends AbstractTest {
   @Test
   public void testRelative() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/28/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "yesterday", 2, 27, 2011);
     validateDate(reference, "tomorrow", 3, 1, 2011);
@@ -202,8 +197,6 @@ public class DateTest extends AbstractTest {
   @Test
   public void fortnight() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("2/28/2011");
-    calendarSource = new CalendarSource(reference);
-
 
     validateDate(reference, "in 2 fortnights", 3, 28, 2011);
     validateDate(reference, "in 30 fortnights", 4, 23, 2012);
@@ -222,7 +215,6 @@ public class DateTest extends AbstractTest {
   @Test
   public void testRange() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("1/02/2011");
-    calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "monday to friday");
     Assert.assertEquals(2, dates.size());
@@ -414,7 +406,6 @@ public class DateTest extends AbstractTest {
     // Same time as
     // 2012, June 2, Saturday, 10 p.m. in US/Pacific GMT -7
     Calendar earlySunday = new GregorianCalendar(2012, 5, 3, 1, 0);
-    calendarSource = new CalendarSource(earlySunday.getTime());
 
     // Run
     Date result = parser.parse("Sunday at 10am", earlySunday.getTime()).get(0).getDates().get(0);

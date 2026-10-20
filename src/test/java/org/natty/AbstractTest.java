@@ -1,7 +1,5 @@
 package org.natty;
 
-import org.junit.Before;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,8 +13,7 @@ import static org.junit.Assert.assertEquals;
  */
 public abstract class AbstractTest {
   private static Calendar _calendar;
-  protected static CalendarSource calendarSource;
-  protected static Parser _parser;
+    protected static Parser _parser;
 
 
   public static void initCalendarAndParser() {
@@ -24,13 +21,6 @@ public abstract class AbstractTest {
     _parser = new Parser();
   }
 
-  /**
-   * Resets the calendar source time before each test
-   */
-  @Before
-  public void before() {
-    calendarSource = new CalendarSource();
-  }
 
   /**
    * Parses the given value into a collection of dates

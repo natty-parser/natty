@@ -25,7 +25,6 @@ public class EventSearchTest extends AbstractTest {
   @Test
   public void testUpcomingSeason() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("5/05/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "spring", 3, 20, 2012);
     validateDate(reference, "summer", 6, 21, 2011);
@@ -37,7 +36,6 @@ public class EventSearchTest extends AbstractTest {
   @Test
   public void testUpcomingHoliday() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT,  US).parse("11/05/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "april fool's day", 4, 1, 2012);
     validateDate(reference, "black friday", 11, 25, 2011);
@@ -72,7 +70,6 @@ public class EventSearchTest extends AbstractTest {
   @Test
   public void testRelativeHolidays() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT,  US).parse("11/05/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "2 black fridays from now", 11, 23, 2012);
     validateDate(reference, "three memorial days ago", 5, 25, 2009);
@@ -81,7 +78,6 @@ public class EventSearchTest extends AbstractTest {
   @Test
   public void testSeasonsByYear() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "spring 2010", 3, 20, 2010);
     validateDate(DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2025"), "spring 2010", 3, 20, 2010);
@@ -106,7 +102,6 @@ public class EventSearchTest extends AbstractTest {
   @Test
   public void testHolidaysByYear() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "april fool's day 2000", 4, 1, 2000);
     validateDate(reference, "black friday 2001", 11, 23, 2001);
@@ -141,7 +136,6 @@ public class EventSearchTest extends AbstractTest {
   @Test
   public void testHolidaysWithModifiers() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "four days before veterans day 2013", 11, 7, 2013);
     validateDate(reference, "two days after two thanksgivings from now", 11, 24, 2012);
@@ -150,7 +144,6 @@ public class EventSearchTest extends AbstractTest {
   @Test
   public void testSeasonsWithModifiers() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT, US).parse("11/05/2011");
-    calendarSource = new CalendarSource(reference);
 
     validateDate(reference, "four days before fall 2013", 9, 18, 2013);
     validateDate(reference, "two days after two summers from now", 6, 23, 2013);

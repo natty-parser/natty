@@ -29,7 +29,6 @@ public class DateTimeTest extends AbstractTest {
   public void testSpecific() {
     final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
 
     validateDateTime(reference, "1st oct in the year '89 1300 hours", 10, 1, 1989, 13, 0, 0);
     validateDateTime(reference, "1st oct in the year '89 at 1300 hours", 10, 1, 1989, 13, 0, 0);
@@ -56,7 +55,7 @@ public class DateTimeTest extends AbstractTest {
   public void testSpecificCJK() {
     final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
+
     validateDateTime(reference, "1980年3月19日 13:00", 3, 19, 1980, 13, 0, 0);
     validateDateTime(reference, "1980년3월19일 13:00", 3, 19, 1980, 13, 0, 0);
 
@@ -66,7 +65,6 @@ public class DateTimeTest extends AbstractTest {
   public void testRelative() {
     final LocalDateTime refDateTime = LocalDateTime.of(2011, 2, 24, 0, 0, 0);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
 
     validateDateTime(reference, "seven years ago at 3pm", 2, 24, 2004, 15, 0, 0);
     validateDateTime(reference, "next wed. at 5pm", 3, 2, 2011, 17, 0, 0);
@@ -117,7 +115,6 @@ public class DateTimeTest extends AbstractTest {
   @Test
   public void testRange() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("6/12/2010");
-    calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "2009-03-10 9:00 to 11:00");
     assertEquals(2, dates.size());
@@ -158,7 +155,6 @@ public class DateTimeTest extends AbstractTest {
   @Test
   public void testList() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("05/19/2012");
-    calendarSource = new CalendarSource(reference);
 
     List<Date> dates =
         parseCollection(reference, "June 25th at 9am and July 2nd at 10am and August 16th at 11am");
