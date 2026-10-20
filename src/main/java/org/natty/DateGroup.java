@@ -15,7 +15,7 @@ import org.antlr.runtime.tree.Tree;
  * @author Joe Stelmach
  */
 public class DateGroup {
-  private final List<Temporal> _dates;
+  private final List<Temporal> _dates = new ArrayList<>();
   private String _text;
   private String _fullText;
   private int _line;
@@ -27,22 +27,29 @@ public class DateGroup {
   private Map<String, List<ParseLocation>> _parseLocations;
   private Tree _syntaxTree;
 
+  /**
+   *
+   */
   public DateGroup() {
-    _dates = new ArrayList<>();
     _isDateInferred = true;
     _isTimeInferred = true;
   }
 
-
   /**
-   * Adds a date to this group
+   * Adds a date to this group. It will be converted to an {@link Instant}
    * @param date the date
+   * @deprecated DateGroup is filled by {@link WalkerState}, so there should be no need to call this
    */
+  @Deprecated
   public void addDate(Date date) {
     _dates.add(date.toInstant());
   }
 
-  public void addZonedDateTime(ZonedDateTime date) {
+  /**
+   * Adds a {@link ZonedDateTime} to this group.
+   * @since 1.2
+   */
+  void addZonedDateTime(ZonedDateTime date) {
     _dates.add(date);
   }
 
@@ -99,7 +106,6 @@ public class DateGroup {
     return Collections.unmodifiableList(_dates);
   }
 
-
   /**
    *
    * @since 1.2
@@ -108,10 +114,13 @@ public class DateGroup {
     return _dates.get(i);
   }
 
+  /**
+   *
+   * @since 1.2
+   */
   public boolean isEmpty() {
     return _dates.isEmpty();
   }
-
 
   /**
    *
