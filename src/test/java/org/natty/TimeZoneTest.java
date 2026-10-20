@@ -5,6 +5,9 @@ import org.junit.Test;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.SimpleTimeZone;
@@ -51,5 +54,32 @@ public class TimeZoneTest extends AbstractTest {
     Date parsed = parser.parse("5/20/12 12:00:00", reference).get(0).getDates().get(0);
 
     assertEquals(Date.from(Instant.parse("2012-05-20T11:00:00Z")), parsed);
+  }
+
+  @Test
+  public void testCustomTimeZoneDaylightSavingRules() {
+    TimeZone timeZone = new SimpleTimeZone(
+      60 * 60 * 1000,
+      "ApplicationZone",
+      Calendar.MARCH, -1, Calendar.SUNDAY, 2 * 60 * 60 * 1000,
+      Calendar.OCTOBER, -1, Calendar.SUNDAY, 3 * 60 * 60 * 1000,
+      60 * 60 * 1000);
+    Parser parser = new Parser(timeZone);
+    Date reference = Date.from(Instant.parse("2012-01-15T11:00:00Z"));
+
+    Date parsed = parser.parse("July 20, 2012 12:00:00", reference).get(0).getDates().get(0);
+
+    assertEquals(Date.from(Instant.parse("2012-07-20T10:00:00Z")), parsed);
+  }
+
+  @Test
+  public void testZonePreservedDuringMeridianPropagation() {
+    Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
+    Date reference = Date.from(Instant.parse("2012-01-15T00:00:00Z"));
+
+    ZonedDateTime first = (ZonedDateTime) parser.parse("10:00 UTC+2 or 11:00pm", reference)
+      .get(0).getTemporals().get(0);
+
+    assertEquals(ZoneOffset.ofHours(2), first.getOffset());
   }
 }

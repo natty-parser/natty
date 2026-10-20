@@ -489,12 +489,12 @@ public class WalkerState {
 
     // The list of times found per capture should always be 1 larger than the number of captures.
     // If not, that mean no time was given for this capture
-    if(_timeGivenPerCapture.size() < _dateGroup.getDates().size() + 1) {
+    if(_timeGivenPerCapture.size() < _dateGroup.getTemporals().size() + 1) {
       _timeGivenPerCapture.add(false);
     }
 
     // ditto for meridien indicators found per capture
-    if(_amPmGivenPerCapture.size() < _dateGroup.getDates().size() + 1) {
+    if(_amPmGivenPerCapture.size() < _dateGroup.getTemporals().size() + 1) {
       _amPmGivenPerCapture.add(null);
     }
 
@@ -504,8 +504,7 @@ public class WalkerState {
       List<Temporal> dates = _dateGroup.getTemporals();
       if (!dates.isEmpty()) {
         for (int i = 0; i < dates.size(); i++) {
-          GregorianCalendar calendar = getCalendar();
-          calendar.setTime(Date.from(Instant.from(dates.get(i))));
+          GregorianCalendar calendar = getCalendar(dates.get(i));
           for (int field : new int[] { Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR }) {
             calendar.set(field, _calendar.get(field));
           }
@@ -523,8 +522,7 @@ public class WalkerState {
         boolean timeGiven = _timeGivenPerCapture.get(i);
         if (!timeGiven) {
           Temporal date = _dateGroup.get(i);
-          GregorianCalendar calendar = getCalendar();
-          calendar.setTime(Date.from(Instant.from(date)));
+          GregorianCalendar calendar = getCalendar(date);
           for (int field : new int[] { Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND}) {
             calendar.set(field, _calendar.get(field));
           }
@@ -541,8 +539,7 @@ public class WalkerState {
         String amPm = _amPmGivenPerCapture.get(i);
         if (amPm == null && _timeGivenPerCapture.get(i)) {
           Temporal date = _dateGroup.getTemporals().get(i);
-          GregorianCalendar calendar = getCalendar();
-          calendar.setTime(Date.from(Instant.from(date)));
+          GregorianCalendar calendar = getCalendar(date);
           int hour = calendar.get(Calendar.HOUR_OF_DAY);
           if(thisAmPm.equals("am") && hour > 11) {
             calendar.set(Calendar.HOUR_OF_DAY, hour - 12);
@@ -733,5 +730,14 @@ public class WalkerState {
    */
   protected GregorianCalendar getCalendar() {
     return calendarSource.getCurrentCalendar();
+  }
+
+  private GregorianCalendar getCalendar(Temporal date) {
+    if (date instanceof ZonedDateTime) {
+      return GregorianCalendar.from((ZonedDateTime) date);
+    }
+    GregorianCalendar calendar = getCalendar();
+    calendar.setTime(Date.from(Instant.from(date)));
+    return calendar;
   }
 }

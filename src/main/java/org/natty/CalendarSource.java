@@ -20,25 +20,25 @@ import java.util.TimeZone;
  */
 public class CalendarSource {
   private ZonedDateTime referenceDate;
+  private TimeZone timeZone;
 
   CalendarSource() {
-    this.referenceDate = ZonedDateTime.now();
+    this(ZonedDateTime.now());
   }
-
   CalendarSource(ZonedDateTime referenceDate) {
     this.referenceDate = referenceDate;
+    this.timeZone = TimeZone.getTimeZone(referenceDate.getZone());
   }
   CalendarSource(Instant referenceDate) {
-    this.referenceDate = referenceDate.atZone(ZoneId.systemDefault());
+    this(referenceDate.atZone(ZoneId.systemDefault()));
   }
 
   TimeZone getTimeZone() {
-    return TimeZone.getTimeZone(this.referenceDate.getZone());
+    return timeZone;
   }
 
   void  setTimeZone(TimeZone timeZone) {
-    Instant ref = this.referenceDate.toInstant();
-    this.referenceDate = ref.atZone(getZoneId(timeZone, ref));
+    this.timeZone = timeZone;
   }
 
 
