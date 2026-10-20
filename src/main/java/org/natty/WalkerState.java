@@ -1,10 +1,9 @@
 package org.natty;
 
 import java.time.Instant;
-import java.time.DateTimeException;
-import java.time.ZoneOffset;
-import java.time.temporal.Temporal;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +14,8 @@ import java.util.TimeZone;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.natty.eventsearchers.EventNotAvailable;
+
+import static org.natty.CalendarSource.toZonedDateTime;
 
 /**
  * @author Joe Stelmach
@@ -46,7 +47,6 @@ public class WalkerState {
 
   private final CalendarSource calendarSource;
   private GregorianCalendar _calendar;
-  private TimeZone _timeZone;
   private int _currentYear;
   private boolean _firstDateInvocationInGroup = true;
   private boolean _timeGivenInGroup = false;
@@ -61,10 +61,13 @@ public class WalkerState {
    * the next hour from the current time
    */
   public WalkerState() {
-    this(new Date());
+    this(ZonedDateTime.now());
+  }
+  public WalkerState(Date referenceDate) {
+    this(referenceDate.toInstant().atZone(ZoneId.systemDefault()));
   }
 
-  public WalkerState(Date referenceDate) {
+  public WalkerState(ZonedDateTime referenceDate) {
     calendarSource = new CalendarSource(referenceDate);
     resetCalendar();
     _dateGroup = new DateGroup();
@@ -73,7 +76,7 @@ public class WalkerState {
 
 
   public void setTimeZone(final TimeZone zone) {
-    _timeZone = zone;
+    calendarSource.setTimeZone(zone);
     resetCalendar();
   }
 
@@ -390,7 +393,7 @@ public class WalkerState {
       zone = TimeZone.getTimeZone(zoneString);
     }
 
-    _calendar.setTimeZone(zone != null ? zone : _timeZone);
+    _calendar.setTimeZone(zone != null ? zone : calendarSource.getTimeZone());
 
     _calendar.set(Calendar.HOUR_OF_DAY, hoursInt);
     // hours greater than 12 are in 24-hour time
@@ -506,7 +509,7 @@ public class WalkerState {
           for (int field : new int[] { Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR }) {
             calendar.set(field, _calendar.get(field));
           }
-          dates.set(i, toZonedDateTime(calendar));
+          _dateGroup.set(i, toZonedDateTime(calendar));
         }
       }
       _updatePreviousDates = false;
@@ -560,14 +563,6 @@ public class WalkerState {
     _firstDateInvocationInGroup = true;
   }
 
-  private ZonedDateTime toZonedDateTime(GregorianCalendar calendar) {
-    try {
-      return calendar.toZonedDateTime();
-    } catch (DateTimeException e) {
-      int offset = calendar.getTimeZone().getOffset(calendar.getTimeInMillis());
-      return calendar.toInstant().atZone(ZoneOffset.ofTotalSeconds(offset / 1000));
-    }
-  }
 
   /**
    * @return the list of date times found
@@ -589,11 +584,8 @@ public class WalkerState {
   public void resetCalendar() {
     _calendar = getCalendar();
     if (_calendar != null) {
-      if (_timeZone != null) {
-        _calendar.setTimeZone(_timeZone);
-      }
       _currentYear = _calendar.get(Calendar.YEAR);
-      _logger.fine(() -> String.format("Resetting calendar to current date: %s (timezone %s)", _calendar.getTime(), _timeZone));
+      _logger.fine(() -> String.format("Resetting calendar to current date: %s (timezone %s)", _calendar.getTime(), calendarSource.getTimeZone()));
     }
   }
 
@@ -610,16 +602,16 @@ public class WalkerState {
 
     // get the current year
     Calendar cal = getCalendar();
-    cal.setTimeZone(_timeZone);
     int currentYear = cal.get(Calendar.YEAR);
 
     // look up a suitable period of occurrences
     final boolean forwards = direction.equals(DIR_RIGHT);
+    TimeZone timeZone = calendarSource.getTimeZone();
     Map<Integer, Date> dates = EventSearcherService.INSTANCE
-      .findEvents(Range.fromYear(currentYear, forwards), _timeZone, eventSummary)
+      .findEvents(Range.fromYear(currentYear, forwards), timeZone, eventSummary)
       .limit(10)
       .collect(Collectors.toMap((d) -> {
-        return d.atZone(_timeZone.toZoneId()).getYear();
+        return d.atZone(timeZone.toZoneId()).getYear();
       }, Date::from));
 
 
@@ -681,7 +673,7 @@ public class WalkerState {
    * or null if not present.
    */
   private Date seasonalDate(String eventSummary, int year) {
-    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year),_timeZone, eventSummary).findFirst().orElse(null);
+    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year), calendarSource.getTimeZone(), eventSummary).findFirst().orElse(null);
     return instant == null ? null : Date.from(instant);
   }
 
