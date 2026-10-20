@@ -64,7 +64,7 @@ public class WalkerState {
     this(ZonedDateTime.now());
   }
   public WalkerState(Date referenceDate) {
-    this(referenceDate.toInstant().atZone(ZoneId.systemDefault()));
+    this(Instant.ofEpochMilli(referenceDate.getTime()).atZone(ZoneId.systemDefault()));
   }
 
   public WalkerState(ZonedDateTime referenceDate) {

@@ -176,5 +176,18 @@ public class ParserTest {
     assertEquals(Instant.parse("2026-10-19T22:00:05Z"), _5secs.get(0).getInstants().get(0));
   }
 
+  @Test
+  public void parsesWithSqlDateReferences() {
+    Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
+    long referenceMillis = Instant.parse("2026-10-20T12:00:00Z").toEpochMilli();
+
+    assertEquals(
+      Instant.ofEpochMilli(referenceMillis + 1000),
+      parser.parse("1 second", new java.sql.Date(referenceMillis)).get(0).getInstants().get(0));
+    assertEquals(
+      Instant.ofEpochMilli(referenceMillis + 1000),
+      parser.parse("1 second", new java.sql.Time(referenceMillis)).get(0).getInstants().get(0));
+  }
+
 
 }
