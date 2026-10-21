@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -401,7 +402,7 @@ public class DateTest extends AbstractTest {
   public void testRelativeDateDifferentTimezone() {
     // Prepare
     TimeZone.setDefault(TimeZone.getTimeZone("US/Eastern"));
-    Parser parser = new Parser(TimeZone.getTimeZone("US/Pacific"));
+    Parser parser = new Parser(ZoneId.of("US/Pacific"));
     // 2012, June 3, Sunday, 1 a.m. in US/Eastern GMT -4
     // Same time as
     // 2012, June 2, Saturday, 10 p.m. in US/Pacific GMT -7

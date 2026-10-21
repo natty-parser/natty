@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
@@ -21,10 +22,12 @@ public class ParserTest {
 
   private static final Logger log  = Logger.getLogger(ParserTest.class.getName());
 
+
+
   @Test
   public void serializationOfParser() throws IOException, ClassNotFoundException {
     // Test serializing of a basic parser which does not have a
-    // user-supplied TimeZone.
+    // user-supplied zone.
     Parser parser = new Parser();
 
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -47,13 +50,9 @@ public class ParserTest {
 
   @Test
   public void serializationOfParserTimeZone() throws IOException, ClassNotFoundException {
-    // TODO this could be improved by mocking TimeZone since it is not part
-    // of the system under test.
-    TimeZone defaultTimeZone = TimeZone.getDefault();
-
     // Test serializing of an alternate parser with a
-    // user-supplied TimeZone.
-    Parser parser = new Parser(defaultTimeZone);
+    // user-supplied zone.
+    Parser parser = new Parser(ZoneId.systemDefault());
 
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     try (ObjectOutputStream out = new ObjectOutputStream(bytes)) {
@@ -82,7 +81,7 @@ public class ParserTest {
 
   @Test
   public void issue278() {
-    final List<DateGroup> groups = new Parser().parse("last easter", new Date(121, 1, 1));
+    final List<DateGroup> groups = new Parser().parse("last easter", date(2021, 2, 1));
   }
 
   /**
@@ -92,7 +91,7 @@ public class ParserTest {
   @Test
   public void lastEaster() {
     for (int i = 1900; i < 2100; i++) {
-      Date reference = new Date(i - 1900, 1, 1);
+      Date reference = date(i, 2, 1);
       final List<DateGroup> groups = new Parser().parse("last easter", reference);
       assertEquals(1, groups.size());
       Instant easter = groups.get(0).getInstants().get(0);
@@ -103,7 +102,7 @@ public class ParserTest {
   @Test
   public void lastElectionDay() {
     for (int i = 2001; i < 2030; i++) {
-      Date reference = new Date(i - 1900, 1, 1);
+      Date reference = date(i, 2, 1);
       final List<DateGroup> groups = new Parser().parse("last election day", reference);
       assertEquals(1, groups.size());
       Instant easter = groups.get(0).getInstants().get(0);
@@ -119,9 +118,9 @@ public class ParserTest {
   @Test
   public void issue279() {
     Parser parser = new Parser();
-    Date d2000  = new Date(100, 1, 1);
-    Date d2010  = new Date(110, 1, 1);
-    Date d2020  = new Date(120, 1, 1);
+    Date d2000  = date(2000, 2, 1);
+    Date d2010  = date(2010, 2, 1);
+    Date d2020  = date(2020, 2, 1);
 
     log.info("Parsed date: " +
       parser.parse("Fri Mar 04 00:00:00 UTC 2016", d2000).get(0).getTemporals().get(0) +
@@ -178,7 +177,7 @@ public class ParserTest {
 
   @Test
   public void parsesWithSqlDateReferences() {
-    Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
+    Parser parser = new Parser(ZoneId.of("UTC"));
     long referenceMillis = Instant.parse("2026-10-20T12:00:00Z").toEpochMilli();
 
     assertEquals(
@@ -187,6 +186,25 @@ public class ParserTest {
     assertEquals(
       Instant.ofEpochMilli(referenceMillis + 1000),
       parser.parse("1 second", new java.sql.Time(referenceMillis)).get(0).getInstants().get(0));
+  }
+
+  @Test
+  public void defaultNow() {
+    Parser parser = new Parser("", "Europe/Amsterdam");
+    assertEquals(ZoneId.of("Europe/Amsterdam"), parser.getClock().getZone());
+    assertEquals(Instant.now().toEpochMilli(), parser.getClock().instant().toEpochMilli(), 100);
+    assertEquals(Instant.now().toEpochMilli(), parser.parse("now").get(0).getInstants().get(0).toEpochMilli(), 100);
+  }
+
+  @Test
+  public void empty() {
+    Parser parser = new Parser("", "Europe/Amsterdam");
+    assertEquals(0, parser.parse("").size());
+  }
+
+
+  private static Date date(int year, int month, int day) {
+    return Date.from(LocalDate.of(year, month, day).atStartOfDay(ZoneId.systemDefault()).toInstant());
   }
 
 

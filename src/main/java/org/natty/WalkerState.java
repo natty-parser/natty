@@ -603,12 +603,12 @@ public class WalkerState {
 
     // look up a suitable period of occurrences
     final boolean forwards = direction.equals(DIR_RIGHT);
-    TimeZone timeZone = calendarSource.getTimeZone();
+    ZoneId zoneId = CalendarSource.getZoneId(calendarSource.getTimeZone(), cal.toInstant());
     Map<Integer, Date> dates = EventSearcherService.INSTANCE
-      .findEvents(Range.fromYear(currentYear, forwards), timeZone, eventSummary)
+      .findEvents(Range.fromYear(currentYear, forwards), zoneId, eventSummary)
       .limit(10)
       .collect(Collectors.toMap((d) -> {
-        return d.atZone(timeZone.toZoneId()).getYear();
+        return d.atZone(zoneId).getYear();
       }, Date::from));
 
 
@@ -670,7 +670,7 @@ public class WalkerState {
    * or null if not present.
    */
   private Date seasonalDate(String eventSummary, int year) {
-    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year), calendarSource.getTimeZone(), eventSummary).findFirst().orElse(null);
+    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year), CalendarSource.getZoneId(calendarSource.getTimeZone(), _calendar.toInstant()), eventSummary).findFirst().orElse(null);
     return instant == null ? null : Date.from(instant);
   }
 

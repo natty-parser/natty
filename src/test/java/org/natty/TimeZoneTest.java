@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -46,6 +47,7 @@ public class TimeZoneTest extends AbstractTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation") // custom TimeZone rules can only be passed via the deprecated constructor
   public void testCustomTimeZoneId() {
     TimeZone timeZone = new SimpleTimeZone(60 * 60 * 1000, "ApplicationZone");
     Parser parser = new Parser(timeZone);
@@ -57,6 +59,7 @@ public class TimeZoneTest extends AbstractTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   public void testCustomTimeZoneDaylightSavingRules() {
     TimeZone timeZone = new SimpleTimeZone(
       60 * 60 * 1000,
@@ -74,7 +77,7 @@ public class TimeZoneTest extends AbstractTest {
 
   @Test
   public void testZonePreservedDuringMeridianPropagation() {
-    Parser parser = new Parser(TimeZone.getTimeZone("UTC"));
+    Parser parser = new Parser(ZoneId.of("UTC"));
     Date reference = Date.from(Instant.parse("2012-01-15T00:00:00Z"));
 
     ZonedDateTime first = (ZonedDateTime) parser.parse("10:00 UTC+2 or 11:00pm", reference)
