@@ -1,6 +1,9 @@
 package org.natty;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +14,8 @@ import java.util.TimeZone;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.natty.eventsearchers.EventNotAvailable;
+
+import static org.natty.CalendarSource.toZonedDateTime;
 
 /**
  * @author Joe Stelmach
@@ -42,7 +47,6 @@ public class WalkerState {
 
   private final CalendarSource calendarSource;
   private GregorianCalendar _calendar;
-  private TimeZone _timeZone;
   private int _currentYear;
   private boolean _firstDateInvocationInGroup = true;
   private boolean _timeGivenInGroup = false;
@@ -57,10 +61,13 @@ public class WalkerState {
    * the next hour from the current time
    */
   public WalkerState() {
-    this(new Date());
+    this(ZonedDateTime.now());
+  }
+  public WalkerState(Date referenceDate) {
+    this(Instant.ofEpochMilli(referenceDate.getTime()).atZone(ZoneId.systemDefault()));
   }
 
-  public WalkerState(Date referenceDate) {
+  public WalkerState(ZonedDateTime referenceDate) {
     calendarSource = new CalendarSource(referenceDate);
     resetCalendar();
     _dateGroup = new DateGroup();
@@ -69,7 +76,7 @@ public class WalkerState {
 
 
   public void setTimeZone(final TimeZone zone) {
-    _timeZone = zone;
+    calendarSource.setTimeZone(zone);
     resetCalendar();
   }
 
@@ -386,7 +393,7 @@ public class WalkerState {
       zone = TimeZone.getTimeZone(zoneString);
     }
 
-    _calendar.setTimeZone(zone != null ? zone : _timeZone);
+    _calendar.setTimeZone(zone != null ? zone : calendarSource.getTimeZone());
 
     _calendar.set(Calendar.HOUR_OF_DAY, hoursInt);
     // hours greater than 12 are in 24-hour time
@@ -482,27 +489,26 @@ public class WalkerState {
 
     // The list of times found per capture should always be 1 larger than the number of captures.
     // If not, that mean no time was given for this capture
-    if(_timeGivenPerCapture.size() < _dateGroup.getDates().size() + 1) {
+    if(_timeGivenPerCapture.size() < _dateGroup.getTemporals().size() + 1) {
       _timeGivenPerCapture.add(false);
     }
 
     // ditto for meridien indicators found per capture
-    if(_amPmGivenPerCapture.size() < _dateGroup.getDates().size() + 1) {
+    if(_amPmGivenPerCapture.size() < _dateGroup.getTemporals().size() + 1) {
       _amPmGivenPerCapture.add(null);
     }
 
     // if other dates have already been added to the date group, we'll
     // update them to match this one
     if(_updatePreviousDates) {
-      List<Date> dates = _dateGroup.getDates();
+      List<Temporal> dates = _dateGroup.getTemporals();
       if (!dates.isEmpty()) {
-        for (Date date : dates) {
-          Calendar calendar = getCalendar();
-          calendar.setTime(date);
+        for (int i = 0; i < dates.size(); i++) {
+          GregorianCalendar calendar = getCalendar(dates.get(i));
           for (int field : new int[] { Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR }) {
             calendar.set(field, _calendar.get(field));
           }
-          date.setTime(calendar.getTimeInMillis());
+          _dateGroup.set(i, toZonedDateTime(calendar));
         }
       }
       _updatePreviousDates = false;
@@ -515,13 +521,12 @@ public class WalkerState {
       for (int i = 0; i < _timeGivenPerCapture.size() - 1; i++) {
         boolean timeGiven = _timeGivenPerCapture.get(i);
         if (!timeGiven) {
-          Date date = _dateGroup.getDates().get(i);
-          Calendar calendar = getCalendar();
-          calendar.setTime(date);
+          Temporal date = _dateGroup.get(i);
+          GregorianCalendar calendar = getCalendar(date);
           for (int field : new int[] { Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND}) {
             calendar.set(field, _calendar.get(field));
           }
-          date.setTime(calendar.getTimeInMillis());
+          _dateGroup.set(i, toZonedDateTime(calendar));
         }
       }
     }
@@ -533,9 +538,8 @@ public class WalkerState {
       for (int i = 0; i < _amPmGivenPerCapture.size() - 1; i++) {
         String amPm = _amPmGivenPerCapture.get(i);
         if (amPm == null && _timeGivenPerCapture.get(i)) {
-          Date date = _dateGroup.getDates().get(i);
-          Calendar calendar = getCalendar();
-          calendar.setTime(date);
+          Temporal date = _dateGroup.getTemporals().get(i);
+          GregorianCalendar calendar = getCalendar(date);
           int hour = calendar.get(Calendar.HOUR_OF_DAY);
           if(thisAmPm.equals("am") && hour > 11) {
             calendar.set(Calendar.HOUR_OF_DAY, hour - 12);
@@ -543,20 +547,19 @@ public class WalkerState {
           if(thisAmPm.equals("pm") && calendar.get(Calendar.HOUR_OF_DAY) < 12) {
             calendar.set(Calendar.HOUR_OF_DAY, hour + 12);
           }
-          date.setTime(calendar.getTimeInMillis());
+          _dateGroup.set(i, toZonedDateTime(calendar));
         }
       }
     }
 
-    Date date = _calendar.getTime();
     if(_dateGroup.isRecurring()) {
-      _dateGroup.setRecurringUntil(date);
-    }
-    else {
-      _dateGroup.addDate(date);
+      _dateGroup.setRecurringUntil(_calendar.getTime());
+    } else {
+      _dateGroup.addZonedDateTime(toZonedDateTime(_calendar));
     }
     _firstDateInvocationInGroup = true;
   }
+
 
   /**
    * @return the list of date times found
@@ -578,11 +581,8 @@ public class WalkerState {
   public void resetCalendar() {
     _calendar = getCalendar();
     if (_calendar != null) {
-      if (_timeZone != null) {
-        _calendar.setTimeZone(_timeZone);
-      }
       _currentYear = _calendar.get(Calendar.YEAR);
-      _logger.fine(() -> String.format("Resetting calendar to current date: %s (timezone %s)", _calendar.getTime(), _timeZone));
+      _logger.fine(() -> String.format("Resetting calendar to current date: %s (timezone %s)", _calendar.getTime(), calendarSource.getTimeZone()));
     }
   }
 
@@ -599,16 +599,16 @@ public class WalkerState {
 
     // get the current year
     Calendar cal = getCalendar();
-    cal.setTimeZone(_timeZone);
     int currentYear = cal.get(Calendar.YEAR);
 
     // look up a suitable period of occurrences
     final boolean forwards = direction.equals(DIR_RIGHT);
+    ZoneId zoneId = CalendarSource.getZoneId(calendarSource.getTimeZone(), cal.toInstant());
     Map<Integer, Date> dates = EventSearcherService.INSTANCE
-      .findEvents(Range.fromYear(currentYear, forwards), _timeZone, eventSummary)
+      .findEvents(Range.fromYear(currentYear, forwards), zoneId, eventSummary)
       .limit(10)
       .collect(Collectors.toMap((d) -> {
-        return d.atZone(_timeZone.toZoneId()).getYear();
+        return d.atZone(zoneId).getYear();
       }, Date::from));
 
 
@@ -670,7 +670,7 @@ public class WalkerState {
    * or null if not present.
    */
   private Date seasonalDate(String eventSummary, int year) {
-    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year),_timeZone, eventSummary).findFirst().orElse(null);
+    Instant instant = EventSearcherService.INSTANCE.findEvents(Range.ofYear(year), CalendarSource.getZoneId(calendarSource.getTimeZone(), _calendar.toInstant()), eventSummary).findFirst().orElse(null);
     return instant == null ? null : Date.from(instant);
   }
 
@@ -730,5 +730,14 @@ public class WalkerState {
    */
   protected GregorianCalendar getCalendar() {
     return calendarSource.getCurrentCalendar();
+  }
+
+  private GregorianCalendar getCalendar(Temporal date) {
+    if (date instanceof ZonedDateTime) {
+      return GregorianCalendar.from((ZonedDateTime) date);
+    }
+    GregorianCalendar calendar = getCalendar();
+    calendar.setTime(Date.from(Instant.from(date)));
+    return calendar;
   }
 }

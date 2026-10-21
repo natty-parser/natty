@@ -25,7 +25,6 @@ public class SearchTest extends AbstractTest {
   @Test
   public void test() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/20/2011");
-    calendarSource = new CalendarSource(reference);
 
     Parser parser = new Parser();
     List<DateGroup> groups = parser.parse("golf tomorrow at 9 AM at pebble beach", reference);
@@ -319,7 +318,6 @@ public class SearchTest extends AbstractTest {
   @Test
   public void testLocations() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/20/2011");
-    calendarSource = new CalendarSource(reference);
 
     Parser parser = new Parser();
     List<DateGroup> groups = parser.parse("I want to go to the movies on september 1st.  Or maybe we should go on October 3rd.", reference);
@@ -342,7 +340,6 @@ public class SearchTest extends AbstractTest {
   public void testPrefixSuffix() throws Exception {
 
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/20/2011");
-    calendarSource = new CalendarSource(reference);
 
     // no prefix or suffix
     Parser parser = new Parser();
