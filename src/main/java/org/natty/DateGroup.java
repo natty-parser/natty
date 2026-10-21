@@ -42,7 +42,7 @@ public class DateGroup {
    */
   @Deprecated
   public void addDate(Date date) {
-    _dates.add(date.toInstant());
+    _dates.add(Instant.ofEpochMilli(date.getTime()));
   }
 
   /**
