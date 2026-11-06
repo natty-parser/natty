@@ -3,10 +3,18 @@ package org.natty;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.SimpleTimeZone;
 import java.util.TimeZone;
+
+import static org.junit.Assert.assertEquals;
 
 public class TimeZoneTest extends AbstractTest {
 
@@ -21,7 +29,6 @@ public class TimeZoneTest extends AbstractTest {
   public void testSpecific() throws Exception {
     final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
 
     validateDateTime(reference, "2011-06-17T07:00:00Z", 6, 17, 2011, 3, 0, 0);
     validateDateTime(reference, "05-Aug-2013 14:10:56 UTC", 8, 5, 2013, 10, 10, 56);
@@ -37,5 +44,45 @@ public class TimeZoneTest extends AbstractTest {
     validateDateTime(reference, "tomorrow, 10pm pacific", 5, 21, 2012, 1, 0, 0);
     validateDateTime(reference, "tomorrow, 10 alaska time", 5, 20, 2012, 14, 0, 0);
     validateDateTime(reference, "tomorrow, 10 hawaii time", 5, 20, 2012, 16, 0, 0);
+  }
+
+  @Test
+  @SuppressWarnings("deprecation") // custom TimeZone rules can only be passed via the deprecated constructor
+  public void testCustomTimeZoneId() {
+    TimeZone timeZone = new SimpleTimeZone(60 * 60 * 1000, "ApplicationZone");
+    Parser parser = new Parser(timeZone);
+    Date reference = Date.from(Instant.parse("2012-05-19T11:00:00Z"));
+
+    Date parsed = parser.parse("5/20/12 12:00:00", reference).get(0).getDates().get(0);
+
+    assertEquals(Date.from(Instant.parse("2012-05-20T11:00:00Z")), parsed);
+  }
+
+  @Test
+  @SuppressWarnings("deprecation")
+  public void testCustomTimeZoneDaylightSavingRules() {
+    TimeZone timeZone = new SimpleTimeZone(
+      60 * 60 * 1000,
+      "ApplicationZone",
+      Calendar.MARCH, -1, Calendar.SUNDAY, 2 * 60 * 60 * 1000,
+      Calendar.OCTOBER, -1, Calendar.SUNDAY, 3 * 60 * 60 * 1000,
+      60 * 60 * 1000);
+    Parser parser = new Parser(timeZone);
+    Date reference = Date.from(Instant.parse("2012-01-15T11:00:00Z"));
+
+    Date parsed = parser.parse("July 20, 2012 12:00:00", reference).get(0).getDates().get(0);
+
+    assertEquals(Date.from(Instant.parse("2012-07-20T10:00:00Z")), parsed);
+  }
+
+  @Test
+  public void testZonePreservedDuringMeridianPropagation() {
+    Parser parser = new Parser(ZoneId.of("UTC"));
+    Date reference = Date.from(Instant.parse("2012-01-15T00:00:00Z"));
+
+    ZonedDateTime first = (ZonedDateTime) parser.parse("10:00 UTC+2 or 11:00pm", reference)
+      .get(0).getTemporals().get(0);
+
+    assertEquals(ZoneOffset.ofHours(2), first.getOffset());
   }
 }

@@ -1,6 +1,5 @@
 package org.natty;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -10,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Runs the parser through the various datetime formats
@@ -28,7 +29,6 @@ public class DateTimeTest extends AbstractTest {
   public void testSpecific() {
     final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
 
     validateDateTime(reference, "1st oct in the year '89 1300 hours", 10, 1, 1989, 13, 0, 0);
     validateDateTime(reference, "1st oct in the year '89 at 1300 hours", 10, 1, 1989, 13, 0, 0);
@@ -55,7 +55,7 @@ public class DateTimeTest extends AbstractTest {
   public void testSpecificCJK() {
     final LocalDateTime refDateTime = LocalDateTime.of(2012, 5, 19, 12, 00, 00);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
+
     validateDateTime(reference, "1980年3月19日 13:00", 3, 19, 1980, 13, 0, 0);
     validateDateTime(reference, "1980년3월19일 13:00", 3, 19, 1980, 13, 0, 0);
 
@@ -65,7 +65,6 @@ public class DateTimeTest extends AbstractTest {
   public void testRelative() {
     final LocalDateTime refDateTime = LocalDateTime.of(2011, 2, 24, 0, 0, 0);
     Date reference = Date.from(refDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
-    calendarSource = new CalendarSource(reference);
 
     validateDateTime(reference, "seven years ago at 3pm", 2, 24, 2004, 15, 0, 0);
     validateDateTime(reference, "next wed. at 5pm", 3, 2, 2011, 17, 0, 0);
@@ -116,40 +115,39 @@ public class DateTimeTest extends AbstractTest {
   @Test
   public void testRange() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("6/12/2010");
-    calendarSource = new CalendarSource(reference);
 
     List<Date> dates = parseCollection(reference, "2009-03-10 9:00 to 11:00");
-    Assert.assertEquals(2, dates.size());
+    assertEquals(2, dates.size());
     validateDateTime(dates.get(0), 3, 10, 2009, 9, 0, 0);
     validateDateTime(dates.get(1), 3, 10, 2009, 11, 0, 0);
 
     dates = parseCollection(reference, "26 oct 10:00 am to 11:00 am");
-    Assert.assertEquals(2, dates.size());
+    assertEquals(2, dates.size());
     validateDateTime(dates.get(0), 10, 26, 2010, 10, 0, 0);
     validateDateTime(dates.get(1), 10, 26, 2010, 11, 0, 0);
 
     dates = parseCollection(reference, "16:00 nov 6 to 17:00");
-    Assert.assertEquals(2, dates.size());
+    assertEquals(2, dates.size());
     validateDateTime(dates.get(0), 11, 6, 2010, 16, 0, 0);
     validateDateTime(dates.get(1), 11, 6, 2010, 17, 0, 0);
 
     dates = parseCollection(reference, "6am dec 5 to 7am");
-    Assert.assertEquals(2, dates.size());
+    assertEquals(2, dates.size());
     validateDateTime(dates.get(0), 12, 5, 2010, 6, 0, 0);
     validateDateTime(dates.get(1), 12, 5, 2010, 7, 0, 0);
 
     dates = parseCollection(reference, "3/3 21:00 to in 5 days");
-    Assert.assertEquals(2, dates.size());
+    assertEquals(2, dates.size());
     validateDateTime(dates.get(0), 3, 3, 2010, 21, 0, 0);
     validateDateTime(dates.get(1), 6, 17, 2010, 21, 0, 0);
 
     dates = parseCollection(reference, "November 20 2 p.m. to 3 p.m");
-    Assert.assertEquals(2, dates.size());
+    assertEquals(2, dates.size());
     validateDateTime(dates.get(0), 11, 20, 2010, 14, 0, 0);
     validateDateTime(dates.get(1), 11, 20, 2010, 15, 0, 0);
 
     dates = parseCollection(reference, "November 20 2 p.m. - 3 p.m.");
-    Assert.assertEquals(2, dates.size());
+    assertEquals(2, dates.size());
     validateDateTime(dates.get(0), 11, 20, 2010, 14, 0, 0);
     validateDateTime(dates.get(1), 11, 20, 2010, 15, 0, 0);
   }
@@ -157,35 +155,34 @@ public class DateTimeTest extends AbstractTest {
   @Test
   public void testList() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("05/19/2012");
-    calendarSource = new CalendarSource(reference);
 
     List<Date> dates =
         parseCollection(reference, "June 25th at 9am and July 2nd at 10am and August 16th at 11am");
-    Assert.assertEquals(3, dates.size());
+    assertEquals(3, dates.size());
     validateDateTime(dates.get(0), 6, 25, 2012, 9, 0, 0);
     validateDateTime(dates.get(1), 7, 2, 2012, 10, 0, 0);
     validateDateTime(dates.get(2), 8, 16, 2012, 11, 0, 0);
 
     dates = parseCollection(reference, "June 25th at 10am and July 2nd and August 16th");
-    Assert.assertEquals(3, dates.size());
+    assertEquals(3, dates.size());
     validateDateTime(dates.get(0), 6, 25, 2012, 10, 0, 0);
     validateDateTime(dates.get(1), 7, 2, 2012, 10, 0, 0);
     validateDateTime(dates.get(2), 8, 16, 2012, 10, 0, 0);
 
     dates = parseCollection(reference, "June 25th and July 2nd at 10am and August 16th");
-    Assert.assertEquals(3, dates.size());
+    assertEquals(3, dates.size());
     validateDateTime(dates.get(0), 6, 25, 2012, 10, 0, 0);
     validateDateTime(dates.get(1), 7, 2, 2012, 10, 0, 0);
     validateDateTime(dates.get(2), 8, 16, 2012, 10, 0, 0);
 
     dates = parseCollection(reference, "June 25th and July 2nd and August 16th at 10am");
-    Assert.assertEquals(3, dates.size());
+    assertEquals(3, dates.size());
     validateDateTime(dates.get(0), 6, 25, 2012, 10, 0, 0);
     validateDateTime(dates.get(1), 7, 2, 2012, 10, 0, 0);
     validateDateTime(dates.get(2), 8, 16, 2012, 10, 0, 0);
 
     dates = parseCollection(reference, "slept from 3:30 a.m. To 9:41 a.m. On April 10th");
-    Assert.assertEquals(2, dates.size());
+    assertEquals(2, dates.size());
     validateDateTime(dates.get(0), 4, 10, 2012, 3, 30, 0);
     validateDateTime(dates.get(1), 4, 10, 2012, 9, 41, 0);
   }

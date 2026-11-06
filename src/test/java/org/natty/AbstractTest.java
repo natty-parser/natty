@@ -1,12 +1,11 @@
 package org.natty;
 
-import org.junit.Assert;
-import org.junit.Before;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -14,8 +13,7 @@ import java.util.List;
  */
 public abstract class AbstractTest {
   private static Calendar _calendar;
-  protected static CalendarSource calendarSource;
-  protected static Parser _parser;
+    protected static Parser _parser;
 
 
   public static void initCalendarAndParser() {
@@ -23,13 +21,6 @@ public abstract class AbstractTest {
     _parser = new Parser();
   }
 
-  /**
-   * Resets the calendar source time before each test
-   */
-  @Before
-  public void before() {
-    calendarSource = new CalendarSource();
-  }
 
   /**
    * Parses the given value into a collection of dates
@@ -50,7 +41,7 @@ public abstract class AbstractTest {
    */
   protected Date parseSingleDate(String value, Date referenceDate) {
     List<Date> dates = parseCollection(referenceDate, value);
-    Assert.assertEquals("didn't find a date in '" + value + "' at all", 1, dates.size());
+    assertEquals("didn't find a date in '" + value + "' at all", 1, dates.size());
     return dates.get(0);
   }
 
@@ -82,9 +73,9 @@ public abstract class AbstractTest {
    */
   protected void validateDate(Date date, int month, int day, int year) {
     _calendar.setTime(date);
-    Assert.assertEquals(date + ": year != " + year, year, _calendar.get(Calendar.YEAR));
-    Assert.assertEquals(date + ": month != " + month , month, _calendar.get(Calendar.MONTH) + 1);
-    Assert.assertEquals(date + ": day != " + day, day, _calendar.get(Calendar.DAY_OF_MONTH));
+    assertEquals(date + ": year != " + year, year, _calendar.get(Calendar.YEAR));
+    assertEquals(date + ": month != " + month , month, _calendar.get(Calendar.MONTH) + 1);
+    assertEquals(date + ": day != " + day, day, _calendar.get(Calendar.DAY_OF_MONTH));
 
   }
 
@@ -114,9 +105,9 @@ public abstract class AbstractTest {
    */
   protected void validateTime(Date date, int hours, int minutes, int seconds) {
     _calendar.setTime(date);
-    Assert.assertEquals(hours, _calendar.get(Calendar.HOUR_OF_DAY));
-    Assert.assertEquals(minutes, _calendar.get(Calendar.MINUTE));
-    Assert.assertEquals(seconds, _calendar.get(Calendar.SECOND));
+    assertEquals(hours, _calendar.get(Calendar.HOUR_OF_DAY));
+    assertEquals(minutes, _calendar.get(Calendar.MINUTE));
+    assertEquals(seconds, _calendar.get(Calendar.SECOND));
   }
 
   /**
@@ -154,11 +145,11 @@ public abstract class AbstractTest {
       int hours, int minutes, int seconds) {
 
     _calendar.setTime(date);
-    Assert.assertEquals(month -1, _calendar.get(Calendar.MONTH));
-    Assert.assertEquals(day, _calendar.get(Calendar.DAY_OF_MONTH));
-    Assert.assertEquals(year, _calendar.get(Calendar.YEAR));
-    Assert.assertEquals(hours, _calendar.get(Calendar.HOUR_OF_DAY));
-    Assert.assertEquals(minutes, _calendar.get(Calendar.MINUTE));
-    Assert.assertEquals(seconds, _calendar.get(Calendar.SECOND));
+    assertEquals(month -1, _calendar.get(Calendar.MONTH));
+    assertEquals(day, _calendar.get(Calendar.DAY_OF_MONTH));
+    assertEquals(year, _calendar.get(Calendar.YEAR));
+    assertEquals(hours, _calendar.get(Calendar.HOUR_OF_DAY));
+    assertEquals(minutes, _calendar.get(Calendar.MINUTE));
+    assertEquals(seconds, _calendar.get(Calendar.SECOND));
   }
 }

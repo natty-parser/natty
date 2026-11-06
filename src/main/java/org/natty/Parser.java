@@ -4,8 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.time.Clock;
+import java.time.DateTimeException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -43,10 +48,13 @@ public class Parser implements Serializable {
   private static final Logger _logger = Logger.getLogger(Parser.class.getName());
 
 
-  private final TimeZone _defaultTimeZone;
-
   private final Clock _clock;
 
+  /**
+   * Only set when the parser was created with a {@link TimeZone} whose rules cannot be represented by a {@link ZoneId}
+   * (e.g. a custom {@link java.util.SimpleTimeZone}).
+   */
+  private final TimeZone _customTimeZone;
 
   /**
    * Tokens that should be removed from the end any list of tokens before parsing. These are
@@ -74,39 +82,96 @@ public class Parser implements Serializable {
   );
 
   /**
+   * Creates a new parser using the given zone as the default
+   * @param defaultZone the zone
+   * @since 1.2.0
+   */
+  public Parser(ZoneId defaultZone) {
+    this(Clock.system(defaultZone));
+  }
+
+  /**
    * Creates a new parser using the given time zone as the default
    * @param defaultTimeZone the timezone
+   * @deprecated use {@link #Parser(ZoneId)}
    */
+  @Deprecated
   public Parser(TimeZone defaultTimeZone) {
     this(defaultTimeZone, Clock.systemUTC());
   }
 
   /**
    * @since 1.1.5
+   * @deprecated use {@link #Parser(Clock)} with {@link Clock#withZone(ZoneId)}
    */
+  @Deprecated
   public Parser(TimeZone defaultTimeZone, Clock clock) {
-    this._defaultTimeZone = defaultTimeZone;
-    this._clock = clock;
+    this(
+      clock.withZone(CalendarSource.getZoneId(defaultTimeZone, clock.instant())),
+      customTimeZone(defaultTimeZone)
+    );
   }
 
   /**
-   * @since 1.1.5
+   * Creates a new parser using the given clock for 'now', and its zone as the default zone.
+   * @since 1.2.0
    */
   public Parser(Clock clock) {
-    this(TimeZone.getTimeZone(clock.getZone()), clock);
+    this(clock, null);
+  }
+
+  private Parser(Clock clock, TimeZone customTimeZone) {
+    this._clock = clock;
+    this._customTimeZone = customTimeZone;
   }
 
   /**
-   * @since 1.1.5
+   * @since 1.2.0
    */
   public Parser(String now, String zoneId) {
-    this(
-      now == null || now.isEmpty() ?
-        Clock.system(zoneId == null || zoneId.isEmpty() ? ZoneId.systemDefault() : ZoneId.of(zoneId)) :
-        Clock.fixed(Instant.parse(now), zoneId == null || zoneId.isEmpty() ? ZoneId.systemDefault() : ZoneId.of(zoneId)));
+    this(now, zoneId == null || zoneId.isEmpty() ? ZoneId.systemDefault() : ZoneId.of(zoneId));
   }
 
+  /**
+   * @since 1.2.0
+   */
+  public Parser(String now, ZoneId zoneId) {
+    this(Clock.fixed(
+      now == null || now.isEmpty() ? Instant.now() : parse(now, zoneId),
+      zoneId));
+  }
 
+  /**
+   * @since 1.2.0
+   */
+  public Clock getClock() {
+    return _clock;
+
+  }
+
+  private static TimeZone customTimeZone(TimeZone timeZone) {
+    try {
+      return TimeZone.getTimeZone(timeZone.toZoneId()).hasSameRules(timeZone) ? null : timeZone;
+    } catch (DateTimeException e) {
+      return timeZone;
+    }
+  }
+
+  private TimeZone getTimeZone() {
+    return _customTimeZone != null ? _customTimeZone : TimeZone.getTimeZone(_clock.getZone());
+  }
+
+  private static Instant parse(String now, ZoneId zoneId) {
+    try {
+      return Instant.parse(now);
+    } catch (DateTimeParseException e) {
+      try {
+        return ZonedDateTime.parse(now).toInstant();
+      } catch (DateTimeParseException e2) {
+        return LocalDateTime.parse(now).atZone(zoneId).toInstant();
+      }
+    }
+  }
 
 
   private boolean isPossibleDateStartToken(int tokenType) {
@@ -116,10 +181,10 @@ public class Parser implements Serializable {
   }
 
   /**
-   * Creates a new parser with no explicit default time zone (default will be {@link TimeZone#getDefault()})
+   * Creates a new parser with no explicit default time zone (default will be {@link ZoneId#systemDefault()})
    */
   public Parser() {
-    this(TimeZone.getDefault());
+    this(ZoneId.systemDefault());
   }
 
   /**
@@ -166,15 +231,15 @@ public class Parser implements Serializable {
       lastStream = stream;
       List<Token> tokens = ((NattyTokenSource) stream.getTokenSource()).getTokens();
       DateGroup group = singleParse(stream, value, referenceDate);
-      while((group == null || group.getDates().isEmpty()) && !tokens.isEmpty()) {
-        if(group == null || group.getDates().isEmpty()) {
+      while((group == null || group.isEmpty()) && !tokens.isEmpty()) {
+        if(group == null || group.isEmpty()) {
 
           // we have two options:
           // 1. Continuously remove tokens from the end of the stream and re-parse.  This will
           //    recover from the case of an extraneous token at the end of the token stream.
           //    For example, 'june 20th on'
           List<Token> endRemovedTokens = new ArrayList<>(tokens);
-          while((group == null || group.getDates().isEmpty()) && !endRemovedTokens.isEmpty()) {
+          while((group == null || group.isEmpty()) && !endRemovedTokens.isEmpty()) {
             endRemovedTokens = endRemovedTokens.subList(0, endRemovedTokens.size() - 1);
             TokenStream newStream = new CommonTokenStream(new NattyTokenSource(endRemovedTokens));
             group = singleParse(newStream, value, referenceDate);
@@ -183,7 +248,7 @@ public class Parser implements Serializable {
 
           // 2. Continuously look for another possible starting point in the token
           //    stream and re-parse.
-          while((group == null || group.getDates().isEmpty()) && !tokens.isEmpty()) {
+          while((group == null || group.isEmpty()) && !tokens.isEmpty()) {
             tokens = tokens.subList(1, tokens.size());
             Iterator<Token> iter = tokens.iterator();
             while(iter.hasNext()) {
@@ -206,7 +271,7 @@ public class Parser implements Serializable {
       // but not if multiple streams were found and the group contains only numeric time information.
       // For example: A full text string of '1' should parse to 1 o'clock, but 'I need 1 hard drive'
       // should result in no groups found.
-      if(group != null && !group.getDates().isEmpty() &&
+      if(group != null && !group.isEmpty() &&
           (streams.size() == 1 || !group.isDateInferred() || !isAllNumeric(lastStream))) {
 
         // Additionally, we'll only accept this group if the associated text does not have an
@@ -283,7 +348,7 @@ public class Parser implements Serializable {
         nodes.setTokenStream(stream);
         DateWalker walker = new DateWalker(nodes);
         walker.setReferenceDate(referenceDate);
-        walker.getState().setTimeZone(_defaultTimeZone);
+        walker.getState().setTimeZone(getTimeZone());
         walker.parse();
         Tree finalTree = tree;
         _logger.finer(() -> String.format("AST: %s", finalTree.toStringTree()));
@@ -421,11 +486,11 @@ public class Parser implements Serializable {
     if (!(o instanceof Parser)) return false;
 
     Parser parser = (Parser) o;
-    return Objects.equals(_defaultTimeZone, parser._defaultTimeZone);
+    return Objects.equals(_clock, parser._clock) && Objects.equals(_customTimeZone, parser._customTimeZone);
   }
   @Override
   public int hashCode() {
-    return Objects.hashCode(_defaultTimeZone);
+    return Objects.hash(_clock, _customTimeZone);
   }
 
   /**
@@ -513,7 +578,7 @@ public class Parser implements Serializable {
     System.out.println("Parsing input: " + input);
     List<DateGroup> groups = parser.parse(input);
     for (DateGroup group : groups) {
-      List<Date> dates = group.getDates();
+      List<Temporal> dates = group.getTemporals();
       int line = group.getLine();
       int column = group.getPosition();
       String matchingValue = group.getText();

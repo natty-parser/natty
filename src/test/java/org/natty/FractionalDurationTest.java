@@ -5,9 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -83,7 +81,6 @@ public class FractionalDurationTest extends AbstractTest {
   public void testParse_fractionalDays() throws Exception {
     // Reference: Feb 28, 2011 midnight (US/Eastern)
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/28/2011");
-    calendarSource = new CalendarSource(reference);
 
     // "1.5 days from now" → "36 hours from now" → Feb 28 00:00 + 36h = March 1 12:00 → March 1
     validateDate(reference, "1.5 days from now", 3, 1, 2011);
@@ -95,7 +92,6 @@ public class FractionalDurationTest extends AbstractTest {
   @Test
   public void testParse_fractionalWeeks() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/28/2011");
-    calendarSource = new CalendarSource(reference);
 
     // "1.5 weeks from now" → "11 days from now" → Feb 28 + 11 = March 11
     validateDate(reference, "1.5 weeks from now", 3, 11, 2011);
@@ -104,7 +100,6 @@ public class FractionalDurationTest extends AbstractTest {
   @Test
   public void testParse_inFractionalDays() throws Exception {
     Date reference = DateFormat.getDateInstance(DateFormat.SHORT).parse("2/28/2011");
-    calendarSource = new CalendarSource(reference);
 
     // "in 1.5 days" → "in 36 hours" → Feb 28 00:00 + 36h = March 1 12:00 → March 1
     validateDate(reference, "in 1.5 days", 3, 1, 2011);
