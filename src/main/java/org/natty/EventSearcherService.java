@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.Year;
+import java.time.ZoneId;
 import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,18 +46,29 @@ public class EventSearcherService implements EventSearcher<Temporal> {
   }
 
 
+  /**
+   * @deprecated use {@link #findEvents(Range, ZoneId, String)}
+   */
+  @Deprecated
   public Stream<Instant> findEvents(Range<Year> range, TimeZone timeZone, String eventSummary) {
+    return findEvents(range, timeZone.toZoneId(), eventSummary);
+  }
+
+  /**
+   * @since 1.2.0
+   */
+  public Stream<Instant> findEvents(Range<Year> range, ZoneId zoneId, String eventSummary) {
     return findEvents(range, eventSummary)
       .map(t -> {
-        return toInstant(t, timeZone);
+        return toInstant(t, zoneId);
       }).filter(Optional::isPresent)
       .map(Optional::get);
   }
 
-  protected Optional<Instant> toInstant(Temporal date, TimeZone timeZone) {
+  protected Optional<Instant> toInstant(Temporal date, ZoneId zoneId) {
   // this date is at the date of the holiday at 12 AM UTC
     if (date instanceof LocalDate) {
-      return Optional.of(((LocalDate) date).atStartOfDay().atZone(timeZone.toZoneId()).toInstant());
+      return Optional.of(((LocalDate) date).atStartOfDay().atZone(zoneId).toInstant());
     } else if (date instanceof OffsetDateTime) {
       return Optional.of(((OffsetDateTime) date).toInstant());
     } else if (date instanceof Instant) {
@@ -88,7 +100,18 @@ public class EventSearcherService implements EventSearcher<Temporal> {
     });
   }
 
+  /**
+   * @deprecated the time zone is not used; use {@link #findEvents(Range, String, Class)}
+   */
+  @Deprecated
   public <T extends Temporal,  E extends EventSearcher<T>> Stream<T> findEvents(Range<Year> range, TimeZone timeZone, String eventSummary, Class<E> eventSearcherClass) {
+    return findEvents(range, eventSummary, eventSearcherClass);
+  }
+
+  /**
+   * @since 1.2.0
+   */
+  public <T extends Temporal,  E extends EventSearcher<T>> Stream<T> findEvents(Range<Year> range, String eventSummary, Class<E> eventSearcherClass) {
     return getEventSearchers(eventSearcherClass)
       .flatMap(searcher -> searcher.findEvents(range, eventSummary))
       .filter(Objects::nonNull);

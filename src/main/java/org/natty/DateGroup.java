@@ -1,16 +1,21 @@
 package org.natty;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.antlr.runtime.tree.Tree;
 
 /**
  * @author Joe Stelmach
  */
 public class DateGroup {
-  private final List<Date> _dates;
+  private final List<Temporal> _dates = new ArrayList<>();
   private String _text;
   private String _fullText;
   private int _line;
@@ -22,18 +27,29 @@ public class DateGroup {
   private Map<String, List<ParseLocation>> _parseLocations;
   private Tree _syntaxTree;
 
+  /**
+   *
+   */
   public DateGroup() {
-    _dates = new ArrayList<>();
     _isDateInferred = true;
     _isTimeInferred = true;
   }
 
+  /**
+   * Adds a date to this group. It will be converted to an {@link Instant}
+   * @param date the date
+   * @deprecated DateGroup is filled by {@link WalkerState}, so there should be no need to call this
+   */
+  @Deprecated
+  public void addDate(Date date) {
+    _dates.add(Instant.ofEpochMilli(date.getTime()));
+  }
 
   /**
-   * Adds a date to this group
-   * @param date the date
+   * Adds a {@link ZonedDateTime} to this group.
+   * @since 1.2
    */
-  public void addDate(Date date) {
+  void addZonedDateTime(ZonedDateTime date) {
     _dates.add(date);
   }
 
@@ -63,9 +79,55 @@ public class DateGroup {
 
   /**
    * @return The list of dates in this group
+   * @deprecated
    */
+  @Deprecated
   public List<Date> getDates() {
-    return _dates;
+    return Collections.unmodifiableList(_dates.stream().
+      map(i -> Date.from(Instant.from(i)))
+      .collect(Collectors.toList()));
+  }
+
+  /**
+   *
+   * @since 1.2
+   */
+  public List<Instant> getInstants() {
+    return Collections.unmodifiableList(_dates.stream().
+      map(Instant::from)
+      .collect(Collectors.toList()));
+  }
+
+  /**
+   *
+   * @since 1.2
+   */
+  public List<Temporal> getTemporals() {
+    return Collections.unmodifiableList(_dates);
+  }
+
+  /**
+   *
+   * @since 1.2
+   */
+  public Temporal get(int i) {
+    return _dates.get(i);
+  }
+
+  /**
+   *
+   * @since 1.2
+   */
+  public boolean isEmpty() {
+    return _dates.isEmpty();
+  }
+
+  /**
+   *
+   * @since 1.2
+   */
+  void set(int i, Temporal date) {
+    _dates.set(i, date);
   }
 
   /**
